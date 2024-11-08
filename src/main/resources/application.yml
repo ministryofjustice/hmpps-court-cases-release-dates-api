@@ -1,10 +1,10 @@
 info.app:
-  name: HMPPS Template Kotlin
+  name: HMPPS Court Cases Release Dates Api
   version: 1.0
 
 spring:
   application:
-    name: hmpps-template-kotlin
+    name: hmpps-court-cases-release-dates-api
   codec:
     max-in-memory-size: 10MB
 
