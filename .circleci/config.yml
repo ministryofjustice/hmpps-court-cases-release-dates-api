@@ -4,7 +4,7 @@ orbs:
 parameters:
   releases-slack-channel:
     type: string
-    default: SLACK_RELEASES_CHANNEL
+    default: legacy-replacement-releases
 jobs:
   validate:
     executor:
@@ -71,7 +71,7 @@ workflows:
   #          pipeline_number: <<pipeline.number>>
   #          context:
   #            - hmpps-common-vars
-  #            - hmpps-template-kotlin-preprod
+  #            - hmpps-court-cases-release-dates-api-preprod
   #          requires:
   #            - request-preprod-approval
   #          helm_timeout: 5m
@@ -90,7 +90,7 @@ workflows:
   #          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
   #          context:
   #            - hmpps-common-vars
-  #            - hmpps-template-kotlin-prod
+  #            - hmpps-court-cases-release-dates-api-prod
   #          requires:
   #            - request-prod-approval
   #          helm_timeout: 5m
