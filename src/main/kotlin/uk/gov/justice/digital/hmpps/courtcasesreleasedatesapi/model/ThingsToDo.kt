@@ -6,5 +6,5 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.enums.CalculationT
 data class ThingsToDo(
   val prisonerId: String,
   val calculationThingsToDo: List<CalculationToDoType> = emptyList(),
-  val adjustmetThingsToDo: List<AdjustmentToDoType> = emptyList(),
+  val adjustmentThingsToDo: List<AdjustmentToDoType> = emptyList(),
 )
