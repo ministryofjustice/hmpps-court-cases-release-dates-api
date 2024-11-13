@@ -15,8 +15,15 @@ class ThingsToDoService(
   fun getToDoList(prisonerId: String): ThingsToDo {
     val adjustmentTodos = adjustmentsApiClient.thingsToDo(prisonerId)
     if (adjustmentTodos.thingsToDo.isNotEmpty()) {
-      return adjustmentTodos
+      return ThingsToDo(
+        prisonerId = prisonerId,
+        adjustmetThingsToDo = adjustmentTodos.thingsToDo,
+      )
     }
-    return calculateReleaseDatesApiClient.thingsToDo(prisonerId)
+    val calculationThingsToDo = calculateReleaseDatesApiClient.thingsToDo(prisonerId)
+    return ThingsToDo(
+      prisonerId = prisonerId,
+      calculationThingsToDo = calculationThingsToDo.thingsToDo,
+    )
   }
 }

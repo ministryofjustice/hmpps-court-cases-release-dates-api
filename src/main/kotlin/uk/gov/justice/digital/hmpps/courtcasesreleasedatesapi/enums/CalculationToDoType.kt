@@ -1,5 +1,5 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.enums
 
-enum class ToDoType {
+enum class CalculationToDoType {
   CALCULATION_REQUIRED,
 }
