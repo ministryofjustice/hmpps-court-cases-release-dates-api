@@ -15,3 +15,13 @@ example-api:
   client:
     id: "example-api-client"
     secret: "example-api-client-secret"
+calculate-release-dates-api:
+  url: "http://localhost:8092"
+  client:
+    id: "crd-api-client"
+    secret: "crd-api-client-secret"
+adjustments-api:
+  url: "http://localhost:8093"
+  client:
+    id: "adjustments-api-client"
+    secret: "adjustments-api-client-secret"
