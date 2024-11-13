@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -27,6 +28,7 @@ class ThingsToDoResource(
   @Operation(
     summary = "Retrieve things-to-do for a prisoner",
     description = "Provides a list of things-to-do for a specified prisoner based on their ID.",
+    security = [SecurityRequirement(name = "court-cases-release-dates-api-ui-role")],
   )
   @ApiResponses(
     value = [
