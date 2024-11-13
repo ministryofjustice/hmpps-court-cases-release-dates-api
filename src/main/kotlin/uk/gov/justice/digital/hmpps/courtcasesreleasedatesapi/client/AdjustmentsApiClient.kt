@@ -12,10 +12,13 @@ class AdjustmentsApiClient(@Qualifier("adjustmentsApiWebClient") private val web
   private val log = LoggerFactory.getLogger(this::class.java)
   private inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
 
-  fun thingsToDo(prisonerId: String): AdjustmentThingsToDo {
+  fun thingsToDo(prisonerId: String, activeCaseLoadId: String): AdjustmentThingsToDo {
     log.info("Get things to do from Adjustments for $prisonerId")
     return webClient.get()
       .uri("/things-to-do/prisoner/$prisonerId")
+      .headers { headers ->
+        headers.set("Active-Caseload", activeCaseLoadId)
+      }
       .retrieve()
       .bodyToMono(typeReference<AdjustmentThingsToDo>())
       .block()!!
