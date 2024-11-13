@@ -14,6 +14,7 @@ class WebClientConfiguration(
   @Value("\${example-api.url}") val exampleApiBaseUri: String,
   @Value("\${hmpps-auth.url}") val hmppsAuthBaseUri: String,
   @Value("\${calculate-release-dates-api.url}") val calculateReleaseDatesApiBaseUri: String,
+  @Value("\${adjustments-api.url}") val adjustmentsApiBaseUri: String,
   @Value("\${api.health-timeout:2s}") val healthTimeout: Duration,
   @Value("\${api.timeout:20s}") val timeout: Duration,
 ) {
@@ -34,4 +35,8 @@ class WebClientConfiguration(
   @Bean
   fun calculateReleaseDatesApiWebClient(authorizedClientManager: OAuth2AuthorizedClientManager, builder: WebClient.Builder): WebClient =
     builder.authorisedWebClient(authorizedClientManager, registrationId = "calculate-release-dates-api", url = calculateReleaseDatesApiBaseUri, timeout)
+
+  @Bean
+  fun adjustmentsApiWebClient(authorizedClientManager: OAuth2AuthorizedClientManager, builder: WebClient.Builder): WebClient =
+    builder.authorisedWebClient(authorizedClientManager, registrationId = "adjustments-api", url = adjustmentsApiBaseUri, timeout)
 }
