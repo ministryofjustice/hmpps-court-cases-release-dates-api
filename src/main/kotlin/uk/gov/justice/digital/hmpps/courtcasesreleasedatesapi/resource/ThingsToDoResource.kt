@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service.ThingsToDoService
 
 @RestController
@@ -36,7 +37,7 @@ class ThingsToDoResource(
   fun getThingsToDo(
     @Parameter(required = true, example = "A1234AB", description = "Prisoner's ID (also known as nomsId)")
     @PathVariable prisonerId: String,
-  ): String {
+  ): ThingsToDo {
     log.info("Request to retrieve things-to-do list for prisoner ID: {}", prisonerId)
     return thingsToDoService.getToDoList(prisonerId)
   }
