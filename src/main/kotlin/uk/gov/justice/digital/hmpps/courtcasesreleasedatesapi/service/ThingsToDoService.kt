@@ -12,12 +12,13 @@ class ThingsToDoService(
 ) {
 
   // TODO This is a placeholder at the moment, the actual rules are yet to be decided, wil revisit after discussion with analyst/designer (separate ticket)
-  fun getToDoList(prisonerId: String, activeCaseLoadId: String): ThingsToDo {
-    val adjustmentTodos = adjustmentsApiClient.thingsToDo(prisonerId, activeCaseLoadId)
+  fun getToDoList(prisonerId: String): ThingsToDo {
+    val adjustmentTodos = adjustmentsApiClient.thingsToDo(prisonerId)
     if (adjustmentTodos.thingsToDo.isNotEmpty()) {
       return ThingsToDo(
         prisonerId = prisonerId,
-        adjustmentThingsToDo = adjustmentTodos.thingsToDo,
+        adjustmentThingsToDo = adjustmentTodos,
+
       )
     }
     val calculationThingsToDo = calculateReleaseDatesApiClient.thingsToDo(prisonerId)

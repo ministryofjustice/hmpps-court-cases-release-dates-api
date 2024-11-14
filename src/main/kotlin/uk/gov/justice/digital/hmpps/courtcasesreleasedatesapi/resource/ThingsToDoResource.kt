@@ -23,7 +23,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service.ThingsToDo
 class ThingsToDoResource(
   private val thingsToDoService: ThingsToDoService,
 ) {
-  @GetMapping("/prisoner/{prisonerId}/{activeCaseLoadId}")
+  @GetMapping("/prisoner/{prisonerId}")
   @PreAuthorize("hasAnyRole('ADJUSTMENTS__ADJUSTMENTS_RO', 'RELEASE_DATES_CALCULATOR')")
   @Operation(
     summary = "Retrieve things-to-do for a prisoner",
@@ -40,11 +40,9 @@ class ThingsToDoResource(
   fun getThingsToDo(
     @Parameter(required = true, example = "A1234AB", description = "Prisoner's ID (also known as nomsId)")
     @PathVariable prisonerId: String,
-    @Parameter(required = true, example = "MDI", description = "Active caseload ID (required for adjustments call)")
-    @PathVariable activeCaseLoadId: String,
   ): ThingsToDo {
-    log.info("Request to retrieve things-to-do list for prisoner ID: {} for caseload {}", prisonerId, activeCaseLoadId)
-    return thingsToDoService.getToDoList(prisonerId, activeCaseLoadId)
+    log.info("Request to retrieve things-to-do list for prisoner ID: {}", prisonerId)
+    return thingsToDoService.getToDoList(prisonerId)
   }
 
   companion object {
