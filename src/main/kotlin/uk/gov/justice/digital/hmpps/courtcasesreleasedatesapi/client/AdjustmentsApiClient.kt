@@ -14,7 +14,7 @@ class AdjustmentsApiClient(@Qualifier("adjustmentsApiWebClient") private val web
 
   fun thingsToDo(prisonerId: String): AdjustmentThingsToDo {
     log.info("Get things to do from Adjustments for $prisonerId")
-    //  TODO Remove active case load header, at the moment is because required by the api (but the api doesnt use it). once removed from adjustments can remove from here too
+    //  TODO Remove active case load header, at the moment it's mandatory by the api (but the api doesnt use it). once removed from adjustments can remove from here too
     return webClient.get()
       .uri("/things-to-do/prisoner/$prisonerId")
       .headers { headers ->
