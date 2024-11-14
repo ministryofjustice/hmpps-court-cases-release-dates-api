@@ -12,12 +12,13 @@ class AdjustmentsApiClient(@Qualifier("adjustmentsApiWebClient") private val web
   private val log = LoggerFactory.getLogger(this::class.java)
   private inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
 
-  fun thingsToDo(prisonerId: String, activeCaseLoadId: String): AdjustmentThingsToDo {
+  fun thingsToDo(prisonerId: String): AdjustmentThingsToDo {
     log.info("Get things to do from Adjustments for $prisonerId")
+    //  TODO Remove active case load header, at the moment it's mandatory by the api (but the api doesnt use it). once removed from adjustments can remove from here too
     return webClient.get()
       .uri("/things-to-do/prisoner/$prisonerId")
       .headers { headers ->
-        headers.set("Active-Caseload", activeCaseLoadId)
+        headers.set("Active-Caseload", "COURT_CASES_RELEASE_DATES_API")
       }
       .retrieve()
       .bodyToMono(typeReference<AdjustmentThingsToDo>())
