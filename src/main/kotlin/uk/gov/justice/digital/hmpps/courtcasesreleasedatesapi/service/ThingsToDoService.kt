@@ -18,13 +18,14 @@ class ThingsToDoService(
       return ThingsToDo(
         prisonerId = prisonerId,
         adjustmentThingsToDo = adjustmentTodos,
-
+        hasAdjustmentThingsToDo = true,
       )
     }
     val calculationThingsToDo = calculateReleaseDatesApiClient.thingsToDo(prisonerId)
     return ThingsToDo(
       prisonerId = prisonerId,
       calculationThingsToDo = calculationThingsToDo.thingsToDo,
+      hasCalculationThingsToDo = true
     )
   }
 }
