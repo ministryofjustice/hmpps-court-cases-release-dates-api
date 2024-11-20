@@ -25,7 +25,7 @@ class ThingsToDoService(
     return ThingsToDo(
       prisonerId = prisonerId,
       calculationThingsToDo = calculationThingsToDo.thingsToDo,
-      hasCalculationThingsToDo = true
+      hasCalculationThingsToDo = true,
     )
   }
 }
