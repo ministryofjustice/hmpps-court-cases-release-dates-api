@@ -11,21 +11,21 @@ import org.junit.jupiter.api.extension.ExtensionContext
 class AdjustmentsApiMockServer : WireMockServer(8092) {
   fun stubGetAdaUpdateThingsTodo(prisonerId: String) {
     stubFor(
-      get("/things-to-do/prisoner/${prisonerId}").willReturn(
+      get("/things-to-do/prisoner/$prisonerId").willReturn(
         aResponse()
           .withHeader("Content-Type", "application/json")
           .withBody(
             """
-                        {
-                            "prisonerId": "$prisonerId",
-                            "thingsToDo": ["ADA_INTERCEPT"],
-                            "adaIntercept": {
-                              "type": "UPDATE",
-                              "number": "1",
-                              "anyProspective": "false"
-                            }
-                        }
-                        """.trimIndent(),
+            {
+                "prisonerId": "$prisonerId",
+                "thingsToDo": ["ADA_INTERCEPT"],
+                "adaIntercept": {
+                  "type": "UPDATE",
+                  "number": "1",
+                  "anyProspective": "false"
+                }
+            }
+            """.trimIndent(),
           ),
       ),
     )
@@ -33,15 +33,15 @@ class AdjustmentsApiMockServer : WireMockServer(8092) {
 
   fun stubGetEmptyThingsTodo(prisonerId: String) {
     stubFor(
-      get("/things-to-do/prisoner/${prisonerId}").willReturn(
+      get("/things-to-do/prisoner/$prisonerId").willReturn(
         aResponse()
           .withHeader("Content-Type", "application/json")
           .withBody(
             """
-                        {
-                            "prisonerId": "$prisonerId"
-                        }
-                        """.trimIndent(),
+            {
+                "prisonerId": "$prisonerId"
+            }
+            """.trimIndent(),
           ),
       ),
     )

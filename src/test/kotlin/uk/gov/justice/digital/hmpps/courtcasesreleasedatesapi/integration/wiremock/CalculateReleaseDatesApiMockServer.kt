@@ -17,11 +17,11 @@ class CalculateReleaseDatesApiMockServer : WireMockServer(8091) {
             .withHeader("Content-Type", "application/json")
             .withBody(
               """
-                        {
-                            "prisonerId": "$prisonerId",
-                            "thingsToDo": ["CALCULATION_REQUIRED"]
-                        }
-                        """.trimIndent(),
+              {
+                  "prisonerId": "$prisonerId",
+                  "thingsToDo": ["CALCULATION_REQUIRED"]
+              }
+              """.trimIndent(),
             ),
         ),
     )
@@ -35,10 +35,10 @@ class CalculateReleaseDatesApiMockServer : WireMockServer(8091) {
             .withHeader("Content-Type", "application/json")
             .withBody(
               """
-                        {
-                            "prisonerId": "$prisonerId"
-                        }
-                        """.trimIndent(),
+              {
+                  "prisonerId": "$prisonerId"
+              }
+              """.trimIndent(),
             ),
         ),
     )

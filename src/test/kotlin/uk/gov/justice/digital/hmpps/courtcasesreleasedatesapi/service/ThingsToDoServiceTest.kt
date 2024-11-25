@@ -20,7 +20,8 @@ class ThingsToDoServiceTest {
   private val calculateReleaseDatesApiClient = mock<CalculateReleaseDatesApiClient>()
 
   private val thingsToDoService = ThingsToDoService(
-    calculateReleaseDatesApiClient, adjustmentsApiClient,
+    calculateReleaseDatesApiClient,
+    adjustmentsApiClient,
   )
 
   @Test
