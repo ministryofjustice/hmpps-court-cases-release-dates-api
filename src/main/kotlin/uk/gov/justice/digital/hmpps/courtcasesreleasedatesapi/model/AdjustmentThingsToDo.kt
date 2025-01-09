@@ -13,6 +13,7 @@ data class AdaIntercept(
   val number: Int,
   val anyProspective: Boolean,
   val messageArguments: List<String> = listOf(),
+  val message: String,
 )
 
 enum class InterceptType {
@@ -20,4 +21,6 @@ enum class InterceptType {
   FIRST_TIME,
   UPDATE,
   PADA,
+  PADAS,
+  FIRST_TIME_WITH_NO_ADJUDICATION,
 }

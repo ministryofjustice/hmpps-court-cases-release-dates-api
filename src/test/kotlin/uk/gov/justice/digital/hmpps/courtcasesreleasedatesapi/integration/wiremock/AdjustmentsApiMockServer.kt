@@ -22,7 +22,8 @@ class AdjustmentsApiMockServer : WireMockServer(8092) {
                 "adaIntercept": {
                   "type": "UPDATE",
                   "number": "1",
-                  "anyProspective": "false"
+                  "anyProspective": "false",
+                  "message": "message"
                 }
             }
             """.trimIndent(),

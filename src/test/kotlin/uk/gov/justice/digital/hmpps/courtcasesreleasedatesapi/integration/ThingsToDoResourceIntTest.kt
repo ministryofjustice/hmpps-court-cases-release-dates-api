@@ -68,7 +68,7 @@ class ThingsToDoResourceIntTest : IntegrationTestBase() {
     private val ADJUSTMENT_THINGS_TO_DO = AdjustmentThingsToDo(
       prisonerId = PRISONER_ID,
       thingsToDo = listOf(ADA_INTERCEPT),
-      adaIntercept = AdaIntercept(type = UPDATE, number = 1, anyProspective = false),
+      adaIntercept = AdaIntercept(type = UPDATE, number = 1, anyProspective = false, emptyList(), "message"),
     )
   }
 }
