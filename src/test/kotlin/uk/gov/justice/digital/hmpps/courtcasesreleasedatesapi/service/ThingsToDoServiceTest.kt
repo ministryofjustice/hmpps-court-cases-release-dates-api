@@ -79,7 +79,7 @@ class ThingsToDoServiceTest {
     private val ADJUSTMENT_THINGS_TO_DO = AdjustmentThingsToDo(
       prisonerId = PRISONER_ID,
       thingsToDo = listOf(ADA_INTERCEPT),
-      adaIntercept = AdaIntercept(type = UPDATE, number = 1, anyProspective = false),
+      adaIntercept = AdaIntercept(type = UPDATE, number = 1, anyProspective = false, emptyList(),"message"),
     )
     private val CALCULATION_THINGS_TO_DO = CalculationThingsToDo(
       prisonerId = PRISONER_ID,
