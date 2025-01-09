@@ -20,4 +20,6 @@ enum class InterceptType {
   FIRST_TIME,
   UPDATE,
   PADA,
+  PADAS,
+  FIRST_TIME_WITH_NO_ADJUDICATION,
 }
