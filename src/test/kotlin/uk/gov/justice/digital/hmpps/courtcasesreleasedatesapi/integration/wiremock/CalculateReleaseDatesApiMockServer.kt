@@ -2,13 +2,21 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wirem
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.exactly
 import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
+import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 
 class CalculateReleaseDatesApiMockServer : WireMockServer(8091) {
+
+  fun verifyNoThingsToDoCalls(prisonerId: String) {
+    verify(exactly(0), getRequestedFor(urlEqualTo("/things-to-do/prisoner/$prisonerId")))
+  }
+
   fun stubGetCalcRequiredThingsToDo(prisonerId: String) {
     stubFor(
       get("/things-to-do/prisoner/$prisonerId")

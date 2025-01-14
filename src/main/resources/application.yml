@@ -69,3 +69,36 @@ management:
     info:
       cache:
         time-to-live: 2000ms
+
+ccrd-service-configurations:
+  services:
+    overview:
+      text: 'Overview'
+      ui-url: ${hmpps-court-cases-and-release-dates-ui-url}
+      url-mapping: '/prisoner/{prisonerId}/overview'
+      requiredRoles:
+        - 'RELEASE_DATES_CALCULATOR'
+    courtCases:
+      text: 'Court cases'
+      ui-url: ${hmpps-remand-and-sentencing-ui-url}
+      url-mapping: '/person/{prisonerId}'
+      requiredRoles:
+        - 'REMAND_AND_SENTENCING'
+    adjustments:
+      text: 'Adjustments'
+      ui-url: ${hmpps-adjustments-ui-url}
+      url-mapping: '/{prisonerId}'
+      requiredRoles:
+        - 'ADJUSTMENTS_MAINTAINER'
+    recalls:
+      text: 'Recalls'
+      ui-url: ${hmpps-recalls-ui-url}
+      url-mapping: '/person/{prisonerId}'
+      requiredRoles:
+        - 'TODO'
+    releaseDates:
+      text: 'Release dates and calculations'
+      ui-url: ${hmpps-calculate-release-dates-ui-url}
+      url-mapping: '?prisonId={prisonerId}'
+      requiredRoles:
+        - 'RELEASE_DATES_CALCULATOR'

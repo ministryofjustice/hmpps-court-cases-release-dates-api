@@ -11,7 +11,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.AdaIntercept
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.AdjustmentThingsToDo
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.InterceptType.UPDATE
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.InterceptType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
 
 class ThingsToDoResourceIntTest : IntegrationTestBase() {
@@ -68,7 +68,7 @@ class ThingsToDoResourceIntTest : IntegrationTestBase() {
     private val ADJUSTMENT_THINGS_TO_DO = AdjustmentThingsToDo(
       prisonerId = PRISONER_ID,
       thingsToDo = listOf(ADA_INTERCEPT),
-      adaIntercept = AdaIntercept(type = UPDATE, number = 1, anyProspective = false, emptyList(), "message"),
+      adaIntercept = AdaIntercept(type = InterceptType.UPDATE, number = 1, anyProspective = false, emptyList(), "message"),
     )
   }
 }
