@@ -17,3 +17,9 @@ adjustments-api:
   client:
     id: "adjustments-api-client"
     secret: "adjustments-api-client-secret"
+
+hmpps-court-cases-and-release-dates-ui-url: "http://localhost:8000"
+hmpps-remand-and-sentencing-ui-url: "http://localhost:8001"
+hmpps-adjustments-ui-url: "http://localhost:8002"
+hmpps-recalls-ui-url: "http://localhost:8003"
+hmpps-calculate-release-dates-ui-url: "http://localhost:8004"

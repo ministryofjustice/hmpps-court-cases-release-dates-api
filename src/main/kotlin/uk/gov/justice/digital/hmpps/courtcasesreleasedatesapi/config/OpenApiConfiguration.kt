@@ -38,15 +38,16 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
       Info().title("HMPPS Court Cases Release Dates Api").version(version)
         .contact(Contact().name("HMPPS Digital Studio").email("feedback@digital.justice.gov.uk")),
     )
-    // TODO: Remove the default security schema and start adding your own schemas and roles to describe your
-    // service authorisation requirements
     .components(
       Components().addSecuritySchemes(
         "court-cases-release-dates-api-ui-role",
         SecurityScheme().addBearerJwtRequirement("ROLE_TEMPLATE_KOTLIN__UI"),
+      ).addSecuritySchemes(
+        "user-token",
+        SecurityScheme().addBearerJwtRequirement("RELEASE_DATES_CALCULATOR").description("The users token, with at least the RELEASE_DATES_CALCULATOR ro"),
       ),
     )
-    .addSecurityItem(SecurityRequirement().addList("court-cases-release-dates-api-ui-role", listOf("read")))
+    .addSecurityItem(SecurityRequirement().addList("court-cases-release-dates-api-ui-role", listOf("read")).addList("user-token"))
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme =
