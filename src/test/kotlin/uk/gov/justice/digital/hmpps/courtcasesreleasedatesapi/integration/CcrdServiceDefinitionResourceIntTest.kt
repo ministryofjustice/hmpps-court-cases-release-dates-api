@@ -12,12 +12,63 @@ class CcrdServiceDefinitionResourceIntTest : IntegrationTestBase() {
   @Nested
   @DisplayName("GET /service-definitions")
   inner class PrisonerEndpoint {
+    @Test
+    fun `Should return services for user with all roles and no things to do`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "ADJUSTMENTS_MAINTAINER"))
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "count": 0
+                }
+              },
+              "courtCases": {
+                "href": "http://localhost:8001/person/AB1234AB",
+                "text": "Court cases",
+                "thingsToDo": {
+                  "count": 0
+                }
+              },
+              "adjustments": {
+                "href": "http://localhost:8002/AB1234AB",
+                "text": "Adjustments",
+                "thingsToDo": {
+                  "count": 0
+                }
+              },
+              "recalls": {
+                "href": "http://localhost:8003/person/AB1234AB",
+                "text": "Recalls",
+                "thingsToDo": {
+                  "count": 0
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "count": 0
+                }
+              }
+            }
+          }          
+          """.trimIndent(),
+        )
+    }
 
     @Test
-    fun `Should return services for user with all roles`() {
+    fun `Should return services for user with all roles and things to do`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetAdaUpdateThingsTodo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "ADJUSTMENTS_MAINTAINER", "TODO"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "ADJUSTMENTS_MAINTAINER"))
         .expectBody()
         .json(
           """
