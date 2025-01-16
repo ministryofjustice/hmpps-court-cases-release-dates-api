@@ -2,9 +2,11 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service
 
 import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.AdjustmentsApiClient
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.AdjustmentThingToDo
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.EmptyThingToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.InterceptType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.ThingToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.ThingToDoType
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.ThingsToDo
 
 @Component
 class AdjustmentsThingsToDoProvider(
@@ -12,15 +14,33 @@ class AdjustmentsThingsToDoProvider(
 ) : ThingsToDoProvider {
   override val serviceName: String = "adjustments"
 
-  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingToDo>): ThingToDo {
+  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): ThingsToDo {
     val adjustmentTodos = adjustmentsApiClient.thingsToDo(prisonerId)
-    if (adjustmentTodos.thingsToDo.isNotEmpty()) {
-      return AdjustmentThingToDo(
-        count = 1,
-        adaIntercept = adjustmentTodos.adaIntercept,
-        types = adjustmentTodos.thingsToDo,
+    if (adjustmentTodos.thingsToDo.isNotEmpty() && adjustmentTodos.adaIntercept != null) {
+      val intercept = adjustmentTodos.adaIntercept
+      val interceptType = if (listOf(InterceptType.PADA, InterceptType.PADAS).contains(intercept.type)) "PADA" else "ADA"
+      val pluralisation = if (intercept.number > 1) "s" else ""
+      val title = if (listOf(InterceptType.FIRST_TIME, InterceptType.FIRST_TIME_WITH_NO_ADJUDICATION).contains(intercept.type)) {
+        "Review ADA adjudication$pluralisation"
+      } else if (interceptType == "PADA") {
+        "Review PADA$pluralisation"
+      } else if (intercept.type == InterceptType.UPDATE) {
+        "Review ADA updates"
+      } else {
+        "Review adjustment information"
+      }
+      return ThingsToDo(
+        things = listOf(
+          ThingToDo(
+            title = title,
+            message = intercept.message,
+            buttonText = "Review $interceptType",
+            buttonHref = if (intercept.anyProspective) serviceConfig.uiUrl + "/$prisonerId/additional-days/review-prospective" else serviceConfig.uiUrl + "/$prisonerId/additional-days/review-and-approve",
+            type = ThingToDoType.ADA_INTERCEPT,
+          ),
+        ),
       )
     }
-    return EmptyThingToDo()
+    return ThingsToDo(emptyList())
   }
 }

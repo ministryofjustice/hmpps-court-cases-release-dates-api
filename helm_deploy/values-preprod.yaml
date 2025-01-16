@@ -17,6 +17,7 @@ generic-service:
     HMPPS_ADJUSTMENTS_UI_URL: "https://adjust-release-dates-preprod.hmpps.service.justice.gov.uk"
     HMPPS_RECALLS_UI_URL: "https://record-a-recall-preprod.hmpps.service.justice.gov.uk"
     HMPPS_CALCULATE_RELEASE_DATES_UI_URL: "https://calculate-release-dates-preprod.hmpps.service.justice.gov.uk"
+    THINGS_TO_DO_FEATURE_TOGGLE: "false"
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts

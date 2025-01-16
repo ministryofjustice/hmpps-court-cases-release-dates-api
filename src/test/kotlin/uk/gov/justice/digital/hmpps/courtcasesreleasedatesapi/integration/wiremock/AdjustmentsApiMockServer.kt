@@ -41,6 +41,52 @@ class AdjustmentsApiMockServer : WireMockServer(8092) {
     )
   }
 
+  fun stubAdaFirstTimeThingsToDo(prisonerId: String) {
+    stubFor(
+      get("/things-to-do/prisoner/$prisonerId").willReturn(
+        aResponse()
+          .withHeader("Content-Type", "application/json")
+          .withBody(
+            """
+            {
+                "prisonerId": "$prisonerId",
+                "thingsToDo": ["ADA_INTERCEPT"],
+                "adaIntercept": {
+                  "type": "FIRST_TIME",
+                  "number": "5",
+                  "anyProspective": "false",
+                  "message": "message"
+                }
+            }
+            """.trimIndent(),
+          ),
+      ),
+    )
+  }
+
+  fun stubAdaProspectiveThingsToDo(prisonerId: String) {
+    stubFor(
+      get("/things-to-do/prisoner/$prisonerId").willReturn(
+        aResponse()
+          .withHeader("Content-Type", "application/json")
+          .withBody(
+            """
+            {
+                "prisonerId": "$prisonerId",
+                "thingsToDo": ["ADA_INTERCEPT"],
+                "adaIntercept": {
+                  "type": "PADA",
+                  "number": "1",
+                  "anyProspective": "true",
+                  "message": "message"
+                }
+            }
+            """.trimIndent(),
+          ),
+      ),
+    )
+  }
+
   fun stubGetEmptyThingsTodo(prisonerId: String) {
     stubFor(
       get("/things-to-do/prisoner/$prisonerId").willReturn(
