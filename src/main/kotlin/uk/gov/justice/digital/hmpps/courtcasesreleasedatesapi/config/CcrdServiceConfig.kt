@@ -1,7 +1,7 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config
 
 data class CcrdServiceConfig(
-  val uiUrl: String?,
+  val uiUrl: String,
   val urlMapping: String,
   val requiredRoles: List<String>,
   val text: String,

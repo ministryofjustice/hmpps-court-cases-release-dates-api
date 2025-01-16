@@ -1,15 +1,9 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2
 
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.enums.CalculationToDoType
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION, defaultImpl = EmptyThingToDo::class)
-@JsonSubTypes(
-  JsonSubTypes.Type(value = EmptyThingToDo::class),
-  JsonSubTypes.Type(value = AdjustmentThingToDo::class),
-  JsonSubTypes.Type(value = CalculationToDoType::class),
+data class ThingToDo(
+  val title: String,
+  val message: String,
+  val buttonText: String,
+  val buttonHref: String,
+  val type: ThingToDoType,
 )
-interface ThingToDo {
-  val count: Long
-}

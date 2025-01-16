@@ -102,3 +102,7 @@ ccrd-service-configurations:
       url-mapping: '?prisonId={prisonerId}'
       requiredRoles:
         - 'RELEASE_DATES_CALCULATOR'
+
+
+feature-toggles:
+  things-to-do: ${things-to-do-feature-toggle:false}
