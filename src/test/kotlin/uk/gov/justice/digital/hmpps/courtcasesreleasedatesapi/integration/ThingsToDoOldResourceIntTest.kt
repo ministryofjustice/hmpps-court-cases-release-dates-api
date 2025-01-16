@@ -12,9 +12,9 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.AdaIntercept
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.AdjustmentThingsToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.InterceptType
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDoOld
 
-class ThingsToDoResourceIntTest : IntegrationTestBase() {
+class ThingsToDoOldResourceIntTest : IntegrationTestBase() {
 
   @Nested
   @DisplayName("GET /things-to-do")
@@ -27,7 +27,7 @@ class ThingsToDoResourceIntTest : IntegrationTestBase() {
       calculateReleaseDatesApiMockServer.stubGetCalcRequiredThingsToDo(PRISONER_ID)
       val thingsToDo = getThingsToDo()
       assertThat(thingsToDo).isEqualTo(
-        ThingsToDo(
+        ThingsToDoOld(
           prisonerId = PRISONER_ID,
           adjustmentThingsToDo = ADJUSTMENT_THINGS_TO_DO,
           hasAdjustmentThingsToDo = true,
@@ -43,7 +43,7 @@ class ThingsToDoResourceIntTest : IntegrationTestBase() {
       calculateReleaseDatesApiMockServer.stubGetCalcRequiredThingsToDo(PRISONER_ID)
       val thingsToDo = getThingsToDo()
       assertThat(thingsToDo).isEqualTo(
-        ThingsToDo(
+        ThingsToDoOld(
           prisonerId = PRISONER_ID,
           calculationThingsToDo = listOf(CALCULATION_REQUIRED),
           hasAdjustmentThingsToDo = false,
@@ -60,7 +60,7 @@ class ThingsToDoResourceIntTest : IntegrationTestBase() {
       .exchange()
       .expectStatus()
       .isOk
-      .expectBody(ThingsToDo::class.java)
+      .expectBody(ThingsToDoOld::class.java)
       .returnResult().responseBody
 
   companion object {

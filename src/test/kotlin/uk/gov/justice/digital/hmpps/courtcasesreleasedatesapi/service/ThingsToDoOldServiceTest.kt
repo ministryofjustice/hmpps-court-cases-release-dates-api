@@ -12,9 +12,9 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.AdaIntercept
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.AdjustmentThingsToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CalculationThingsToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.InterceptType
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDoOld
 
-class ThingsToDoServiceTest {
+class ThingsToDoOldServiceTest {
 
   private val adjustmentsApiClient = mock<AdjustmentsApiClient>()
   private val calculateReleaseDatesApiClient = mock<CalculateReleaseDatesApiClient>()
@@ -32,7 +32,7 @@ class ThingsToDoServiceTest {
     val result = thingsToDoService.getToDoList(PRISONER_ID)
 
     assertThat(result).isEqualTo(
-      ThingsToDo(
+      ThingsToDoOld(
         prisonerId = PRISONER_ID,
       ),
     )
@@ -46,7 +46,7 @@ class ThingsToDoServiceTest {
     val result = thingsToDoService.getToDoList(PRISONER_ID)
 
     assertThat(result).isEqualTo(
-      ThingsToDo(
+      ThingsToDoOld(
         prisonerId = PRISONER_ID,
         adjustmentThingsToDo = ADJUSTMENT_THINGS_TO_DO,
         hasAdjustmentThingsToDo = true,
@@ -63,7 +63,7 @@ class ThingsToDoServiceTest {
     val result = thingsToDoService.getToDoList(PRISONER_ID)
 
     assertThat(result).isEqualTo(
-      ThingsToDo(
+      ThingsToDoOld(
         prisonerId = PRISONER_ID,
         calculationThingsToDo = listOf(CALCULATION_REQUIRED),
         hasAdjustmentThingsToDo = false,
