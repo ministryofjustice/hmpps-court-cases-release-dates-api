@@ -3,9 +3,9 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service
 import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.CalculateReleaseDatesApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.ThingToDo
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.ThingToDoType
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.ThingsToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
 
 @Component
 class CrdsThingsToDoProvider(
