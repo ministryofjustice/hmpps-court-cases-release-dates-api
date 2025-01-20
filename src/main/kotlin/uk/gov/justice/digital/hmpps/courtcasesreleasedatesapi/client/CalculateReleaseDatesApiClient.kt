@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CalculationThingsToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.CalculationThingsToDo
 
 @Service
 class CalculateReleaseDatesApiClient(@Qualifier("calculateReleaseDatesApiWebClient") private val webClient: WebClient) {

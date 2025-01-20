@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfigs
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.FeatureToggles
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.CcrdServiceDefinition
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.CcrdServiceDefinitions
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2.ThingsToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CcrdServiceDefinition
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CcrdServiceDefinitions
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
 import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
 
 @Service
@@ -36,7 +36,7 @@ class CcrdDefinitionService(
   }
 
   private fun getHref(serviceConfig: CcrdServiceConfig, prisonerId: String): String {
-    return serviceConfig.uiUrl!! + serviceConfig.urlMapping.replace("{prisonerId}", prisonerId)
+    return serviceConfig.uiUrl + serviceConfig.urlMapping.replace("{prisonerId}", prisonerId)
   }
 
   private fun getThingsToDo(prisonerId: String, serviceName: String, thingsToDo: MutableList<ThingsToDo>): ThingsToDo {
@@ -50,6 +50,6 @@ class CcrdDefinitionService(
     return ThingsToDo(emptyList())
   }
 
-  private fun roleCheck(serviceDefintion: CcrdServiceConfig): Boolean =
-    HmppsAuthenticationHolder.hasRoles(*serviceDefintion.requiredRoles.toTypedArray())
+  private fun roleCheck(serviceConfig: CcrdServiceConfig): Boolean =
+    HmppsAuthenticationHolder.hasRoles(*serviceConfig.requiredRoles.toTypedArray())
 }

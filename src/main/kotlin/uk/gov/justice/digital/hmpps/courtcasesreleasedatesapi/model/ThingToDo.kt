@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.v2
+package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model
 
 data class ThingToDo(
   val title: String,

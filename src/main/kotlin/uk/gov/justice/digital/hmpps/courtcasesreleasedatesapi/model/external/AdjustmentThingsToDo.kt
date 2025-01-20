@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model
+package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external
 
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.enums.AdjustmentToDoType
 
