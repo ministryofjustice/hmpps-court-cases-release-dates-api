@@ -1,5 +1,7 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfigs
@@ -41,15 +43,26 @@ class CcrdDefinitionService(
 
   private fun getThingsToDo(prisonerId: String, serviceName: String, thingsToDo: MutableList<ThingsToDo>): ThingsToDo {
     if (featureToggles.thingsToDo) {
-      // TODO build caching layer around things to do.
-      val provider = thingsToDoProviders.find { it.serviceName == serviceName }
-      if (provider != null) {
-        return provider.getThingToDo(prisonerId, thingsToDo, ccrdServiceConfigs.services[serviceName]!!)
-      }
+      val providers = thingsToDoProviders.filter { it.serviceName == serviceName }
+      return ThingsToDo(
+        providers.mapNotNull {
+          try {
+            // TODO build caching layer around things to do.
+            it.getThingToDo(prisonerId, thingsToDo, ccrdServiceConfigs.services[serviceName]!!)
+          } catch (error: Exception) {
+            log.error("Error finding thing to do $prisonerId $serviceName", error)
+            null
+          }
+        },
+      )
     }
     return ThingsToDo(emptyList())
   }
 
   private fun roleCheck(serviceConfig: CcrdServiceConfig): Boolean =
     HmppsAuthenticationHolder.hasRoles(*serviceConfig.requiredRoles.toTypedArray())
+
+  companion object {
+    private val log: Logger = LoggerFactory.getLogger(CcrdDefinitionService::class.java)
+  }
 }

@@ -23,4 +23,9 @@ hmpps-remand-and-sentencing-ui-url: "http://localhost:8001"
 hmpps-adjustments-ui-url: "http://localhost:8002"
 hmpps-recalls-ui-url: "http://localhost:8003"
 hmpps-calculate-release-dates-ui-url: "http://localhost:8004"
+hmpps-identify-remand-api:
+  url:  "http://localhost:8093"
+hmpps-identify-remand-ui:
+  url:  "http://localhost:8005"
+
 things-to-do-feature-toggle: "true"

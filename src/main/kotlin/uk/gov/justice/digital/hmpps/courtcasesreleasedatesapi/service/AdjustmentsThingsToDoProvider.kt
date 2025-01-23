@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service
 
 import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.AdjustmentsApiClient
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.IdentifyRemandApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
@@ -11,10 +12,11 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.Int
 @Component
 class AdjustmentsThingsToDoProvider(
   private val adjustmentsApiClient: AdjustmentsApiClient,
+  private val identifyRemandApiClient: IdentifyRemandApiClient,
 ) : ThingsToDoProvider {
   override val serviceName: String = "adjustments"
 
-  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): ThingsToDo {
+  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): ThingToDo? {
     val adjustmentTodos = adjustmentsApiClient.thingsToDo(prisonerId)
     if (adjustmentTodos.thingsToDo.isNotEmpty() && adjustmentTodos.adaIntercept != null) {
       val intercept = adjustmentTodos.adaIntercept
@@ -29,18 +31,14 @@ class AdjustmentsThingsToDoProvider(
       } else {
         "Review adjustment information"
       }
-      return ThingsToDo(
-        things = listOf(
-          ThingToDo(
-            title = title,
-            message = intercept.message,
-            buttonText = "Review $interceptType",
-            buttonHref = if (intercept.anyProspective) serviceConfig.uiUrl + "/$prisonerId/additional-days/review-prospective" else serviceConfig.uiUrl + "/$prisonerId/additional-days/review-and-approve",
-            type = ThingToDoType.ADA_INTERCEPT,
-          ),
-        ),
+      return ThingToDo(
+        title = title,
+        message = intercept.message,
+        buttonText = "Review $interceptType",
+        buttonHref = if (intercept.anyProspective) serviceConfig.uiUrl + "/$prisonerId/additional-days/review-prospective" else serviceConfig.uiUrl + "/$prisonerId/additional-days/review-and-approve",
+        type = ThingToDoType.ADA_INTERCEPT,
       )
     }
-    return ThingsToDo(emptyList())
+    return null
   }
 }
