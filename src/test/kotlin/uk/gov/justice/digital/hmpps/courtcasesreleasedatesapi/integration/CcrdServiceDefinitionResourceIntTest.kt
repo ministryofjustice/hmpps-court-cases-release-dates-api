@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.AdjustmentsApiExtension.Companion.adjustmentsApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.CalculateReleaseDatesApiExtension.Companion.calculateReleaseDatesApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.IdentifyRemandApiExtension.Companion.identifyRemandApiMockServer
 
 class CcrdServiceDefinitionResourceIntTest : IntegrationTestBase() {
 
@@ -17,7 +18,8 @@ class CcrdServiceDefinitionResourceIntTest : IntegrationTestBase() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "ADJUSTMENTS_MAINTAINER"))
+      identifyRemandApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "ADJUSTMENTS_MAINTAINER", "REMAND_IDENTIFIER"))
         .expectBody()
         .json(
           """
@@ -107,6 +109,7 @@ class CcrdServiceDefinitionResourceIntTest : IntegrationTestBase() {
           """.trimIndent(),
         )
       adjustmentsApiMockServer.verifyNoThingsToDoCalls(PRISONER_ID)
+      identifyRemandApiMockServer.verifyNoThingsToDoCalls(PRISONER_ID)
     }
   }
 
@@ -259,6 +262,67 @@ class CcrdServiceDefinitionResourceIntTest : IntegrationTestBase() {
           """.trimIndent(),
         )
       calculateReleaseDatesApiMockServer.verifyNoThingsToDoCalls(PRISONER_ID)
+    }
+  }
+
+  @Nested
+  @DisplayName("GET /service-definitions identify remand things to do")
+  inner class IdentifyRemandThingsToDo {
+    @Test
+    fun `Should call identify remand things to do if user has adjustments and ir roles`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubAdaProspectiveThingsToDo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      identifyRemandApiMockServer.stubFirstTimeReviewThingsToDo(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "ADJUSTMENTS_MAINTAINER", "REMAND_IDENTIFIER"))
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "adjustments": {
+                "href": "http://localhost:8002/AB1234AB",
+                "text": "Adjustments",
+                "thingsToDo": {
+                  "things": [
+                    {
+                      "title": "Review PADA",
+                      "message": "message",
+                      "buttonText": "Review PADA",
+                      "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-prospective",
+                      "type": "ADA_INTERCEPT"
+                    },
+                    {
+                      "title": "There are periods of remand to review",
+                      "message": "This service has identified periods of remand that may be relevant. You must review this remand periods before calculating a release date.",
+                      "buttonText": "Review remand",
+                      "buttonHref": "http://localhost:8005/prisoner/AB1234AB",
+                      "type": "REVIEW_IDENTIFIED_REMAND"
+                    }
+                  ],
+                  "count": 2
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
     }
   }
 

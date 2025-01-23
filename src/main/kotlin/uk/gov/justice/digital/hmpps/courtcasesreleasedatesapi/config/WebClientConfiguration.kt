@@ -14,6 +14,7 @@ class WebClientConfiguration(
   @Value("\${hmpps-auth.url}") val hmppsAuthBaseUri: String,
   @Value("\${calculate-release-dates-api.url}") val calculateReleaseDatesApiBaseUri: String,
   @Value("\${adjustments-api.url}") val adjustmentsApiBaseUri: String,
+  @Value("\${hmpps-identify-remand-api.url}") val identifyRemandApiBaseUri: String,
   @Value("\${api.health-timeout:2s}") val healthTimeout: Duration,
   @Value("\${api.timeout:20s}") val timeout: Duration,
 ) {
@@ -43,6 +44,18 @@ class WebClientConfiguration(
       authorizedClientManager,
       registrationId = "adjustments-api",
       url = adjustmentsApiBaseUri,
+      timeout,
+    )
+
+  @Bean
+  fun identifyRemandApiWebClient(
+    authorizedClientManager: OAuth2AuthorizedClientManager,
+    builder: WebClient.Builder,
+  ): WebClient =
+    builder.authorisedWebClient(
+      authorizedClientManager,
+      registrationId = "identify-remand-api",
+      url = identifyRemandApiBaseUri,
       timeout,
     )
 }

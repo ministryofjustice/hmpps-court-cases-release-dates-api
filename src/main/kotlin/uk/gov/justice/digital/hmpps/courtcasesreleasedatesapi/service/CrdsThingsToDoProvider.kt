@@ -13,24 +13,19 @@ class CrdsThingsToDoProvider(
 ) : ThingsToDoProvider {
   override val serviceName: String = "releaseDates"
 
-  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): ThingsToDo {
+  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): ThingToDo? {
     if (existingThingsToDo.none { it.count > 0 }) {
       val calculationThingsToDo = calculateReleaseDatesApiClient.thingsToDo(prisonerId)
       if (calculationThingsToDo.thingsToDo.isNotEmpty()) {
-        return ThingsToDo(
-          things = listOf(
-            ThingToDo(
-              title = "Calculation required",
-              message = "Some information has changed. Check that all information is up to date then calculate release dates.",
-              buttonText = "Calculate release dates",
-              buttonHref = serviceConfig.uiUrl + "/calculation/" + prisonerId + "/reason",
-              type = ThingToDoType.CALCULATION_REQUIRED,
-            ),
-          ),
-
+        return ThingToDo(
+          title = "Calculation required",
+          message = "Some information has changed. Check that all information is up to date then calculate release dates.",
+          buttonText = "Calculate release dates",
+          buttonHref = serviceConfig.uiUrl + "/calculation/" + prisonerId + "/reason",
+          type = ThingToDoType.CALCULATION_REQUIRED,
         )
       }
     }
-    return ThingsToDo(emptyList())
+    return null
   }
 }
