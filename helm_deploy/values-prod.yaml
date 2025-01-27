@@ -14,7 +14,7 @@ generic-service:
     HMPPS_ADJUSTMENTS_UI_URL: "https://adjust-release-dates.hmpps.service.justice.gov.uk"
     HMPPS_RECALLS_UI_URL: "https://record-a-recall.hmpps.service.justice.gov.uk"
     HMPPS_CALCULATE_RELEASE_DATES_UI_URL: "https://calculate-release-dates.hmpps.service.justice.gov.uk"
-    THINGS_TO_DO_FEATURE_TOGGLE: "false"
+    THINGS_TO_DO_FEATURE_TOGGLE: "true"
     HMPPS_IDENTIFY_REMAND_UI_URL: "https://identify-remand-periods.hmpps.service.justice.gov.uk"
     HMPPS_IDENTIFY_REMAND_API_URL: "https://identify-remand-periods-api.hmpps.service.justice.gov.uk"
 
