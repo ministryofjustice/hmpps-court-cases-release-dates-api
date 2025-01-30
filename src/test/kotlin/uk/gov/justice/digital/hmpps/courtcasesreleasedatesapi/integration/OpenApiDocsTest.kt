@@ -70,8 +70,12 @@ class OpenApiDocsTest : IntegrationTestBase() {
     // We therefore need to grab all the valid security requirements and check that each path only contains those items
     val securityRequirements = result.openAPI.security.flatMap { it.keys }
     result.openAPI.paths.forEach { pathItem ->
-      val operation = pathItem.value.get ?: pathItem.value.delete ?: pathItem.value.post ?: pathItem.value.put
-      assertThat(operation.security.flatMap { it.keys }).isSubsetOf(securityRequirements)
+
+      assertThat(
+        listOfNotNull(pathItem.value.get, pathItem.value.delete, pathItem.value.post, pathItem.value.put, pathItem.value.patch)
+          .flatMap { it.security.flatMap { sec -> sec.keys } }
+          .distinct(),
+      ).isSubsetOf(securityRequirements)
     }
   }
 

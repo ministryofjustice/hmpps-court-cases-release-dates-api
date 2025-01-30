@@ -21,33 +21,18 @@ class ThingsToDoResourceIntTest : IntegrationTestBase() {
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       identifyRemandApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
-      getServiceDefinitions(
-        listOf(
-          "RELEASE_DATES_CALCULATOR",
-          "REMAND_AND_SENTENCING",
-          "ADJUSTMENTS_MAINTAINER",
-          "REMAND_IDENTIFIER",
-        ),
-      )
-      getServiceDefinitions(
-        listOf(
-          "RELEASE_DATES_CALCULATOR",
-          "REMAND_AND_SENTENCING",
-          "ADJUSTMENTS_MAINTAINER",
-          "REMAND_IDENTIFIER",
-        ),
+      val allRoles = listOf(
+        "RELEASE_DATES_CALCULATOR",
+        "REMAND_AND_SENTENCING",
+        "ADJUSTMENTS_MAINTAINER",
+        "REMAND_IDENTIFIER",
       )
 
+      getServiceDefinitions(allRoles)
+      getServiceDefinitions(allRoles)
       evictCache()
+      getServiceDefinitions(allRoles)
 
-      getServiceDefinitions(
-        listOf(
-          "RELEASE_DATES_CALCULATOR",
-          "REMAND_AND_SENTENCING",
-          "ADJUSTMENTS_MAINTAINER",
-          "REMAND_IDENTIFIER",
-        ),
-      )
       // Looked up things to do three times, first lookup from API, second from cache third from API after eviction.
       adjustmentsApiMockServer.verifyNumberOfThingsToDoCalls(PRISONER_ID, 2)
       calculateReleaseDatesApiMockServer.verifyNumberOfThingsToDoCalls(PRISONER_ID, 2)
