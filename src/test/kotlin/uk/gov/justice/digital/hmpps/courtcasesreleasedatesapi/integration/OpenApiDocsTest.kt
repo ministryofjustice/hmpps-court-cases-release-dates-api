@@ -70,12 +70,13 @@ class OpenApiDocsTest : IntegrationTestBase() {
     // We therefore need to grab all the valid security requirements and check that each path only contains those items
     val securityRequirements = result.openAPI.security.flatMap { it.keys }
     result.openAPI.paths.forEach { pathItem ->
-      assertThat(pathItem.value.get.security.flatMap { it.keys }).isSubsetOf(securityRequirements)
+      val operation = pathItem.value.get ?: pathItem.value.delete ?: pathItem.value.post ?: pathItem.value.put
+      assertThat(operation.security.flatMap { it.keys }).isSubsetOf(securityRequirements)
     }
   }
 
   @ParameterizedTest
-  @CsvSource(value = ["court-cases-release-dates-api-ui-role, ROLE_TEMPLATE_KOTLIN__UI"])
+  @CsvSource(value = ["court-cases-release-dates-api-things-to-do-rw-role, CCRD__THINGS_TO_DO_RW"])
   fun `the security scheme is setup for bearer tokens`(key: String, role: String) {
     webTestClient.get()
       .uri("/v3/api-docs")
@@ -89,7 +90,7 @@ class OpenApiDocsTest : IntegrationTestBase() {
         assertThat(it).contains(role)
       }
       .jsonPath("$.components.securitySchemes.$key.bearerFormat").isEqualTo("JWT")
-      .jsonPath("$.security[0].$key").isEqualTo(JSONArray().apply { this.add("read") })
+      .jsonPath("$.security[0].$key").isEqualTo(JSONArray().apply { this.add("read") }.apply { this.add("write") })
   }
 
   @Test

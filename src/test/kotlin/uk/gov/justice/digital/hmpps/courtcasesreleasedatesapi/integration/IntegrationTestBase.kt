@@ -12,9 +12,10 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.IdentifyRemandApiExtension
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.RedisExtension
 import uk.gov.justice.hmpps.test.kotlin.auth.JwtAuthorisationHelper
 
-@ExtendWith(HmppsAuthApiExtension::class, AdjustmentsApiExtension::class, CalculateReleaseDatesApiExtension::class, IdentifyRemandApiExtension::class)
+@ExtendWith(HmppsAuthApiExtension::class, AdjustmentsApiExtension::class, CalculateReleaseDatesApiExtension::class, IdentifyRemandApiExtension::class, RedisExtension::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
 abstract class IntegrationTestBase {

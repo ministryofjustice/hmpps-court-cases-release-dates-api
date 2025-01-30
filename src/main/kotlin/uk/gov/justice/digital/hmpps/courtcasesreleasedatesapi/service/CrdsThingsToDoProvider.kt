@@ -28,4 +28,5 @@ class CrdsThingsToDoProvider(
     }
     return null
   }
+  override fun thingToDoType(): ThingToDoType = ThingToDoType.CALCULATION_REQUIRED
 }

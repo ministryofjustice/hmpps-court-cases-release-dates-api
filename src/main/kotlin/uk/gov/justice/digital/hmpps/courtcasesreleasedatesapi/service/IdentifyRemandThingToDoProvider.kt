@@ -7,7 +7,6 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdService
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
-import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
 
 @Component
 class IdentifyRemandThingToDoProvider(
@@ -18,20 +17,24 @@ class IdentifyRemandThingToDoProvider(
   override val serviceName: String = "adjustments"
 
   override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): ThingToDo? {
-    if (HmppsAuthenticationHolder.hasRoles(IDENTIFY_REMAND_ROLE)) {
-      val thingsToDo = identifyRemandApiClient.thingsToDo(prisonerId)
-      if (thingsToDo.thingsToDo.isNotEmpty()) {
-        return ThingToDo(
-          title = "There are periods of remand to review",
-          message = "This service has identified periods of remand that may be relevant. You must review this remand periods before calculating a release date.",
-          buttonText = "Review remand",
-          buttonHref = "$identifyRemandApiBaseUri/prisoner/$prisonerId",
-          type = ThingToDoType.REVIEW_IDENTIFIED_REMAND,
-        )
-      }
+    val thingsToDo = identifyRemandApiClient.thingsToDo(prisonerId)
+    if (thingsToDo.thingsToDo.isNotEmpty()) {
+      return ThingToDo(
+        title = "There are periods of remand to review",
+        message = "This service has identified periods of remand that may be relevant. You must review this remand periods before calculating a release date.",
+        buttonText = "Review remand",
+        buttonHref = "$identifyRemandApiBaseUri/prisoner/$prisonerId",
+        type = ThingToDoType.REVIEW_IDENTIFIED_REMAND,
+      )
     }
     return null
   }
+
+  override fun additionalRoles(): List<String> {
+    return listOf(IDENTIFY_REMAND_ROLE)
+  }
+
+  override fun thingToDoType(): ThingToDoType = ThingToDoType.REVIEW_IDENTIFIED_REMAND
 
   companion object {
     private const val IDENTIFY_REMAND_ROLE = "REMAND_IDENTIFIER"

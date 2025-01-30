@@ -40,14 +40,14 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
     )
     .components(
       Components().addSecuritySchemes(
-        "court-cases-release-dates-api-ui-role",
-        SecurityScheme().addBearerJwtRequirement("ROLE_TEMPLATE_KOTLIN__UI"),
+        "court-cases-release-dates-api-things-to-do-rw-role",
+        SecurityScheme().addBearerJwtRequirement("CCRD__THINGS_TO_DO_RW"),
       ).addSecuritySchemes(
         "user-token",
         SecurityScheme().addBearerJwtRequirement("RELEASE_DATES_CALCULATOR").description("The users token, with at least the RELEASE_DATES_CALCULATOR ro"),
       ),
     )
-    .addSecurityItem(SecurityRequirement().addList("court-cases-release-dates-api-ui-role", listOf("read")).addList("user-token"))
+    .addSecurityItem(SecurityRequirement().addList("court-cases-release-dates-api-things-to-do-rw-role", listOf("read", "write")).addList("user-token"))
 }
 
 private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme =

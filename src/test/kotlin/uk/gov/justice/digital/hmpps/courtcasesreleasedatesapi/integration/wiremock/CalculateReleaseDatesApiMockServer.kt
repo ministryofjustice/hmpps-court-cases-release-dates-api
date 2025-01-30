@@ -17,6 +17,9 @@ class CalculateReleaseDatesApiMockServer : WireMockServer(8091) {
     verify(exactly(0), getRequestedFor(urlEqualTo("/things-to-do/prisoner/$prisonerId")))
   }
 
+  fun verifyNumberOfThingsToDoCalls(prisonerId: String, number: Int) {
+    verify(exactly(number), getRequestedFor(urlEqualTo("/things-to-do/prisoner/$prisonerId")))
+  }
   fun stubGetCalcRequiredThingsToDo(prisonerId: String) {
     stubFor(
       get("/things-to-do/prisoner/$prisonerId")

@@ -17,6 +17,9 @@ class AdjustmentsApiMockServer : WireMockServer(8092) {
   fun verifyNoThingsToDoCalls(prisonerId: String) {
     verify(exactly(0), getRequestedFor(urlEqualTo("/things-to-do/prisoner/$prisonerId")))
   }
+  fun verifyNumberOfThingsToDoCalls(prisonerId: String, number: Int) {
+    verify(exactly(number), getRequestedFor(urlEqualTo("/things-to-do/prisoner/$prisonerId")))
+  }
 
   fun stubGetAdaUpdateThingsTodo(prisonerId: String) {
     stubFor(

@@ -23,7 +23,7 @@ class CcrdDefinitionService(
     return CcrdServiceDefinitions(
       ccrdServiceConfigs.services
         .filter { (_, serviceConfig) ->
-          roleCheck(serviceConfig)
+          roleCheck(serviceConfig.requiredRoles)
         }
         .mapValues { (serviceName, serviceConfig) ->
           val thingToDo = getThingsToDo(prisonerId, serviceName, thingsToDo)
@@ -43,11 +43,12 @@ class CcrdDefinitionService(
 
   private fun getThingsToDo(prisonerId: String, serviceName: String, thingsToDo: MutableList<ThingsToDo>): ThingsToDo {
     if (featureToggles.thingsToDo) {
-      val providers = thingsToDoProviders.filter { it.serviceName == serviceName }
+      val providers = thingsToDoProviders
+        .filter { it.serviceName == serviceName }
+        .filter { it.additionalRoles().isEmpty() || roleCheck(it.additionalRoles()) }
       return ThingsToDo(
         providers.mapNotNull {
           try {
-            // TODO build caching layer around things to do.
             it.getThingToDo(prisonerId, thingsToDo, ccrdServiceConfigs.services[serviceName]!!)
           } catch (error: Exception) {
             log.error("Error finding thing to do $prisonerId $serviceName", error)
@@ -59,8 +60,8 @@ class CcrdDefinitionService(
     return ThingsToDo(emptyList())
   }
 
-  private fun roleCheck(serviceConfig: CcrdServiceConfig): Boolean =
-    HmppsAuthenticationHolder.hasRoles(*serviceConfig.requiredRoles.toTypedArray())
+  private fun roleCheck(requiredRoles: List<String>): Boolean =
+    HmppsAuthenticationHolder.hasRoles(*requiredRoles.toTypedArray())
 
   companion object {
     private val log: Logger = LoggerFactory.getLogger(CcrdDefinitionService::class.java)
