@@ -20,10 +20,9 @@ import java.time.Duration
 @ConditionalOnProperty("things-to-do-caching.enabled", havingValue = "true")
 class CacheConfiguration(
   private val objectMapper: ObjectMapper,
+  @Value("\${cache.ttlMinutes.default:60}")
+  val defaultCacheTtlMinutes: Long,
 ) {
-
-  @Value("\${cache.ttlMinutes.default}")
-  var defaultCacheTtlMinutes: Long = 60
 
   private fun objectMapper(): ObjectMapper = objectMapper.copy()
     .configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
