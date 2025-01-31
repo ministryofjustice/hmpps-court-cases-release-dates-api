@@ -1,9 +1,10 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.health
 
 import org.junit.jupiter.api.Test
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.IntegrationTestBase
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.IntegrationTestBase
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.SqsIntegrationTestBase
 
-class HealthCheckTest : IntegrationTestBase() {
+class HealthCheckTest : SqsIntegrationTestBase() {
 
   @Test
   fun `Health page reports ok`() {

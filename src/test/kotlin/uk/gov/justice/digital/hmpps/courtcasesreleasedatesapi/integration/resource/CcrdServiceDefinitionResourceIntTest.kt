@@ -1,14 +1,16 @@
-package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration
+package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.resource
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.IntegrationTestBase
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.SqsIntegrationTestBase
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.AdjustmentsApiExtension.Companion.adjustmentsApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.CalculateReleaseDatesApiExtension.Companion.calculateReleaseDatesApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.IdentifyRemandApiExtension.Companion.identifyRemandApiMockServer
 
-class CcrdServiceDefinitionResourceIntTest : IntegrationTestBase() {
+class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
 
   @Nested
   @DisplayName("GET /service-definitions")
@@ -328,7 +330,7 @@ class CcrdServiceDefinitionResourceIntTest : IntegrationTestBase() {
 
   private fun getServiceDefinitions(roles: List<String>) =
     webTestClient.get()
-      .uri("/service-definitions/prisoner/${PRISONER_ID}")
+      .uri("/service-definitions/prisoner/$PRISONER_ID")
       .headers(setAuthorisation(roles = roles))
       .exchange()
       .expectStatus()

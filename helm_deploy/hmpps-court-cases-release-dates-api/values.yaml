@@ -32,6 +32,9 @@ generic-service:
       SYSTEM_CLIENT_ID: "SYSTEM_CLIENT_ID"
       SYSTEM_CLIENT_SECRET: "SYSTEM_CLIENT_SECRET"
 
+    sqs-adjustments-prisoner-events-secret: #TOOD FIND SECRET NAME from CP.
+      HMPPS_SQS_QUEUES_CACHEEVICTIONLISTENER_QUEUE_NAME: "sqs_queue_name"
+
     elasticache-redis:
       SPRING_DATA_REDIS_HOST: "primary_endpoint_address"
       SPRING_DATA_REDIS_PASSWORD: "auth_token"

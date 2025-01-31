@@ -8,10 +8,12 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.IntegrationTestBase
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.SqsIntegrationTestBase
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class OpenApiDocsTest : IntegrationTestBase() {
+class OpenApiDocsTest : SqsIntegrationTestBase() {
   @LocalServerPort
   private val port: Int = 0
 
