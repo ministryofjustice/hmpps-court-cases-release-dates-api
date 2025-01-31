@@ -5,6 +5,11 @@ management.endpoint:
   health.cache.time-to-live: 0
   info.cache.time-to-live: 0
 
+spring:
+  data:
+    redis:
+      port: 6380
+
 hmpps-auth:
   url: "http://localhost:8090/auth"
 calculate-release-dates-api:

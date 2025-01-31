@@ -2,7 +2,6 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service
 
 import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.AdjustmentsApiClient
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.IdentifyRemandApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
@@ -12,7 +11,6 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.Int
 @Component
 class AdjustmentsThingsToDoProvider(
   private val adjustmentsApiClient: AdjustmentsApiClient,
-  private val identifyRemandApiClient: IdentifyRemandApiClient,
 ) : ThingsToDoProvider {
   override val serviceName: String = "adjustments"
 
@@ -41,4 +39,6 @@ class AdjustmentsThingsToDoProvider(
     }
     return null
   }
+
+  override fun thingToDoType(): ThingToDoType = ThingToDoType.ADA_INTERCEPT
 }

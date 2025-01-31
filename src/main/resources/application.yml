@@ -112,3 +112,6 @@ ccrd-service-configurations:
 
 feature-toggles:
   things-to-do: ${things-to-do-feature-toggle:false}
+
+things-to-do-caching:
+  enabled:  ${things-to-do-caching-toggle:false}
