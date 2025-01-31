@@ -1,11 +1,7 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -22,18 +18,14 @@ import java.time.Duration
 @Configuration
 @EnableCaching
 @ConditionalOnProperty("things-to-do-caching.enabled", havingValue = "true")
-class CacheConfiguration {
+class CacheConfiguration(
+  private val objectMapper: ObjectMapper,
+) {
 
   @Value("\${cache.ttlMinutes.default}")
   var defaultCacheTtlMinutes: Long = 60
 
-  private fun objectMapper(): ObjectMapper = ObjectMapper()
-    .registerModule(Jdk8Module())
-    .registerModule(JavaTimeModule())
-    .registerKotlinModule()
-    .apply {
-      activateDefaultTyping(polymorphicTypeValidator, ObjectMapper.DefaultTyping.EVERYTHING, JsonTypeInfo.As.PROPERTY)
-    }
+  private fun objectMapper(): ObjectMapper = objectMapper.copy()
     .configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
 
   private fun getDefaultCacheConfiguration(): RedisCacheConfiguration = RedisCacheConfiguration
