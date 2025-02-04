@@ -3,11 +3,14 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.liste
 import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilAsserted
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.cache.annotation.EnableCaching
 import software.amazon.awssdk.services.sns.model.MessageAttributeValue
 import software.amazon.awssdk.services.sns.model.PublishRequest
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.SqsIntegrationTestBase
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.resource.ThingsToDoResourceIntTest
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.resource.ThingsToDoResourceIntTest.Companion
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.AdjustmentsApiExtension.Companion.adjustmentsApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.CalculateReleaseDatesApiExtension.Companion.calculateReleaseDatesApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
@@ -15,7 +18,12 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremo
 import uk.gov.justice.hmpps.sqs.countAllMessagesOnQueue
 
 @EnableCaching
-class PrisonerListenerIntTest: SqsIntegrationTestBase() {
+class PrisonerListenerIntTest : SqsIntegrationTestBase() {
+
+  @BeforeEach
+  fun setup() {
+    evictCache()
+  }
 
   @Test
   fun `Check event will evict cache`() {
@@ -62,6 +70,15 @@ class PrisonerListenerIntTest: SqsIntegrationTestBase() {
     webTestClient.get()
       .uri("/service-definitions/prisoner/$PRISONER_ID")
       .headers(setAuthorisation(roles = roles))
+      .exchange()
+      .expectStatus()
+      .isOk
+
+
+  private fun evictCache() =
+    webTestClient.delete()
+      .uri("/things-to-do/prisoner/$PRISONER_ID/evict")
+      .headers(setAuthorisation(roles = listOf("CCRD__THINGS_TO_DO_RW")))
       .exchange()
       .expectStatus()
       .isOk

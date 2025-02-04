@@ -18,7 +18,7 @@ class PrisonerEventListener(
 
   private companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
-    val prisonIdFields = listOf("nomsNumber", "removedNomsNumber", "movedFromNomsNumber", "movedToNomsNumber")
+    val prisonIdFields = listOf("nomsNumber", "removedNomsNumber", "movedFromNomsNumber", "movedToNomsNumber", "offenderNo")
   }
 
   @SqsListener("cacheevictionlistener", factory = "hmppsQueueContainerFactoryProxy")

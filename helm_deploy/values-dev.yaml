@@ -29,3 +29,9 @@ generic-service:
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
 generic-prometheus-alerts:
   alertSeverity: legacy-replacement-alerts-non-prod
+  businessHoursOnly: true
+  sqsAlertsQueueNames:
+    - "farsight-devs-dev-hmpps_ccrd_cache_eviction_queue"
+    - "farsight-devs-dev-hmpps_ccrd_cache_eviction_dlq"
+  sqsAlertsOldestThreshold: 2
+  sqsAlertsTotalMessagesThreshold: 1

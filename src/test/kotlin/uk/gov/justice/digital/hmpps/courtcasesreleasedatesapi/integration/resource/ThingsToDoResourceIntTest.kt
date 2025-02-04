@@ -1,10 +1,10 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.resource
 
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.cache.annotation.EnableCaching
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.IntegrationTestBase
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.SqsIntegrationTestBase
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.AdjustmentsApiExtension.Companion.adjustmentsApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.CalculateReleaseDatesApiExtension.Companion.calculateReleaseDatesApiMockServer
@@ -13,6 +13,11 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremo
 
 @EnableCaching
 class ThingsToDoResourceIntTest : SqsIntegrationTestBase() {
+
+  @BeforeEach
+  fun setup() {
+    evictCache()
+  }
 
   @Nested
   @DisplayName("GET /service-definitions caching")

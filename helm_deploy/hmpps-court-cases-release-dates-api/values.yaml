@@ -13,7 +13,13 @@ generic-service:
     enabled: true
     host: app-hostname.local # override per environment
     tlsSecretName: hmpps-court-cases-release-dates-api-cert
-
+    annotations:
+      nginx.ingress.kubernetes.io/server-snippet: |
+        server_tokens off;
+        location /queue-admin/retry-all-dlqs {
+          deny all;
+          return 401;
+        }
   # Environment variables to load into the deployment
   env:
     JAVA_OPTS: "-Xmx512m"
@@ -32,7 +38,7 @@ generic-service:
       SYSTEM_CLIENT_ID: "SYSTEM_CLIENT_ID"
       SYSTEM_CLIENT_SECRET: "SYSTEM_CLIENT_SECRET"
 
-    sqs-adjustments-prisoner-events-secret: #TOOD FIND SECRET NAME from CP.
+    sqs-ccrd-cache-eviction-secret:
       HMPPS_SQS_QUEUES_CACHEEVICTIONLISTENER_QUEUE_NAME: "sqs_queue_name"
 
     elasticache-redis:
@@ -42,6 +48,9 @@ generic-service:
   allowlist:
     groups:
       - internal
+
+  retryDlqCronjob:
+    enabled: true
 
 generic-prometheus-alerts:
   targetApplication: hmpps-court-cases-release-dates-api

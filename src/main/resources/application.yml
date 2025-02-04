@@ -43,10 +43,6 @@ spring:
             client-secret: ${system.client.secret}
             authorization-grant-type: client_credentials
             scope: read,write
-  data:
-    redis:
-      ssl:
-        enabled: true
 
 server:
   port: 8080
