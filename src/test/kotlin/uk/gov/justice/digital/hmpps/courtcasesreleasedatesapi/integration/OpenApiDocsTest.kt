@@ -74,12 +74,12 @@ class OpenApiDocsTest : SqsIntegrationTestBase() {
       .filterNot { it.key.contains("/queue-admin") }
       .forEach { pathItem ->
 
-      assertThat(
-        listOfNotNull(pathItem.value.get, pathItem.value.delete, pathItem.value.post, pathItem.value.put, pathItem.value.patch)
-          .flatMap { it.security.flatMap { sec -> sec.keys } }
-          .distinct(),
-      ).isSubsetOf(securityRequirements)
-    }
+        assertThat(
+          listOfNotNull(pathItem.value.get, pathItem.value.delete, pathItem.value.post, pathItem.value.put, pathItem.value.patch)
+            .flatMap { it.security.flatMap { sec -> sec.keys } }
+            .distinct(),
+        ).isSubsetOf(securityRequirements)
+      }
   }
 
   @ParameterizedTest

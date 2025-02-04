@@ -9,8 +9,6 @@ import org.springframework.cache.annotation.EnableCaching
 import software.amazon.awssdk.services.sns.model.MessageAttributeValue
 import software.amazon.awssdk.services.sns.model.PublishRequest
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.SqsIntegrationTestBase
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.resource.ThingsToDoResourceIntTest
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.resource.ThingsToDoResourceIntTest.Companion
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.AdjustmentsApiExtension.Companion.adjustmentsApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.CalculateReleaseDatesApiExtension.Companion.calculateReleaseDatesApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
@@ -73,7 +71,6 @@ class PrisonerListenerIntTest : SqsIntegrationTestBase() {
       .exchange()
       .expectStatus()
       .isOk
-
 
   private fun evictCache() =
     webTestClient.delete()
