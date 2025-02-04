@@ -34,3 +34,20 @@ hmpps-identify-remand-ui:
   url:  "http://localhost:8005"
 
 things-to-do-feature-toggle: "true"
+
+
+hmpps.sqs:
+  reactiveApi: true
+  provider: localstack
+  queues:
+    cacheevictionlistener:
+      queueName: "cacheevictionlistener-${random.uuid}"
+      dlqName: "cacheevictionlistener-dlq-${random.uuid}"
+      subscribeTopicId: domainevents
+      subscribeFilter: "{\"eventType\":[\"prisoner-offender-search.prisoner.released\", \"prisoner-offender-search.prisoner.received\", \"prison-offender-events.prisoner.merged\", \"prison-offender-events.prisoner.booking.moved\"]}"
+      dlqMaxReceiveCount: 3
+      visibilityTimeout: 120
+  topics:
+    domainevents:
+      arn: arn:aws:sns:eu-west-2:000000000000:11111111-2222-3333-4444-555555555555
+

@@ -1,16 +1,23 @@
-package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration
+package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.resource
 
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.cache.annotation.EnableCaching
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.SqsIntegrationTestBase
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.AdjustmentsApiExtension.Companion.adjustmentsApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.CalculateReleaseDatesApiExtension.Companion.calculateReleaseDatesApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.IdentifyRemandApiExtension.Companion.identifyRemandApiMockServer
 
 @EnableCaching
-class ThingsToDoResourceIntTest : IntegrationTestBase() {
+class ThingsToDoResourceIntTest : SqsIntegrationTestBase() {
+
+  @BeforeEach
+  fun setup() {
+    evictCache()
+  }
 
   @Nested
   @DisplayName("GET /service-definitions caching")
@@ -42,7 +49,7 @@ class ThingsToDoResourceIntTest : IntegrationTestBase() {
 
   private fun getServiceDefinitions(roles: List<String>) =
     webTestClient.get()
-      .uri("/service-definitions/prisoner/${PRISONER_ID}")
+      .uri("/service-definitions/prisoner/$PRISONER_ID")
       .headers(setAuthorisation(roles = roles))
       .exchange()
       .expectStatus()
@@ -50,7 +57,7 @@ class ThingsToDoResourceIntTest : IntegrationTestBase() {
 
   private fun evictCache() =
     webTestClient.delete()
-      .uri("/things-to-do/prisoner/${PRISONER_ID}/evict")
+      .uri("/things-to-do/prisoner/$PRISONER_ID/evict")
       .headers(setAuthorisation(roles = listOf("CCRD__THINGS_TO_DO_RW")))
       .exchange()
       .expectStatus()

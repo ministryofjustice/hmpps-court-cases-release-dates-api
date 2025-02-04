@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration
+package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration
 
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
