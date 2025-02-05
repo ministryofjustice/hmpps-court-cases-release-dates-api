@@ -41,7 +41,7 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
     .components(
       Components().addSecuritySchemes(
         "court-cases-release-dates-api-things-to-do-rw-role",
-        SecurityScheme().addBearerJwtRequirement("CCRD__THINGS_TO_DO_RW"),
+        SecurityScheme().addBearerJwtRequirement("COURT_CASES_RELEASE_DATES__PRE_SENTENCE_CALC_REVIEW_TASKS__RW"),
       ).addSecuritySchemes(
         "user-token",
         SecurityScheme().addBearerJwtRequirement("RELEASE_DATES_CALCULATOR").description("The users token, with at least the RELEASE_DATES_CALCULATOR ro"),

@@ -58,7 +58,7 @@ class ThingsToDoResourceIntTest : SqsIntegrationTestBase() {
   private fun evictCache() =
     webTestClient.delete()
       .uri("/things-to-do/prisoner/$PRISONER_ID/evict")
-      .headers(setAuthorisation(roles = listOf("CCRD__THINGS_TO_DO_RW")))
+      .headers(setAuthorisation(roles = listOf("COURT_CASES_RELEASE_DATES__PRE_SENTENCE_CALC_REVIEW_TASKS__RW")))
       .exchange()
       .expectStatus()
       .isOk
