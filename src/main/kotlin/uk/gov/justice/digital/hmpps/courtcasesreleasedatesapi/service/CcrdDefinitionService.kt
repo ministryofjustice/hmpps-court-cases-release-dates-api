@@ -49,7 +49,7 @@ class CcrdDefinitionService(
       return ThingsToDo(
         providers.mapNotNull {
           try {
-            it.getThingToDo(prisonerId, thingsToDo, ccrdServiceConfigs.services[serviceName]!!)
+            it.getThingToDo(prisonerId, thingsToDo, ccrdServiceConfigs.services[serviceName]!!).thingToDo
           } catch (error: Exception) {
             log.error("Error finding thing to do $prisonerId $serviceName", error)
             null
