@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service
 import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.AdjustmentsApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CacheableThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
@@ -14,7 +15,7 @@ class AdjustmentsThingsToDoProvider(
 ) : ThingsToDoProvider {
   override val serviceName: String = "adjustments"
 
-  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): ThingToDo? {
+  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): CacheableThingToDo {
     val adjustmentTodos = adjustmentsApiClient.thingsToDo(prisonerId)
     if (adjustmentTodos.thingsToDo.isNotEmpty() && adjustmentTodos.adaIntercept != null) {
       val intercept = adjustmentTodos.adaIntercept
@@ -29,15 +30,17 @@ class AdjustmentsThingsToDoProvider(
       } else {
         "Review adjustment information"
       }
-      return ThingToDo(
-        title = title,
-        message = intercept.message,
-        buttonText = "Review $interceptType",
-        buttonHref = if (intercept.anyProspective) serviceConfig.uiUrl + "/$prisonerId/additional-days/review-prospective" else serviceConfig.uiUrl + "/$prisonerId/additional-days/review-and-approve",
-        type = ThingToDoType.ADA_INTERCEPT,
+      return CacheableThingToDo(
+        ThingToDo(
+          title = title,
+          message = intercept.message,
+          buttonText = "Review $interceptType",
+          buttonHref = if (intercept.anyProspective) serviceConfig.uiUrl + "/$prisonerId/additional-days/review-prospective" else serviceConfig.uiUrl + "/$prisonerId/additional-days/review-and-approve",
+          type = ThingToDoType.ADA_INTERCEPT,
+        ),
       )
     }
-    return null
+    return CacheableThingToDo()
   }
 
   override fun thingToDoType(): ThingToDoType = ThingToDoType.ADA_INTERCEPT
