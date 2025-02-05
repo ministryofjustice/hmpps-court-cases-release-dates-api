@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Value
@@ -26,6 +27,9 @@ class CacheConfiguration(
 
   private fun objectMapper(): ObjectMapper = objectMapper.copy()
     .configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
+    .apply {
+      activateDefaultTyping(polymorphicTypeValidator, ObjectMapper.DefaultTyping.NON_FINAL_AND_ENUMS, JsonTypeInfo.As.PROPERTY)
+    }
 
   private fun getDefaultCacheConfiguration(): RedisCacheConfiguration = RedisCacheConfiguration
     .defaultCacheConfig()
