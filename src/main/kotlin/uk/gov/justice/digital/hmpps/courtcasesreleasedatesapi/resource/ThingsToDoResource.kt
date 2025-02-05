@@ -24,7 +24,7 @@ class ThingsToDoResource(
   private val thingToDoCacheService: ThingToDoCacheService,
 ) {
   @DeleteMapping("/prisoner/{prisonerId}/evict")
-  @PreAuthorize("hasAnyRole('CCRD__THINGS_TO_DO_RW')")
+  @PreAuthorize("hasAnyRole('COURT_CASES_RELEASE_DATES__PRE_SENTENCE_CALC_REVIEW_TASKS__RW')")
   @Operation(
     summary = "Evict the cached things to do",
     description = "Evict the cached things to do when underlying data has changed.",

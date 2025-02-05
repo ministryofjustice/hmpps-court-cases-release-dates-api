@@ -83,7 +83,7 @@ class OpenApiDocsTest : SqsIntegrationTestBase() {
   }
 
   @ParameterizedTest
-  @CsvSource(value = ["court-cases-release-dates-api-things-to-do-rw-role, CCRD__THINGS_TO_DO_RW"])
+  @CsvSource(value = ["court-cases-release-dates-api-things-to-do-rw-role, COURT_CASES_RELEASE_DATES__PRE_SENTENCE_CALC_REVIEW_TASKS__RW"])
   fun `the security scheme is setup for bearer tokens`(key: String, role: String) {
     webTestClient.get()
       .uri("/v3/api-docs")
