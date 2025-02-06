@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 // wrapping the thing to do in an object for caching null values.
 @JsonTypeInfo(
-  use = JsonTypeInfo.Id.MINIMAL_CLASS,
+  use = JsonTypeInfo.Id.CLASS,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "@class",
 )
 data class CacheableThingToDo(
   val thingToDo: ThingToDo? = null,
