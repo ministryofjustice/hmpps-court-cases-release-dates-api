@@ -23,7 +23,7 @@ class IdentifyRemandThingToDoProvider(
       return CacheableThingToDo(
         ThingToDo(
           title = "There are periods of remand to review",
-          message = "This service has identified periods of remand that may be relevant. You must review this remand periods before calculating a release date.",
+          message = "This service has identified periods of remand that may be relevant. You must review these remand periods before calculating a release date.",
           buttonText = "Review remand",
           buttonHref = "$identifyRemandApiBaseUri/prisoner/$prisonerId",
           type = ThingToDoType.REVIEW_IDENTIFIED_REMAND,
