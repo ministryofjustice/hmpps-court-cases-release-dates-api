@@ -18,7 +18,7 @@ class PrisonerEventListener(
 
   private companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
-    val prisonIdFields = listOf("nomsNumber", "removedNomsNumber", "movedFromNomsNumber", "movedToNomsNumber", "offenderNo")
+    val prisonIdFields = listOf("nomsNumber", "removedNomsNumber", "movedFromNomsNumber", "movedToNomsNumber", "offenderNo", "prisonerNumber")
   }
 
   @SqsListener("cacheevictionlistener", factory = "hmppsQueueContainerFactoryProxy")
@@ -45,7 +45,7 @@ class PrisonerEventListener(
     }
 
     if (prisonerIds.isEmpty()) {
-      log.error("Unable to find prisoner ID from event ${prisonerEvent.eventType}")
+      throw UnknownPrisonerIdException("Unable to find prisoner ID from event ${prisonerEvent.eventType}")
     } else {
       log.info("Event ${prisonerEvent.eventType} triggers cache evict for prisoner IDs $prisonerIds")
     }
@@ -56,6 +56,8 @@ class PrisonerEventListener(
       }
     }
   }
+
+  class UnknownPrisonerIdException(message: String) : Exception(message)
 
   data class PrisonerEvent(
     val eventType: String,
