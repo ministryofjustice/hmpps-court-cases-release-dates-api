@@ -32,7 +32,6 @@ class ThingsToDoResourceIntTest : SqsIntegrationTestBase() {
       val allRoles = listOf(
         "RELEASE_DATES_CALCULATOR",
         "REMAND_AND_SENTENCING",
-        "ADJUSTMENTS_MAINTAINER",
         "REMAND_IDENTIFIER",
       )
 
