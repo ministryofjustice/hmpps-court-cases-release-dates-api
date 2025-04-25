@@ -20,7 +20,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       identifyRemandApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "ADJUSTMENTS_MAINTAINER", "REMAND_IDENTIFIER"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER"))
         .expectBody()
         .json(
           """
@@ -109,7 +109,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
             }
           """.trimIndent(),
         )
-      adjustmentsApiMockServer.verifyNoThingsToDoCalls(PRISONER_ID)
+      adjustmentsApiMockServer.verifyNumberOfThingsToDoCalls(PRISONER_ID, 1)
       identifyRemandApiMockServer.verifyNoThingsToDoCalls(PRISONER_ID)
     }
   }
@@ -122,7 +122,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     fun `Should return ADA update`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetAdaUpdateThingsTodo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "ADJUSTMENTS_MAINTAINER"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR"))
         .expectBody()
         .json(
           """
@@ -171,7 +171,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     fun `Should return ADA first time`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubAdaFirstTimeThingsToDo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "ADJUSTMENTS_MAINTAINER"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR"))
         .expectBody()
         .json(
           """
@@ -220,7 +220,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     fun `Should return ADA prospective`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubAdaProspectiveThingsToDo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "ADJUSTMENTS_MAINTAINER"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR"))
         .expectBody()
         .json(
           """
@@ -275,7 +275,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       adjustmentsApiMockServer.stubAdaProspectiveThingsToDo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       identifyRemandApiMockServer.stubFirstTimeReviewThingsToDo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "ADJUSTMENTS_MAINTAINER", "REMAND_IDENTIFIER"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER"))
         .expectBody()
         .json(
           """
