@@ -64,24 +64,21 @@ class PrisonerListenerIntTest : SqsIntegrationTestBase() {
     identifyRemandApiMockServer.verifyNumberOfThingsToDoCalls(PRISONER_ID, 2)
   }
 
-  private fun getServiceDefinitions(roles: List<String>) =
-    webTestClient.get()
-      .uri("/service-definitions/prisoner/$PRISONER_ID")
-      .headers(setAuthorisation(roles = roles))
-      .exchange()
-      .expectStatus()
-      .isOk
+  private fun getServiceDefinitions(roles: List<String>) = webTestClient.get()
+    .uri("/service-definitions/prisoner/$PRISONER_ID")
+    .headers(setAuthorisation(roles = roles))
+    .exchange()
+    .expectStatus()
+    .isOk
 
-  private fun evictCache() =
-    webTestClient.delete()
-      .uri("/things-to-do/prisoner/$PRISONER_ID/evict")
-      .headers(setAuthorisation(roles = listOf("COURT_CASES_RELEASE_DATES__PRE_SENTENCE_CALC_REVIEW_TASKS__RW")))
-      .exchange()
-      .expectStatus()
-      .isOk
+  private fun evictCache() = webTestClient.delete()
+    .uri("/things-to-do/prisoner/$PRISONER_ID/evict")
+    .headers(setAuthorisation(roles = listOf("COURT_CASES_RELEASE_DATES__PRE_SENTENCE_CALC_REVIEW_TASKS__RW")))
+    .exchange()
+    .expectStatus()
+    .isOk
 
-  private fun prisonerAdmissionPayload(nomsNumber: String, eventType: String) =
-    """{"eventType":"$eventType", "additionalInformation": {"nomsNumber":"$nomsNumber", "reason": "NEW_ADMISSION"}}"""
+  private fun prisonerAdmissionPayload(nomsNumber: String, eventType: String) = """{"eventType":"$eventType", "additionalInformation": {"nomsNumber":"$nomsNumber", "reason": "NEW_ADMISSION"}}"""
 
   companion object {
     private const val PRISONER_ID = "AB1234AB"

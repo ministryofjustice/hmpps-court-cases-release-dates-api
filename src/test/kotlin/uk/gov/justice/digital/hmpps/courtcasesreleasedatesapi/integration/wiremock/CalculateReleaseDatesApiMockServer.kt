@@ -56,7 +56,10 @@ class CalculateReleaseDatesApiMockServer : WireMockServer(8091) {
   }
 }
 
-class CalculateReleaseDatesApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
+class CalculateReleaseDatesApiExtension :
+  BeforeAllCallback,
+  AfterAllCallback,
+  BeforeEachCallback {
   companion object {
     @JvmField
     val calculateReleaseDatesApiMockServer = CalculateReleaseDatesApiMockServer()

@@ -20,42 +20,38 @@ class WebClientConfiguration(
 ) {
   // HMPPS Auth health ping is required if your service calls HMPPS Auth to get a token to call other services
   @Bean
-  fun hmppsAuthHealthWebClient(builder: WebClient.Builder): WebClient =
-    builder.healthWebClient(hmppsAuthBaseUri, healthTimeout)
+  fun hmppsAuthHealthWebClient(builder: WebClient.Builder): WebClient = builder.healthWebClient(hmppsAuthBaseUri, healthTimeout)
 
   @Bean
   fun calculateReleaseDatesApiWebClient(
     authorizedClientManager: OAuth2AuthorizedClientManager,
     builder: WebClient.Builder,
-  ): WebClient =
-    builder.authorisedWebClient(
-      authorizedClientManager,
-      registrationId = "calculate-release-dates-api",
-      url = calculateReleaseDatesApiBaseUri,
-      timeout,
-    )
+  ): WebClient = builder.authorisedWebClient(
+    authorizedClientManager,
+    registrationId = "calculate-release-dates-api",
+    url = calculateReleaseDatesApiBaseUri,
+    timeout,
+  )
 
   @Bean
   fun adjustmentsApiWebClient(
     authorizedClientManager: OAuth2AuthorizedClientManager,
     builder: WebClient.Builder,
-  ): WebClient =
-    builder.authorisedWebClient(
-      authorizedClientManager,
-      registrationId = "adjustments-api",
-      url = adjustmentsApiBaseUri,
-      timeout,
-    )
+  ): WebClient = builder.authorisedWebClient(
+    authorizedClientManager,
+    registrationId = "adjustments-api",
+    url = adjustmentsApiBaseUri,
+    timeout,
+  )
 
   @Bean
   fun identifyRemandApiWebClient(
     authorizedClientManager: OAuth2AuthorizedClientManager,
     builder: WebClient.Builder,
-  ): WebClient =
-    builder.authorisedWebClient(
-      authorizedClientManager,
-      registrationId = "identify-remand-api",
-      url = identifyRemandApiBaseUri,
-      timeout,
-    )
+  ): WebClient = builder.authorisedWebClient(
+    authorizedClientManager,
+    registrationId = "identify-remand-api",
+    url = identifyRemandApiBaseUri,
+    timeout,
+  )
 }

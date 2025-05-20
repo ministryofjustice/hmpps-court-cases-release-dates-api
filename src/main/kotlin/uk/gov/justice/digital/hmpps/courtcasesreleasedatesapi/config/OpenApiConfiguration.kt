@@ -20,8 +20,10 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
   fun customOpenAPI(): OpenAPI = OpenAPI()
     .servers(
       listOf(
-        Server().url("https://court-cases-release-dates-api-dev.hmpps.service.justice.gov.uk").description("Development"),
-        Server().url("https://court-cases-release-dates-api-preprod.hmpps.service.justice.gov.uk").description("Pre-Production"),
+        Server().url("https://court-cases-release-dates-api-dev.hmpps.service.justice.gov.uk")
+          .description("Development"),
+        Server().url("https://court-cases-release-dates-api-preprod.hmpps.service.justice.gov.uk")
+          .description("Pre-Production"),
         Server().url("https://court-cases-release-dates-api.hmpps.service.justice.gov.uk").description("Production"),
         Server().url("http://localhost:8080").description("Local"),
       ),
@@ -44,16 +46,21 @@ class OpenApiConfiguration(buildProperties: BuildProperties) {
         SecurityScheme().addBearerJwtRequirement("COURT_CASES_RELEASE_DATES__PRE_SENTENCE_CALC_REVIEW_TASKS__RW"),
       ).addSecuritySchemes(
         "user-token",
-        SecurityScheme().addBearerJwtRequirement("RELEASE_DATES_CALCULATOR").description("The users token, with at least the RELEASE_DATES_CALCULATOR ro"),
+        SecurityScheme().addBearerJwtRequirement("RELEASE_DATES_CALCULATOR")
+          .description("The users token, with at least the RELEASE_DATES_CALCULATOR ro"),
       ),
     )
-    .addSecurityItem(SecurityRequirement().addList("court-cases-release-dates-api-things-to-do-rw-role", listOf("read", "write")).addList("user-token"))
+    .addSecurityItem(
+      SecurityRequirement().addList(
+        "court-cases-release-dates-api-things-to-do-rw-role",
+        listOf("read", "write"),
+      ).addList("user-token"),
+    )
 }
 
-private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme =
-  type(SecurityScheme.Type.HTTP)
-    .scheme("bearer")
-    .bearerFormat("JWT")
-    .`in`(SecurityScheme.In.HEADER)
-    .name("Authorization")
-    .description("A HMPPS Auth access token with the `$role` role.")
+private fun SecurityScheme.addBearerJwtRequirement(role: String): SecurityScheme = type(SecurityScheme.Type.HTTP)
+  .scheme("bearer")
+  .bearerFormat("JWT")
+  .`in`(SecurityScheme.In.HEADER)
+  .name("Authorization")
+  .description("A HMPPS Auth access token with the `$role` role.")

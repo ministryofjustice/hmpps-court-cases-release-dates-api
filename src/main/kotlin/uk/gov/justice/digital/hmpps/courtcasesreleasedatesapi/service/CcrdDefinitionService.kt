@@ -37,9 +37,7 @@ class CcrdDefinitionService(
     )
   }
 
-  private fun getHref(serviceConfig: CcrdServiceConfig, prisonerId: String): String {
-    return serviceConfig.uiUrl + serviceConfig.urlMapping.replace("{prisonerId}", prisonerId)
-  }
+  private fun getHref(serviceConfig: CcrdServiceConfig, prisonerId: String): String = serviceConfig.uiUrl + serviceConfig.urlMapping.replace("{prisonerId}", prisonerId)
 
   private fun getThingsToDo(prisonerId: String, serviceName: String, thingsToDo: MutableList<ThingsToDo>): ThingsToDo {
     if (featureToggles.thingsToDo) {
@@ -60,8 +58,7 @@ class CcrdDefinitionService(
     return ThingsToDo(emptyList())
   }
 
-  private fun roleCheck(requiredRoles: List<String>): Boolean =
-    HmppsAuthenticationHolder.hasRoles(*requiredRoles.toTypedArray())
+  private fun roleCheck(requiredRoles: List<String>): Boolean = HmppsAuthenticationHolder.hasRoles(*requiredRoles.toTypedArray())
 
   companion object {
     private val log: Logger = LoggerFactory.getLogger(CcrdDefinitionService::class.java)
