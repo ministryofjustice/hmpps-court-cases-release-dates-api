@@ -17,7 +17,11 @@ class IdentifyRemandThingToDoProvider(
 ) : ThingsToDoProvider {
   override val serviceName: String = "adjustments"
 
-  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): CacheableThingToDo {
+  override fun getThingToDo(
+    prisonerId: String,
+    existingThingsToDo: MutableList<ThingsToDo>,
+    serviceConfig: CcrdServiceConfig,
+  ): CacheableThingToDo {
     val thingsToDo = identifyRemandApiClient.thingsToDo(prisonerId)
     if (thingsToDo.thingsToDo.isNotEmpty()) {
       return CacheableThingToDo(
@@ -33,9 +37,7 @@ class IdentifyRemandThingToDoProvider(
     return CacheableThingToDo()
   }
 
-  override fun additionalRoles(): List<String> {
-    return listOf(IDENTIFY_REMAND_ROLE)
-  }
+  override fun additionalRoles(): List<String> = listOf(IDENTIFY_REMAND_ROLE)
 
   override fun thingToDoType(): ThingToDoType = ThingToDoType.REVIEW_IDENTIFIED_REMAND
 

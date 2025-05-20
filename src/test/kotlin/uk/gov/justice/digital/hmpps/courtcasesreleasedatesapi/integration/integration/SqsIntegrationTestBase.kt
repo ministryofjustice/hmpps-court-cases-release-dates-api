@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration
 
-import org.awaitility.core.ConditionFactory
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.matches
 import org.awaitility.kotlin.untilCallTo
@@ -11,14 +10,10 @@ import org.springframework.test.context.DynamicPropertySource
 import software.amazon.awssdk.services.sqs.model.PurgeQueueRequest
 import uk.gov.justice.hmpps.sqs.HmppsQueue
 import uk.gov.justice.hmpps.sqs.HmppsQueueService
-import uk.gov.justice.hmpps.sqs.HmppsSqsProperties
 import uk.gov.justice.hmpps.sqs.MissingQueueException
-import uk.gov.justice.hmpps.sqs.MissingTopicException
 import uk.gov.justice.hmpps.sqs.countMessagesOnQueue
-import java.time.Duration
 
 class SqsIntegrationTestBase : IntegrationTestBase() {
-  protected val awaitAtMost30Secs: ConditionFactory get() = await.atMost(Duration.ofSeconds(30))
 
   @Autowired
   private lateinit var hmppsQueueService: HmppsQueueService
@@ -28,9 +23,6 @@ class SqsIntegrationTestBase : IntegrationTestBase() {
   protected val domainEventsTopicArn by lazy { domainEventsTopic.arn }
 
   protected val cacheEvictionQueue by lazy { hmppsQueueService.findByQueueId("cacheevictionlistener") as HmppsQueue }
-
-  fun HmppsSqsProperties.domaineventsTopicConfig() =
-    topics["domainevents"] ?: throw MissingTopicException("domainevents has not been loaded from configuration properties")
 
   @BeforeEach
   fun cleanQueue() {

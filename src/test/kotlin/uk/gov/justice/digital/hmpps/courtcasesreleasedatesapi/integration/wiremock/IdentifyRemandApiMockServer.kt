@@ -1,12 +1,7 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import com.github.tomakehurst.wiremock.client.WireMock.exactly
-import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
-import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
-import com.github.tomakehurst.wiremock.client.WireMock.verify
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
@@ -56,7 +51,10 @@ class IdentifyRemandApiMockServer : WireMockServer(8093) {
   }
 }
 
-class IdentifyRemandApiExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
+class IdentifyRemandApiExtension :
+  BeforeAllCallback,
+  AfterAllCallback,
+  BeforeEachCallback {
   companion object {
     @JvmField
     val identifyRemandApiMockServer = IdentifyRemandApiMockServer()

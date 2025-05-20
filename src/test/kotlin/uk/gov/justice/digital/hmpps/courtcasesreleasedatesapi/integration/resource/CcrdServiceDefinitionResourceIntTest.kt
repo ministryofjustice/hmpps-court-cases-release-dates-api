@@ -327,13 +327,12 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     }
   }
 
-  private fun getServiceDefinitions(roles: List<String>) =
-    webTestClient.get()
-      .uri("/service-definitions/prisoner/$PRISONER_ID")
-      .headers(setAuthorisation(roles = roles))
-      .exchange()
-      .expectStatus()
-      .isOk
+  private fun getServiceDefinitions(roles: List<String>) = webTestClient.get()
+    .uri("/service-definitions/prisoner/$PRISONER_ID")
+    .headers(setAuthorisation(roles = roles))
+    .exchange()
+    .expectStatus()
+    .isOk
 
   companion object {
     private const val PRISONER_ID = "AB1234AB"

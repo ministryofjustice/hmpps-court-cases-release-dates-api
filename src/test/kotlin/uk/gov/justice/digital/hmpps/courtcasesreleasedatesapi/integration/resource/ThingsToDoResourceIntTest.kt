@@ -47,21 +47,19 @@ class ThingsToDoResourceIntTest : SqsIntegrationTestBase() {
     }
   }
 
-  private fun getServiceDefinitions(roles: List<String>) =
-    webTestClient.get()
-      .uri("/service-definitions/prisoner/$PRISONER_ID")
-      .headers(setAuthorisation(roles = roles))
-      .exchange()
-      .expectStatus()
-      .isOk
+  private fun getServiceDefinitions(roles: List<String>) = webTestClient.get()
+    .uri("/service-definitions/prisoner/$PRISONER_ID")
+    .headers(setAuthorisation(roles = roles))
+    .exchange()
+    .expectStatus()
+    .isOk
 
-  private fun evictCache() =
-    webTestClient.delete()
-      .uri("/things-to-do/prisoner/$PRISONER_ID/evict")
-      .headers(setAuthorisation(roles = listOf("COURT_CASES_RELEASE_DATES__PRE_SENTENCE_CALC_REVIEW_TASKS__RW")))
-      .exchange()
-      .expectStatus()
-      .isOk
+  private fun evictCache() = webTestClient.delete()
+    .uri("/things-to-do/prisoner/$PRISONER_ID/evict")
+    .headers(setAuthorisation(roles = listOf("COURT_CASES_RELEASE_DATES__PRE_SENTENCE_CALC_REVIEW_TASKS__RW")))
+    .exchange()
+    .expectStatus()
+    .isOk
 
   companion object {
     private const val PRISONER_ID = "AB1234AB"
