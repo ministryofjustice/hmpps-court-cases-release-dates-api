@@ -101,7 +101,7 @@ ccrd-service-configurations:
       ui-url: ${hmpps-recalls-ui-url}
       url-mapping: '/person/{prisonerId}'
       requiredRoles:
-        - 'REMAND_AND_SENTENCING'
+        - 'RECALL_MAINTAINER'
     releaseDates:
       text: 'Release dates and calculations'
       ui-url: ${hmpps-calculate-release-dates-ui-url}
