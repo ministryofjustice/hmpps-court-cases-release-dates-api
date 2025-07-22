@@ -20,7 +20,7 @@ class IdentifyRemandApiMockServer : WireMockServer(8093) {
   fun verifyNumberOfThingsToDoCalls(prisonerId: String, number: Int) {
     verify(exactly(number), getRequestedFor(urlEqualTo("/things-to-do/prisoner/$prisonerId")))
   }
-  fun stubFirstTimeReviewThingsToDo(prisonerId: String) {
+  fun stubFirstTimeReviewWithNon0DaysThingsToDo(prisonerId: String) {
     stubFor(
       get("/things-to-do/prisoner/$prisonerId").willReturn(
         aResponse()
@@ -31,6 +31,41 @@ class IdentifyRemandApiMockServer : WireMockServer(8093) {
                 "prisonerId": "$prisonerId",
                 "thingsToDo": ["IDENTIFY_REMAND_REVIEW_FIRST_TIME"],
                 "days": 10
+            }
+            """.trimIndent(),
+          ),
+      ),
+    )
+  }
+
+  fun stubFirstTimeReviewWith0DaysThingsToDo(prisonerId: String) {
+    stubFor(
+      get("/things-to-do/prisoner/$prisonerId").willReturn(
+        aResponse()
+          .withHeader("Content-Type", "application/json")
+          .withBody(
+            """
+            {
+                "prisonerId": "$prisonerId",
+                "thingsToDo": ["IDENTIFY_REMAND_REVIEW_FIRST_TIME"],
+                "days": 0
+            }
+            """.trimIndent(),
+          ),
+      ),
+    )
+  }
+
+  fun stubFirstTimeReviewWithNullDaysThingsToDo(prisonerId: String) {
+    stubFor(
+      get("/things-to-do/prisoner/$prisonerId").willReturn(
+        aResponse()
+          .withHeader("Content-Type", "application/json")
+          .withBody(
+            """
+            {
+                "prisonerId": "$prisonerId",
+                "thingsToDo": ["IDENTIFY_REMAND_REVIEW_FIRST_TIME"]
             }
             """.trimIndent(),
           ),

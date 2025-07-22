@@ -270,11 +270,11 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
   @DisplayName("GET /service-definitions identify remand things to do")
   inner class IdentifyRemandThingsToDo {
     @Test
-    fun `Should call identify remand things to do if user has adjustments and ir roles`() {
+    fun `Should call identify remand things to do if user has adjustments and ir roles and have right banner for non 0 day remand `() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubAdaProspectiveThingsToDo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      identifyRemandApiMockServer.stubFirstTimeReviewThingsToDo(PRISONER_ID)
+      identifyRemandApiMockServer.stubFirstTimeReviewWithNon0DaysThingsToDo(PRISONER_ID)
       getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER"))
         .expectBody()
         .json(
@@ -302,8 +302,122 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "type": "ADA_INTERCEPT"
                     },
                     {
-                      "title": "There are periods of remand to review",
-                      "message": "This service has identified periods of remand that may be relevant. You must review these remand periods before calculating a release date.",
+                      "title": "The remand tool has calculated that there is relevant remand to be applied.",
+                      "message": "Review the remand tool before calculating a release date.",
+                      "buttonText": "Review remand",
+                      "buttonHref": "http://localhost:8005/prisoner/AB1234AB",
+                      "type": "REVIEW_IDENTIFIED_REMAND"
+                    }
+                  ],
+                  "count": 2
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun `Should call identify remand things to do if user has adjustments and ir roles and have right banner for 0 day remand `() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubAdaProspectiveThingsToDo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      identifyRemandApiMockServer.stubFirstTimeReviewWith0DaysThingsToDo(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER"))
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "adjustments": {
+                "href": "http://localhost:8002/AB1234AB",
+                "text": "Adjustments",
+                "thingsToDo": {
+                  "things": [
+                    {
+                      "title": "Review PADA",
+                      "message": "message",
+                      "buttonText": "Review PADA",
+                      "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-prospective",
+                      "type": "ADA_INTERCEPT"
+                    },
+                    {
+                      "title": "The remand tool has calculated that there is no remand to be applied.",
+                      "message": "Review the remand tool before calculating a release date.",
+                      "buttonText": "Review remand",
+                      "buttonHref": "http://localhost:8005/prisoner/AB1234AB",
+                      "type": "REVIEW_IDENTIFIED_REMAND"
+                    }
+                  ],
+                  "count": 2
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun `Should call identify remand things to do if user has adjustments and ir roles and have right banner for Null day remand `() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubAdaProspectiveThingsToDo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      identifyRemandApiMockServer.stubFirstTimeReviewWithNullDaysThingsToDo(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER"))
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "adjustments": {
+                "href": "http://localhost:8002/AB1234AB",
+                "text": "Adjustments",
+                "thingsToDo": {
+                  "things": [
+                    {
+                      "title": "Review PADA",
+                      "message": "message",
+                      "buttonText": "Review PADA",
+                      "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-prospective",
+                      "type": "ADA_INTERCEPT"
+                    },
+                    {
+                      "title": "The remand tool has calculated that there is no remand to be applied.",
+                      "message": "Review the remand tool before calculating a release date.",
                       "buttonText": "Review remand",
                       "buttonHref": "http://localhost:8005/prisoner/AB1234AB",
                       "type": "REVIEW_IDENTIFIED_REMAND"
