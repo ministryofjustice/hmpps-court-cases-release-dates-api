@@ -61,9 +61,9 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                   "count": 0
                 }
               },
-              "courtCaseDocuments": {
+              "documents": {
                 "href": "http://localhost:8001/person/AB1234AB/documents",
-                "text": "Court case documents",
+                "text": "Documents",
                 "thingsToDo": {
                   "count": 0
                 }
