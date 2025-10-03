@@ -108,6 +108,12 @@ ccrd-service-configurations:
       url-mapping: '?prisonId={prisonerId}'
       requiredRoles:
         - 'RELEASE_DATES_CALCULATOR'
+    documents:
+      text: 'Documents'
+      ui-url: ${hmpps-remand-and-sentencing-ui-url}
+      url-mapping: '/person/{prisonerId}/documents'
+      requiredRoles:
+        - 'REMAND_AND_SENTENCING'
 
 
 feature-toggles:
