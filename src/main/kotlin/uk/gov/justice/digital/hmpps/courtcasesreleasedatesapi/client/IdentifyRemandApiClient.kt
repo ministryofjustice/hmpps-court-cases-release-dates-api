@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.IdentifyRemandThingsToDo
 
 @Service
-class IdentifyRemandApiClient(@Qualifier("identifyRemandApiWebClient") private val webClient: WebClient) {
+class IdentifyRemandApiClient(@param:Qualifier("identifyRemandApiWebClient") private val webClient: WebClient) {
   private val log = LoggerFactory.getLogger(this::class.java)
   private inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
 
