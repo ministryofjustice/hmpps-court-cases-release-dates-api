@@ -154,6 +154,10 @@ class PrisonerListenerIntTest : SqsIntegrationTestBase() {
         "adjudication.punishments.deleted",
         """{"prisonerNumber": "$PRISONER_ID", "prisonId": "KMI", "chargeNumber": "1a"}""",
       ),
+      Arguments.of(
+        "calculate-release-dates.prisoner.changed",
+        """{"prisonerId": "$PRISONER_ID", "bookingId": 10}""",
+      ),
     )
   }
 }
