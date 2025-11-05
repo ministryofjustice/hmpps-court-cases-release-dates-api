@@ -64,6 +64,7 @@ class PrisonerEventListener(
     val movedToNomsNumber: String? = null,
     val offenderNo: String? = null,
     val prisonerNumber: String? = null,
+    val prisonerId: String? = null,
   ) {
     fun toPrisonerIds() = listOfNotNull(
       nomsNumber,
@@ -72,6 +73,7 @@ class PrisonerEventListener(
       movedToNomsNumber,
       offenderNo,
       prisonerNumber,
+      prisonerId,
     )
   }
 }
