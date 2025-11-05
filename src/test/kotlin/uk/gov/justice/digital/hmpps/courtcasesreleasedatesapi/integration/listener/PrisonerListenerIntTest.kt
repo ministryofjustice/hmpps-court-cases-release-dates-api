@@ -4,7 +4,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.untilAsserted
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.context.annotation.Import
 import software.amazon.awssdk.services.sns.model.MessageAttributeValue
 import software.amazon.awssdk.services.sns.model.PublishRequest
@@ -15,6 +17,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.IdentifyRemandApiExtension.Companion.identifyRemandApiMockServer
 import uk.gov.justice.hmpps.sqs.countAllMessagesOnQueue
+import java.util.stream.Stream
 
 @Import(TestCacheConfiguration::class)
 class PrisonerListenerIntTest : SqsIntegrationTestBase() {
@@ -24,8 +27,9 @@ class PrisonerListenerIntTest : SqsIntegrationTestBase() {
     evictCache()
   }
 
-  @Test
-  fun `Check event will evict cache`() {
+  @ParameterizedTest
+  @MethodSource("exampleEventPayloads")
+  fun `Check event will evict cache`(eventType: String, additionalInfoJson: String) {
     hmppsAuth.stubGrantToken()
     adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
     calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
@@ -39,10 +43,9 @@ class PrisonerListenerIntTest : SqsIntegrationTestBase() {
     getServiceDefinitions(allRoles)
     getServiceDefinitions(allRoles)
 
-    val eventType = "prisoner-offender-search.prisoner.received"
     domainEventsTopicSnsClient.publish(
       PublishRequest.builder().topicArn(domainEventsTopicArn)
-        .message(prisonerAdmissionPayload(PRISONER_ID, eventType))
+        .message("""{"eventType":"$eventType", "additionalInformation": $additionalInfoJson}""")
         .messageAttributes(
           mapOf(
             "eventType" to MessageAttributeValue.builder().dataType("String")
@@ -78,9 +81,79 @@ class PrisonerListenerIntTest : SqsIntegrationTestBase() {
     .expectStatus()
     .isOk
 
-  private fun prisonerAdmissionPayload(nomsNumber: String, eventType: String) = """{"eventType":"$eventType", "additionalInformation": {"nomsNumber":"$nomsNumber", "reason": "NEW_ADMISSION"}}"""
-
   companion object {
     private const val PRISONER_ID = "AB1234AB"
+
+    @JvmStatic
+    fun exampleEventPayloads(): Stream<Arguments> = Stream.of(
+      Arguments.of(
+        "prisoner-offender-search.prisoner.updated",
+        """{"nomsNumber":"$PRISONER_ID", "categoriesChanged": ["STATUS"]}""",
+      ),
+      Arguments.of(
+        "prisoner-offender-search.prisoner.released",
+        """{"nomsNumber":"$PRISONER_ID", "reason": "RELEASED"}""",
+      ),
+      Arguments.of(
+        "prisoner-offender-search.prisoner.received",
+        """{"nomsNumber":"$PRISONER_ID", "reason": "NEW_ADMISSION"}""",
+      ),
+      Arguments.of(
+        "release-date-adjustments.adjustment.inserted",
+        """{"offenderNo":"$PRISONER_ID", "unusedDeductions": false}""",
+      ),
+      Arguments.of(
+        "release-date-adjustments.adjustment.updated",
+        """{"offenderNo":"$PRISONER_ID", "unusedDeductions": false}""",
+      ),
+      Arguments.of(
+        "release-date-adjustments.adjustment.deleted",
+        """{"offenderNo":"$PRISONER_ID", "unusedDeductions": false}""",
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.merged",
+        """{"nomsNumber":"$PRISONER_ID", "removedNomsNumber": "A9999ZZ", "reason": "MERGE"}""",
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.merged",
+        """{"movedFromNomsNumber":"A9999ZZ", "movedToNomsNumber": "$PRISONER_ID", "reason": "MERGE"}""",
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.booking.moved",
+        """{"movedFromNomsNumber":"$PRISONER_ID", "movedToNomsNumber": "A9999ZZ", "reason": "MERGE"}""",
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.booking.moved",
+        """{"nomsNumber":"A9999ZZ", "removedNomsNumber": "$PRISONER_ID", "reason": "MERGE"}""",
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.sentence.changed",
+        """{"nomsNumber": "$PRISONER_ID", "sentenceSequence": 1}""",
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.sentence-term.changed",
+        """{"nomsNumber": "$PRISONER_ID", "sentenceSequence": 1, "termSequence": 1}""",
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.fine-payment.changed",
+        """{"nomsNumber": "$PRISONER_ID", "bookingId": 1}""",
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.fixed-term-recall.changed",
+        """{"nomsNumber": "$PRISONER_ID", "bookingId": 1}""",
+      ),
+      Arguments.of(
+        "adjudication.punishments.created",
+        """{"prisonerNumber": "$PRISONER_ID", "prisonId": "KMI", "chargeNumber": "1a"}""",
+      ),
+      Arguments.of(
+        "adjudication.punishments.updated",
+        """{"prisonerNumber": "$PRISONER_ID", "prisonId": "KMI", "chargeNumber": "1a"}""",
+      ),
+      Arguments.of(
+        "adjudication.punishments.deleted",
+        """{"prisonerNumber": "$PRISONER_ID", "prisonId": "KMI", "chargeNumber": "1a"}""",
+      ),
+    )
   }
 }

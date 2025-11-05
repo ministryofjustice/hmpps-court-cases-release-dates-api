@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.listener
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.awspring.cloud.sqs.annotation.SqsListener
@@ -18,7 +17,6 @@ class PrisonerEventListener(
 
   private companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
-    val prisonIdFields = listOf("nomsNumber", "removedNomsNumber", "movedFromNomsNumber", "movedToNomsNumber", "offenderNo", "prisonerNumber")
   }
 
   @SqsListener("cacheevictionlistener", factory = "hmppsQueueContainerFactoryProxy")
@@ -29,7 +27,8 @@ class PrisonerEventListener(
     return when (sqsMessage.Type) {
       "Notification" -> {
         processMessage(sqsMessage.Message)
-      } else -> {}
+      }
+      else -> {}
     }
   }
 
@@ -37,13 +36,7 @@ class PrisonerEventListener(
     val prisonerEvent = objectMapper.readValue<PrisonerEvent>(message)
     val additionalInformation = prisonerEvent.additionalInformation
 
-    val prisonerIds = prisonIdFields.mapNotNull {
-      if (additionalInformation.has(it)) {
-        return@mapNotNull additionalInformation.get(it).asText()
-      }
-      return@mapNotNull null
-    }
-
+    val prisonerIds = additionalInformation.toPrisonerIds()
     if (prisonerIds.isEmpty()) {
       throw UnknownPrisonerIdException("Unable to find prisoner ID from event ${prisonerEvent.eventType}")
     } else {
@@ -61,6 +54,24 @@ class PrisonerEventListener(
 
   data class PrisonerEvent(
     val eventType: String,
-    val additionalInformation: JsonNode,
+    val additionalInformation: AdditionalInfoPrisonerIds,
   )
+
+  data class AdditionalInfoPrisonerIds(
+    val nomsNumber: String? = null,
+    val removedNomsNumber: String? = null,
+    val movedFromNomsNumber: String? = null,
+    val movedToNomsNumber: String? = null,
+    val offenderNo: String? = null,
+    val prisonerNumber: String? = null,
+  ) {
+    fun toPrisonerIds() = listOfNotNull(
+      nomsNumber,
+      removedNomsNumber,
+      movedFromNomsNumber,
+      movedToNomsNumber,
+      offenderNo,
+      prisonerNumber,
+    )
+  }
 }
