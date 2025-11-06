@@ -7,12 +7,15 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service.StandardTelemetryEvent
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service.TelemetryService
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service.ThingToDoCacheService
 
 @Service
 class PrisonerEventListener(
   private val objectMapper: ObjectMapper,
   private val thingToDoCacheService: ThingToDoCacheService,
+  private val telemetryService: TelemetryService,
 ) {
 
   private companion object {
@@ -46,18 +49,19 @@ class PrisonerEventListener(
     prisonerIds.forEach { prisonerId ->
       ThingToDoType.entries.forEach {
         thingToDoCacheService.evictCache(it.name, prisonerId)
+        telemetryService.track(CacheEvictionTelemetry(prisonerId, prisonerEvent.eventType))
       }
     }
   }
 
   class UnknownPrisonerIdException(message: String) : Exception(message)
 
-  data class PrisonerEvent(
+  private data class PrisonerEvent(
     val eventType: String,
     val additionalInformation: AdditionalInfoPrisonerIds,
   )
 
-  data class AdditionalInfoPrisonerIds(
+  private data class AdditionalInfoPrisonerIds(
     val nomsNumber: String? = null,
     val removedNomsNumber: String? = null,
     val movedFromNomsNumber: String? = null,
@@ -74,6 +78,13 @@ class PrisonerEventListener(
       offenderNo,
       prisonerNumber,
       prisonerId,
+    )
+  }
+
+  private data class CacheEvictionTelemetry(val prisonerId: String, val causedByEventType: String) : StandardTelemetryEvent("prisoner-cache-eviction") {
+    override fun properties() = mapOf(
+      "prisonerId" to prisonerId,
+      "causedByEventType" to causedByEventType,
     )
   }
 }
