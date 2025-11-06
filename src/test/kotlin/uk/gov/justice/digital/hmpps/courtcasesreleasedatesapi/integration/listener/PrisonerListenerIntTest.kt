@@ -29,7 +29,7 @@ class PrisonerListenerIntTest : SqsIntegrationTestBase() {
 
   @ParameterizedTest
   @MethodSource("exampleEventPayloads")
-  fun `Check event will evict cache`(eventType: String, additionalInfoJson: String) {
+  fun `Check event will evict cache`(eventType: String, additionalInfoJson: String, personReferenceJson: String?) {
     hmppsAuth.stubGrantToken()
     adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
     calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
@@ -43,9 +43,17 @@ class PrisonerListenerIntTest : SqsIntegrationTestBase() {
     getServiceDefinitions(allRoles)
     getServiceDefinitions(allRoles)
 
+    val payload =
+      """{
+        |"eventType":"$eventType", 
+        |"additionalInformation": $additionalInfoJson
+        |${personReferenceJson?.let { ", \"personReference\": $personReferenceJson" } ?: ""}
+        |}
+      """.trimMargin()
+
     domainEventsTopicSnsClient.publish(
       PublishRequest.builder().topicArn(domainEventsTopicArn)
-        .message("""{"eventType":"$eventType", "additionalInformation": $additionalInfoJson}""")
+        .message(payload)
         .messageAttributes(
           mapOf(
             "eventType" to MessageAttributeValue.builder().dataType("String")
@@ -89,74 +97,112 @@ class PrisonerListenerIntTest : SqsIntegrationTestBase() {
       Arguments.of(
         "prisoner-offender-search.prisoner.updated",
         """{"nomsNumber":"$PRISONER_ID", "categoriesChanged": ["STATUS"]}""",
+        null,
       ),
       Arguments.of(
         "prisoner-offender-search.prisoner.released",
         """{"nomsNumber":"$PRISONER_ID", "reason": "RELEASED"}""",
+        null,
       ),
       Arguments.of(
         "prisoner-offender-search.prisoner.received",
         """{"nomsNumber":"$PRISONER_ID", "reason": "NEW_ADMISSION"}""",
+        null,
       ),
       Arguments.of(
         "release-date-adjustments.adjustment.inserted",
         """{"offenderNo":"$PRISONER_ID", "unusedDeductions": false}""",
+        null,
       ),
       Arguments.of(
         "release-date-adjustments.adjustment.updated",
         """{"offenderNo":"$PRISONER_ID", "unusedDeductions": false}""",
+        null,
       ),
       Arguments.of(
         "release-date-adjustments.adjustment.deleted",
         """{"offenderNo":"$PRISONER_ID", "unusedDeductions": false}""",
+        null,
       ),
       Arguments.of(
         "prison-offender-events.prisoner.merged",
         """{"nomsNumber":"$PRISONER_ID", "removedNomsNumber": "A9999ZZ", "reason": "MERGE"}""",
+        null,
       ),
       Arguments.of(
         "prison-offender-events.prisoner.merged",
         """{"movedFromNomsNumber":"A9999ZZ", "movedToNomsNumber": "$PRISONER_ID", "reason": "MERGE"}""",
+        null,
       ),
       Arguments.of(
         "prison-offender-events.prisoner.booking.moved",
         """{"movedFromNomsNumber":"$PRISONER_ID", "movedToNomsNumber": "A9999ZZ", "reason": "MERGE"}""",
+        null,
       ),
       Arguments.of(
         "prison-offender-events.prisoner.booking.moved",
         """{"nomsNumber":"A9999ZZ", "removedNomsNumber": "$PRISONER_ID", "reason": "MERGE"}""",
+        null,
       ),
       Arguments.of(
         "prison-offender-events.prisoner.sentence.changed",
         """{"nomsNumber": "$PRISONER_ID", "sentenceSequence": 1}""",
+        null,
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.sentence.changed",
+        """{"sentenceSequence": 1}""",
+        """{ "identifiers": [{"type": "NOMS", "value": "$PRISONER_ID"}] }""",
       ),
       Arguments.of(
         "prison-offender-events.prisoner.sentence-term.changed",
         """{"nomsNumber": "$PRISONER_ID", "sentenceSequence": 1, "termSequence": 1}""",
+        null,
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.sentence-term.changed",
+        """{"sentenceSequence": 1, "termSequence": 1}""",
+        """{ "identifiers": [{"type": "NOMS", "value": "$PRISONER_ID"}] }""",
       ),
       Arguments.of(
         "prison-offender-events.prisoner.fine-payment.changed",
         """{"nomsNumber": "$PRISONER_ID", "bookingId": 1}""",
+        null,
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.fine-payment.changed",
+        """{"bookingId": 1}""",
+        """{ "identifiers": [{"type": "NOMS", "value": "$PRISONER_ID"}] }""",
       ),
       Arguments.of(
         "prison-offender-events.prisoner.fixed-term-recall.changed",
         """{"nomsNumber": "$PRISONER_ID", "bookingId": 1}""",
+        null,
+      ),
+      Arguments.of(
+        "prison-offender-events.prisoner.fixed-term-recall.changed",
+        """{"bookingId": 1}""",
+        """{ "identifiers": [{"type": "NOMS", "value": "$PRISONER_ID"}] }""",
       ),
       Arguments.of(
         "adjudication.punishments.created",
         """{"prisonerNumber": "$PRISONER_ID", "prisonId": "KMI", "chargeNumber": "1a"}""",
+        null,
       ),
       Arguments.of(
         "adjudication.punishments.updated",
         """{"prisonerNumber": "$PRISONER_ID", "prisonId": "KMI", "chargeNumber": "1a"}""",
+        null,
       ),
       Arguments.of(
         "adjudication.punishments.deleted",
         """{"prisonerNumber": "$PRISONER_ID", "prisonId": "KMI", "chargeNumber": "1a"}""",
+        null,
       ),
       Arguments.of(
         "calculate-release-dates.prisoner.changed",
         """{"prisonerId": "$PRISONER_ID", "bookingId": 10}""",
+        null,
       ),
     )
   }
