@@ -37,9 +37,8 @@ class PrisonerEventListener(
 
   private fun processMessage(message: String) {
     val prisonerEvent = objectMapper.readValue<PrisonerEvent>(message)
-    val additionalInformation = prisonerEvent.additionalInformation
 
-    val prisonerIds = additionalInformation.toPrisonerIds()
+    val prisonerIds = prisonerEvent.toPrisonerIds()
     if (prisonerIds.isEmpty()) {
       throw UnknownPrisonerIdException("Unable to find prisoner ID from event ${prisonerEvent.eventType}")
     } else {
@@ -59,7 +58,10 @@ class PrisonerEventListener(
   private data class PrisonerEvent(
     val eventType: String,
     val additionalInformation: AdditionalInfoPrisonerIds,
-  )
+    val personReference: EventPersonReference? = null,
+  ) {
+    fun toPrisonerIds() = setOfNotNull(personReference?.identifiers?.find { it.type == "NOMS" }?.value) + additionalInformation.toPrisonerIds()
+  }
 
   private data class AdditionalInfoPrisonerIds(
     val nomsNumber: String? = null,
@@ -70,7 +72,7 @@ class PrisonerEventListener(
     val prisonerNumber: String? = null,
     val prisonerId: String? = null,
   ) {
-    fun toPrisonerIds() = listOfNotNull(
+    fun toPrisonerIds() = setOfNotNull(
       nomsNumber,
       removedNomsNumber,
       movedFromNomsNumber,
@@ -80,6 +82,10 @@ class PrisonerEventListener(
       prisonerId,
     )
   }
+
+  private data class EventPersonReference(val identifiers: List<EventPersonReferenceIdentifiers>)
+
+  private data class EventPersonReferenceIdentifiers(val type: String, val value: String)
 
   private data class CacheEvictionTelemetry(val prisonerId: String, val causedByEventType: String) : StandardTelemetryEvent("prisoner-cache-eviction") {
     override fun properties() = mapOf(
