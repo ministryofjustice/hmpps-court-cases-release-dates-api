@@ -113,7 +113,7 @@ ccrd-service-configurations:
       ui-url: ${hmpps-remand-and-sentencing-ui-url}
       url-mapping: '/person/{prisonerId}/documents'
       requiredRoles:
-        - 'REMAND_AND_SENTENCING'
+        - 'COURT_CASE_DOCUMENTS'
 
 
 feature-toggles:
