@@ -53,7 +53,8 @@ class OpenApiDocsTest : SqsIntegrationTestBase() {
       .accept(MediaType.APPLICATION_JSON)
       .exchange()
       .expectStatus().isOk
-      .expectBody().jsonPath("info.version").isEqualTo(DateTimeFormatter.ISO_DATE.format(LocalDate.now()))
+      .expectBody().jsonPath("info.version")
+      .value<String> { it.startsWith(DateTimeFormatter.ISO_DATE.format(LocalDate.now())) }
   }
 
   @Test

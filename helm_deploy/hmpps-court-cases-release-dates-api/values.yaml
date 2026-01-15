@@ -6,7 +6,7 @@ generic-service:
   replicaCount: 4
 
   image:
-    repository: quay.io/hmpps/hmpps-court-cases-release-dates-api
+    repository: ghcr.io/ministryofjustice/hmpps-court-cases-release-dates-api
     tag: app_version # override at deployment time
     port: 8080
 
