@@ -10,7 +10,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.Ide
 @Service
 class IdentifyRemandApiClient(@param:Qualifier("identifyRemandApiWebClient") private val webClient: WebClient) {
   private val log = LoggerFactory.getLogger(this::class.java)
-  private inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
+  private inline fun <reified T : Any> typeReference() = object : ParameterizedTypeReference<T>() {}
 
   fun thingsToDo(prisonerId: String): IdentifyRemandThingsToDo {
     log.info("Get things to do from Identify Remand for $prisonerId")

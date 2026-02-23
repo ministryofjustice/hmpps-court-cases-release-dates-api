@@ -8,9 +8,9 @@ import org.springframework.web.reactive.function.client.WebClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.CalculationThingsToDo
 
 @Service
-class CalculateReleaseDatesApiClient(@Qualifier("calculateReleaseDatesApiWebClient") private val webClient: WebClient) {
+class CalculateReleaseDatesApiClient(@param:Qualifier("calculateReleaseDatesApiWebClient") private val webClient: WebClient) {
   private val log = LoggerFactory.getLogger(this::class.java)
-  private inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
+  private inline fun <reified T : Any> typeReference() = object : ParameterizedTypeReference<T>() {}
 
   fun thingsToDo(prisonerId: String): CalculationThingsToDo {
     log.info("Get things to do from CRD for $prisonerId")
