@@ -31,12 +31,10 @@ class CacheConfiguration(
       activateDefaultTyping(polymorphicTypeValidator, ObjectMapper.DefaultTyping.NON_FINAL_AND_ENUMS, JsonTypeInfo.As.PROPERTY)
     }
 
-  private fun getDefaultCacheConfiguration(): RedisCacheConfiguration {
-    return RedisCacheConfiguration
-      .defaultCacheConfig()
-      .serializeKeysWith(SerializationPair.fromSerializer(StringRedisSerializer()))
-      .serializeValuesWith(SerializationPair.fromSerializer(GenericJackson2JsonRedisSerializer(objectMapper())))
-  }
+  private fun getDefaultCacheConfiguration(): RedisCacheConfiguration = RedisCacheConfiguration
+    .defaultCacheConfig()
+    .serializeKeysWith(SerializationPair.fromSerializer(StringRedisSerializer()))
+    .serializeValuesWith(SerializationPair.fromSerializer(GenericJackson2JsonRedisSerializer(objectMapper())))
 
   @Bean
   fun cacheManagerBuilderCustomizer(): RedisCacheManagerBuilderCustomizer? = RedisCacheManagerBuilderCustomizer { builder: RedisCacheManagerBuilder ->

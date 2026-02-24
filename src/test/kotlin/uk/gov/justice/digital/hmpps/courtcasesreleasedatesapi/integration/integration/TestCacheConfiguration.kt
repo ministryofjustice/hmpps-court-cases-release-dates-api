@@ -1,7 +1,7 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration
 
-import org.springframework.boot.test.context.TestConfiguration
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.boot.test.context.TestConfiguration
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CacheConfiguration
 
 @TestConfiguration
