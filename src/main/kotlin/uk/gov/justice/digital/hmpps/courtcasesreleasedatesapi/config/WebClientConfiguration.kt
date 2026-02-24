@@ -17,7 +17,7 @@ class WebClientConfiguration @Autowired constructor(
   @param:Value("\${adjustments-api.url}") private val adjustmentsApiBaseUri: String,
   @param:Value("\${hmpps-identify-remand-api.url}") private val identifyRemandApiBaseUri: String,
   @param:Value("\${api.health-timeout:2s}") private val healthTimeout: Duration,
-  @param:Value("\${api.timeout:20s}") private val timeout: Duration,
+  @param:Value("\${api.timeout:1s}") private val timeout: Duration,
 ) {
   // HMPPS Auth health ping is required if your service calls HMPPS Auth to get a token to call other services
   @Bean
