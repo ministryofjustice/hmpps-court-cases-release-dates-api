@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -10,13 +11,13 @@ import uk.gov.justice.hmpps.kotlin.auth.healthWebClient
 import java.time.Duration
 
 @Configuration
-class WebClientConfiguration(
-  @Value("\${hmpps-auth.url}") val hmppsAuthBaseUri: String,
-  @Value("\${calculate-release-dates-api.url}") val calculateReleaseDatesApiBaseUri: String,
-  @Value("\${adjustments-api.url}") val adjustmentsApiBaseUri: String,
-  @Value("\${hmpps-identify-remand-api.url}") val identifyRemandApiBaseUri: String,
-  @Value("\${api.health-timeout:2s}") val healthTimeout: Duration,
-  @Value("\${api.timeout:20s}") val timeout: Duration,
+class WebClientConfiguration @Autowired constructor(
+  @param:Value("\${hmpps-auth.url}") private val hmppsAuthBaseUri: String,
+  @param:Value("\${calculate-release-dates-api.url}") private val calculateReleaseDatesApiBaseUri: String,
+  @param:Value("\${adjustments-api.url}") private val adjustmentsApiBaseUri: String,
+  @param:Value("\${hmpps-identify-remand-api.url}") private val identifyRemandApiBaseUri: String,
+  @param:Value("\${api.health-timeout:2s}") private val healthTimeout: Duration,
+  @param:Value("\${api.timeout:20s}") private val timeout: Duration,
 ) {
   // HMPPS Auth health ping is required if your service calls HMPPS Auth to get a token to call other services
   @Bean
