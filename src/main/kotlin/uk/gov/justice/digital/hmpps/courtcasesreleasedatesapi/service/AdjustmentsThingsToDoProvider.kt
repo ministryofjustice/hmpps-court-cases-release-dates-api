@@ -27,7 +27,7 @@ class AdjustmentsThingsToDoProvider(
         "Review PADA$pluralisation"
       } else if (intercept.type == InterceptType.UPDATE) {
         "Review ADA updates"
-      } else if(intercept.type == InterceptType.POTENTIAL) {
+      } else if (intercept.type == InterceptType.POTENTIAL) {
         "View ADAs (Additional Days Awarded)"
       } else {
         "Review adjustment information"
@@ -36,7 +36,11 @@ class AdjustmentsThingsToDoProvider(
         ThingToDo(
           title = title,
           message = intercept.message,
-          buttonText = if(intercept.type != InterceptType.POTENTIAL) { "Review $interceptType" } else { "View Potential ADAs"},
+          buttonText = if (intercept.type != InterceptType.POTENTIAL) {
+            "Review $interceptType"
+          } else {
+            "View Potential ADAs"
+          },
           buttonHref = if (intercept.anyProspective) serviceConfig.uiUrl + "/$prisonerId/additional-days/review-prospective" else serviceConfig.uiUrl + "/$prisonerId/additional-days/review-and-approve",
           type = ThingToDoType.ADA_INTERCEPT,
         ),
