@@ -20,6 +20,11 @@ class AdjustmentsThingsToDoProvider(
     if (adjustmentTodos.thingsToDo.isNotEmpty() && adjustmentTodos.adaIntercept != null) {
       val intercept = adjustmentTodos.adaIntercept
       val interceptType = if (listOf(InterceptType.PADA, InterceptType.PADAS).contains(intercept.type)) "PADA" else "ADA"
+      val buttonText = if (intercept.type != InterceptType.POTENTIAL) {
+        "Review $interceptType"
+      } else {
+        "View Potential ADAs"
+      }
       val pluralisation = if (intercept.number > 1) "s" else ""
       val title = if (listOf(InterceptType.FIRST_TIME, InterceptType.FIRST_TIME_WITH_NO_ADJUDICATION).contains(intercept.type)) {
         "Review ADA adjudication$pluralisation"
@@ -36,11 +41,7 @@ class AdjustmentsThingsToDoProvider(
         ThingToDo(
           title = title,
           message = intercept.message,
-          buttonText = if (intercept.type != InterceptType.POTENTIAL) {
-            "Review $interceptType"
-          } else {
-            "View Potential ADAs"
-          },
+          buttonText = buttonText,
           buttonHref = if (intercept.anyProspective) serviceConfig.uiUrl + "/$prisonerId/additional-days/review-prospective" else serviceConfig.uiUrl + "/$prisonerId/additional-days/review-and-approve",
           type = ThingToDoType.ADA_INTERCEPT,
         ),
