@@ -8,6 +8,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CacheableThi
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDoProviderName
 
 @Component
 class IdentifyRemandThingToDoProvider(
@@ -45,7 +46,7 @@ class IdentifyRemandThingToDoProvider(
 
   override fun additionalRoles(): List<String> = listOf(IDENTIFY_REMAND_ROLE)
 
-  override fun thingToDoType(): ThingToDoType = ThingToDoType.REVIEW_IDENTIFIED_REMAND
+  override fun thingsToDoProviderName(): ThingsToDoProviderName = ThingsToDoProviderName.IDENTIFY_REMAND
 
   companion object {
     private const val IDENTIFY_REMAND_ROLE = "REMAND_IDENTIFIER"

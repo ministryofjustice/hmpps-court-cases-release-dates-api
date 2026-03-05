@@ -7,6 +7,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CacheableThi
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDoProviderName
 
 @Component
 class CrdsThingsToDoProvider(
@@ -31,5 +32,5 @@ class CrdsThingsToDoProvider(
     }
     return CacheableThingToDo()
   }
-  override fun thingToDoType(): ThingToDoType = ThingToDoType.CALCULATION_REQUIRED
+  override fun thingsToDoProviderName(): ThingsToDoProviderName = ThingsToDoProviderName.CRDS
 }
