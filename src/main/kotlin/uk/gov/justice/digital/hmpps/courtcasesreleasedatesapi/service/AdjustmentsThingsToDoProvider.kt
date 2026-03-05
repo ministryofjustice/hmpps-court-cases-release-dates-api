@@ -3,7 +3,6 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service
 import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.AdjustmentsApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CacheableThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
@@ -16,7 +15,7 @@ class AdjustmentsThingsToDoProvider(
 ) : ThingsToDoProvider {
   override val serviceName: String = "adjustments"
 
-  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): CacheableThingToDo {
+  override fun getThingsToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): List<ThingToDo> {
     val adjustmentTodos = adjustmentsApiClient.thingsToDo(prisonerId)
     if (adjustmentTodos.thingsToDo.isNotEmpty() && adjustmentTodos.adaIntercept != null) {
       val intercept = adjustmentTodos.adaIntercept
@@ -38,7 +37,7 @@ class AdjustmentsThingsToDoProvider(
       } else {
         "Review adjustment information"
       }
-      return CacheableThingToDo(
+      return listOf(
         ThingToDo(
           title = title,
           message = intercept.message,
@@ -48,7 +47,7 @@ class AdjustmentsThingsToDoProvider(
         ),
       )
     }
-    return CacheableThingToDo()
+    return emptyList()
   }
 
   override fun thingsToDoProviderName(): ThingsToDoProviderName = ThingsToDoProviderName.ADJUSTMENTS

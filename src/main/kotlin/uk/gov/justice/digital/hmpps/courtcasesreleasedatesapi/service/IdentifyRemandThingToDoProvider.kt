@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.IdentifyRemandApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CacheableThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
@@ -18,11 +17,11 @@ class IdentifyRemandThingToDoProvider(
 ) : ThingsToDoProvider {
   override val serviceName: String = "adjustments"
 
-  override fun getThingToDo(
+  override fun getThingsToDo(
     prisonerId: String,
     existingThingsToDo: MutableList<ThingsToDo>,
     serviceConfig: CcrdServiceConfig,
-  ): CacheableThingToDo {
+  ): List<ThingToDo> {
     val thingsToDo = identifyRemandApiClient.thingsToDo(prisonerId)
     if (thingsToDo.thingsToDo.isNotEmpty()) {
       var title = "The remand tool has calculated that there is no remand to be applied."
@@ -31,7 +30,7 @@ class IdentifyRemandThingToDoProvider(
           title = "The remand tool has calculated that there is relevant remand to be applied."
         }
       }
-      return CacheableThingToDo(
+      return listOf(
         ThingToDo(
           title = title,
           message = "Review the remand tool before calculating a release date.",
@@ -41,7 +40,7 @@ class IdentifyRemandThingToDoProvider(
         ),
       )
     }
-    return CacheableThingToDo()
+    return emptyList()
   }
 
   override fun additionalRoles(): List<String> = listOf(IDENTIFY_REMAND_ROLE)
