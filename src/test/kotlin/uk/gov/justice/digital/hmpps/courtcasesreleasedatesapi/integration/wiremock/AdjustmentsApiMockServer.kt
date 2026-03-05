@@ -86,6 +86,46 @@ class AdjustmentsApiMockServer : WireMockServer(8092) {
     )
   }
 
+  fun stubAdaAndPreviousUalForReviewThingsToDo(prisonerId: String) {
+    stubFor(
+      get("/things-to-do/prisoner/$prisonerId").willReturn(
+        aResponse()
+          .withHeader("Content-Type", "application/json")
+          .withBody(
+            """
+            {
+                "prisonerId": "$prisonerId",
+                "thingsToDo": ["ADA_INTERCEPT", "PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW"],
+                "adaIntercept": {
+                  "type": "FIRST_TIME",
+                  "number": "5",
+                  "anyProspective": "false",
+                  "message": "message"
+                }
+            }
+            """.trimIndent(),
+          ),
+      ),
+    )
+  }
+
+  fun stubPreviousPeriodOfUalForReviewThingsToDo(prisonerId: String) {
+    stubFor(
+      get("/things-to-do/prisoner/$prisonerId").willReturn(
+        aResponse()
+          .withHeader("Content-Type", "application/json")
+          .withBody(
+            """
+            {
+                "prisonerId": "$prisonerId",
+                "thingsToDo": ["PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW"]
+            }
+            """.trimIndent(),
+          ),
+      ),
+    )
+  }
+
   fun stubGetEmptyThingsTodo(prisonerId: String) {
     stubFor(
       get("/things-to-do/prisoner/$prisonerId").willReturn(

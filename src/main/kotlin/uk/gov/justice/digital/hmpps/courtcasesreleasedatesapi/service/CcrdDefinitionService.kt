@@ -45,12 +45,12 @@ class CcrdDefinitionService(
         .filter { it.serviceName == serviceName }
         .filter { it.additionalRoles().isEmpty() || roleCheck(it.additionalRoles()) }
       return ThingsToDo(
-        providers.mapNotNull {
+        providers.flatMap {
           try {
-            it.getThingToDo(prisonerId, thingsToDo, ccrdServiceConfigs.services[serviceName]!!).thingToDo
+            it.getThingsToDo(prisonerId, thingsToDo, ccrdServiceConfigs.services[serviceName]!!)
           } catch (error: Exception) {
             log.error("Error finding thing to do $prisonerId $serviceName", error)
-            null
+            emptyList()
           }
         },
       )

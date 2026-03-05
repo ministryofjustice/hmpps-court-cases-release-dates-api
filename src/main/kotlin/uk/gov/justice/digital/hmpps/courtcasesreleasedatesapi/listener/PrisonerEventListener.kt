@@ -6,7 +6,7 @@ import io.awspring.cloud.sqs.annotation.SqsListener
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDoProviderName
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service.StandardTelemetryEvent
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service.TelemetryService
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service.ThingToDoCacheService
@@ -46,10 +46,10 @@ class PrisonerEventListener(
     }
 
     prisonerIds.forEach { prisonerId ->
-      ThingToDoType.entries.forEach {
-        thingToDoCacheService.evictCache(it.name, prisonerId)
-        telemetryService.track(CacheEvictionTelemetry(prisonerId, prisonerEvent.eventType))
+      ThingsToDoProviderName.entries.forEach {
+        thingToDoCacheService.evictCache(it, prisonerId)
       }
+      telemetryService.track(CacheEvictionTelemetry(prisonerId, prisonerEvent.eventType))
     }
   }
 

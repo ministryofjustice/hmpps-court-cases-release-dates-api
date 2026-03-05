@@ -3,10 +3,11 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service
 import org.springframework.stereotype.Component
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.CalculateReleaseDatesApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CacheableThingToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.enums.CalculationToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDoProviderName
 
 @Component
 class CrdsThingsToDoProvider(
@@ -14,22 +15,27 @@ class CrdsThingsToDoProvider(
 ) : ThingsToDoProvider {
   override val serviceName: String = "releaseDates"
 
-  override fun getThingToDo(prisonerId: String, existingThingsToDo: MutableList<ThingsToDo>, serviceConfig: CcrdServiceConfig): CacheableThingToDo {
+  override fun getThingsToDo(
+    prisonerId: String,
+    existingThingsToDo: MutableList<ThingsToDo>,
+    serviceConfig: CcrdServiceConfig,
+  ): List<ThingToDo> {
     if (existingThingsToDo.none { it.count > 0 }) {
       val calculationThingsToDo = calculateReleaseDatesApiClient.thingsToDo(prisonerId)
-      if (calculationThingsToDo.thingsToDo.isNotEmpty()) {
-        return CacheableThingToDo(
-          ThingToDo(
+      return calculationThingsToDo.thingsToDo.map { type ->
+        when (type) {
+          CalculationToDoType.CALCULATION_REQUIRED -> ThingToDo(
             title = "Calculation required",
             message = "Some information has changed. Check that all information is up to date then calculate release dates.",
             buttonText = "Calculate release dates",
-            buttonHref = serviceConfig.uiUrl + "/calculation/" + prisonerId + "/reason",
+            buttonHref = "${serviceConfig.uiUrl}/calculation/$prisonerId/reason",
             type = ThingToDoType.CALCULATION_REQUIRED,
-          ),
-        )
+          )
+        }
       }
     }
-    return CacheableThingToDo()
+    return emptyList()
   }
-  override fun thingToDoType(): ThingToDoType = ThingToDoType.CALCULATION_REQUIRED
+
+  override fun thingsToDoProviderName(): ThingsToDoProviderName = ThingsToDoProviderName.CRDS
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDoProviderName
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service.ThingToDoCacheService
 
 @RestController
@@ -42,8 +42,8 @@ class ThingsToDoResource(
     @PathVariable prisonerId: String,
   ) {
     log.info("Request to evict thing to do cache for prisoner ID: {}", prisonerId)
-    ThingToDoType.entries.forEach {
-      thingToDoCacheService.evictCache(it.name, prisonerId)
+    ThingsToDoProviderName.entries.forEach {
+      thingToDoCacheService.evictCache(it, prisonerId)
     }
   }
 
