@@ -8,6 +8,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDoProviderName
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.ToDoType
 
 @Component
 class IdentifyRemandThingToDoProvider(
@@ -23,24 +24,28 @@ class IdentifyRemandThingToDoProvider(
     serviceConfig: CcrdServiceConfig,
   ): List<ThingToDo> {
     val thingsToDo = identifyRemandApiClient.thingsToDo(prisonerId)
-    if (thingsToDo.thingsToDo.isNotEmpty()) {
-      var title = "The remand tool has calculated that there is no remand to be applied."
-      thingsToDo.days?.let { days ->
-        if (days > 0) {
-          title = "The remand tool has calculated that there is relevant remand to be applied."
+    return thingsToDo.thingsToDo.map { type ->
+      when (type) {
+        ToDoType.IDENTIFY_REMAND_REVIEW_FIRST_TIME,
+        ToDoType.IDENTIFY_REMAND_REVIEW_FIRST_TIME_UPGRADE_DOWNGRADE,
+        ToDoType.IDENTIFY_REMAND_REVIEW_UPDATE,
+        -> {
+          var title = "The remand tool has calculated that there is no remand to be applied."
+          thingsToDo.days?.let { days ->
+            if (days > 0) {
+              title = "The remand tool has calculated that there is relevant remand to be applied."
+            }
+          }
+          ThingToDo(
+            title = title,
+            message = "Review the remand tool before calculating a release date.",
+            buttonText = "Review remand",
+            buttonHref = "$identifyRemandApiBaseUri/prisoner/$prisonerId",
+            type = ThingToDoType.REVIEW_IDENTIFIED_REMAND,
+          )
         }
       }
-      return listOf(
-        ThingToDo(
-          title = title,
-          message = "Review the remand tool before calculating a release date.",
-          buttonText = "Review remand",
-          buttonHref = "$identifyRemandApiBaseUri/prisoner/$prisonerId",
-          type = ThingToDoType.REVIEW_IDENTIFIED_REMAND,
-        ),
-      )
     }
-    return emptyList()
   }
 
   override fun additionalRoles(): List<String> = listOf(IDENTIFY_REMAND_ROLE)

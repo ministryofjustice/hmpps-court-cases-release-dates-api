@@ -115,8 +115,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
   }
 
   @Nested
-  @DisplayName("GET /service-definitions variations of ADA intercept messages")
-  inner class AdaMessageTests {
+  @DisplayName("GET /service-definitions variations of ADA intercept and UAL to review messages")
+  inner class AdjustmentsAPIProvidedThingsToDo {
 
     @Test
     fun `Should return ADA update`() {
@@ -248,6 +248,111 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                     }
                   ],
                   "count": 1
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+      calculateReleaseDatesApiMockServer.verifyNoThingsToDoCalls(PRISONER_ID)
+    }
+
+    @Test
+    fun `Should return UAL for review`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubPreviousPeriodOfUalForReviewThingsToDo(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "adjustments": {
+                "href": "http://localhost:8002/AB1234AB",
+                "text": "Adjustments",
+                "thingsToDo": {
+                  "things": [
+                    {
+                      "title": "Review UAL",
+                      "message": "There are some previous periods of UAL that may be relevant to the release dates calculation. Check whether this UAL needs to saved before calculating release dates.",
+                      "buttonText": "Review UAL",
+                      "buttonHref": "http://localhost:8002/AB1234AB/review-previous-unlawfully-at-large-periods",
+                      "type": "PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW"
+                    }
+                  ],
+                  "count": 1
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+      calculateReleaseDatesApiMockServer.verifyNoThingsToDoCalls(PRISONER_ID)
+    }
+
+    @Test
+    fun `Should return ADA and UAL for review`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubAdaAndPreviousUalForReviewThingsToDo(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "adjustments": {
+                "href": "http://localhost:8002/AB1234AB",
+                "text": "Adjustments",
+                "thingsToDo": {
+                  "things": [
+                    {
+                      "title": "Review ADA adjudications",
+                      "message": "message",
+                      "buttonText": "Review ADA",
+                      "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-and-approve",
+                      "type": "ADA_INTERCEPT"
+                    },
+                    {
+                      "title": "Review UAL",
+                      "message": "There are some previous periods of UAL that may be relevant to the release dates calculation. Check whether this UAL needs to saved before calculating release dates.",
+                      "buttonText": "Review UAL",
+                      "buttonHref": "http://localhost:8002/AB1234AB/review-previous-unlawfully-at-large-periods",
+                      "type": "PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW"
+                    }
+                  ],
+                  "count": 2
                 }
               },
               "releaseDates": {
