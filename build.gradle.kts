@@ -27,7 +27,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webclient")
   testImplementation("org.springframework.boot:spring-boot-webtestclient")
   testImplementation("org.wiremock:wiremock-standalone:3.13.2")
-  testImplementation("io.swagger.parser.v3:swagger-parser-v2-converter:2.1.38")
+  testImplementation("io.swagger.parser.v3:swagger-parser-v2-converter:2.1.39")
   testImplementation("org.testcontainers:testcontainers:2.0.3")
   testImplementation("org.testcontainers:localstack:1.21.4")
   testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:2.0.2")
