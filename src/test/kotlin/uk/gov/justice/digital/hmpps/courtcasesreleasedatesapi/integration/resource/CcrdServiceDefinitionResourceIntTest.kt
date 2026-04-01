@@ -20,7 +20,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       identifyRemandApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "CCRD_DOCUMENTS"))
         .expectBody()
         .json(
           """
@@ -57,6 +57,13 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
               "releaseDates": {
                 "href": "http://localhost:8004?prisonId=AB1234AB",
                 "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "count": 0
+                }
+              },
+              "documents": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/documents",
+                "text": "Documents",
                 "thingsToDo": {
                   "count": 0
                 }

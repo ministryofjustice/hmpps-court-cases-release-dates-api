@@ -107,6 +107,12 @@ ccrd-service-configurations:
       url-mapping: '?prisonId={prisonerId}'
       requiredRoles:
         - 'RELEASE_DATES_CALCULATOR'
+    documents:
+      text: 'Documents'
+      ui-url: ${hmpps-court-cases-and-release-dates-ui-url}
+      url-mapping: '/prisoner/{prisonerId}/documents'
+      requiredRoles:
+        - 'CCRD_DOCUMENTS'
 
 
 feature-toggles:
