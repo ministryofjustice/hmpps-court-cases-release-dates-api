@@ -17,6 +17,7 @@ generic-service:
     THINGS_TO_DO_FEATURE_TOGGLE: "true"
     HMPPS_IDENTIFY_REMAND_UI_URL: "https://identify-remand-periods.hmpps.service.justice.gov.uk"
     HMPPS_IDENTIFY_REMAND_API_URL: "https://identify-remand-periods-api.hmpps.service.justice.gov.uk"
+    HMPPS_COURT_DATA_INGESTION_API_URL: "https://court-data-ingestion-api.hmpps.service.justice.gov.uk"
 
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack

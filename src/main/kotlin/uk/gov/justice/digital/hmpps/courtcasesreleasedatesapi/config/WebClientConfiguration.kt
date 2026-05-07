@@ -16,6 +16,7 @@ class WebClientConfiguration @Autowired constructor(
   @param:Value("\${calculate-release-dates-api.url}") private val calculateReleaseDatesApiBaseUri: String,
   @param:Value("\${adjustments-api.url}") private val adjustmentsApiBaseUri: String,
   @param:Value("\${hmpps-identify-remand-api.url}") private val identifyRemandApiBaseUri: String,
+  @param:Value("\${hmpps-court-data-ingestion-api.url}") private val courtDataIngestionApiUri: String,
   @param:Value("\${api.health-timeout:2s}") private val healthTimeout: Duration,
   @param:Value("\${api.timeout:20s}") private val timeout: Duration,
 ) {
@@ -53,6 +54,17 @@ class WebClientConfiguration @Autowired constructor(
     authorizedClientManager,
     registrationId = "identify-remand-api",
     url = identifyRemandApiBaseUri,
+    timeout,
+  )
+
+  @Bean
+  fun courtDataIngestionApiWebClient(
+    authorizedClientManager: OAuth2AuthorizedClientManager,
+    builder: WebClient.Builder,
+  ): WebClient = builder.authorisedWebClient(
+    authorizedClientManager,
+    registrationId = "court-data-ingestion-api",
+    url = courtDataIngestionApiUri,
     timeout,
   )
 }

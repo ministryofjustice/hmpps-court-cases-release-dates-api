@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.SqsIntegrationTestBase
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.AdjustmentsApiExtension.Companion.adjustmentsApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.CalculateReleaseDatesApiExtension.Companion.calculateReleaseDatesApiMockServer
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.CourtDataIngestionApiExtension.Companion.courtDataIngestionApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.IdentifyRemandApiExtension.Companion.identifyRemandApiMockServer
 
@@ -20,6 +21,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       identifyRemandApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "CCRD_DOCUMENTS"))
         .expectBody()
         .json(
@@ -109,7 +111,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                         "type": "CALCULATION_REQUIRED"
                       }
                     ],
-                    "count": 1
+                    "count": 1,
+                    "severity": "REQUIRED_BEFORE_CALCULATION"
                   }
                 }
               }
@@ -156,7 +159,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "type": "ADA_INTERCEPT"
                     }
                   ],
-                  "count": 1
+                  "count": 1,
+                  "severity": "REQUIRED_BEFORE_CALCULATION"
                 }
               },
               "releaseDates": {
@@ -205,7 +209,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "type": "ADA_INTERCEPT"
                     }
                   ],
-                  "count": 1
+                  "count": 1,
+                  "severity": "REQUIRED_BEFORE_CALCULATION"
                 }
               },
               "releaseDates": {
@@ -254,7 +259,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "type": "ADA_INTERCEPT"
                     }
                   ],
-                  "count": 1
+                  "count": 1,
+                  "severity": "REQUIRED_BEFORE_CALCULATION"
                 }
               },
               "releaseDates": {
@@ -303,7 +309,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "type": "PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW"
                     }
                   ],
-                  "count": 1
+                  "count": 1,
+                  "severity": "REQUIRED_BEFORE_CALCULATION"
                 }
               },
               "releaseDates": {
@@ -359,7 +366,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "type": "PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW"
                     }
                   ],
-                  "count": 2
+                  "count": 2,
+                  "severity": "REQUIRED_BEFORE_CALCULATION"
                 }
               },
               "releaseDates": {
@@ -421,7 +429,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "type": "REVIEW_IDENTIFIED_REMAND"
                     }
                   ],
-                  "count": 2
+                  "count": 2,
+                  "severity": "REQUIRED_BEFORE_CALCULATION"
                 }
               },
               "releaseDates": {
@@ -478,7 +487,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "type": "REVIEW_IDENTIFIED_REMAND"
                     }
                   ],
-                  "count": 2
+                  "count": 2,
+                  "severity": "REQUIRED_BEFORE_CALCULATION"
                 }
               },
               "releaseDates": {
@@ -535,7 +545,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "type": "REVIEW_IDENTIFIED_REMAND"
                     }
                   ],
-                  "count": 2
+                  "count": 2,
+                  "severity": "REQUIRED_BEFORE_CALCULATION"
                 }
               },
               "releaseDates": {
@@ -544,6 +555,97 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                 "thingsToDo": {
                   "things": [],
                   "count": 0
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+    }
+  }
+
+  @Nested
+  @DisplayName("GET /service-definitions documents things to do")
+  inner class DocumentsThingsToDo {
+    @Test
+    fun `Should call documents things to do if user has documents role and returns notifications `() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      courtDataIngestionApiMockServer.stubFiveNewDocuments(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "CCRD_DOCUMENTS"))
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "adjustments": {
+                "href": "http://localhost:8002/AB1234AB",
+                "text": "Adjustments",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "documents": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/documents",
+                "text": "Documents",
+                "thingsToDo": {
+                  "things": [        
+                    {
+                      "title": "",
+                      "message": "",
+                      "buttonText": "",
+                      "buttonHref": "",
+                      "type": "HMCTS_API_DOCUMENT_RECEIVED"
+                    },        
+                    {
+                      "title": "",
+                      "message": "",
+                      "buttonText": "",
+                      "buttonHref": "",
+                      "type": "HMCTS_API_DOCUMENT_RECEIVED"
+                    },        
+                    {
+                      "title": "",
+                      "message": "",
+                      "buttonText": "",
+                      "buttonHref": "",
+                      "type": "HMCTS_API_DOCUMENT_RECEIVED"
+                    },        
+                    {
+                      "title": "",
+                      "message": "",
+                      "buttonText": "",
+                      "buttonHref": "",
+                      "type": "HMCTS_API_DOCUMENT_RECEIVED"
+                    },        
+                    {
+                      "title": "",
+                      "message": "",
+                      "buttonText": "",
+                      "buttonHref": "",
+                      "type": "HMCTS_API_DOCUMENT_RECEIVED"
+                    }
+                  ],
+                  "count": 5,
+                  "severity": "NOTIFICATION"
                 }
               }
             }
