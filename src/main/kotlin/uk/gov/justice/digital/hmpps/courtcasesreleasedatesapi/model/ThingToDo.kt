@@ -6,4 +6,14 @@ data class ThingToDo(
   val buttonText: String,
   val buttonHref: String,
   val type: ThingToDoType,
-)
+) {
+  companion object {
+    fun notificationOnlyThingToDo(type: ThingToDoType): ThingToDo = ThingToDo(
+      "",
+      "",
+      "",
+      "",
+      type,
+    )
+  }
+}

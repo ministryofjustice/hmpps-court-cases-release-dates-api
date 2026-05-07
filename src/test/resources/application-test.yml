@@ -32,7 +32,8 @@ hmpps-identify-remand-api:
   url:  "http://localhost:8093"
 hmpps-identify-remand-ui:
   url:  "http://localhost:8005"
-
+hmpps-court-data-ingestion-api:
+  url:  "http://localhost:8094"
 things-to-do-feature-toggle: "true"
 
 

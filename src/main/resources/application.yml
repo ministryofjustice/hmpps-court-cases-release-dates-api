@@ -11,7 +11,6 @@ spring:
   jackson:
     date-format: "yyyy-MM-dd HH:mm:ss"
 
-  # TODO: This security section can be removed if your service doesn't call out to other services
   security:
     oauth2:
       resourceserver:
@@ -36,6 +35,12 @@ spring:
             authorization-grant-type: client_credentials
             scope: read,write
           identify-remand-api:
+            provider: hmpps-auth
+            client-id: ${system.client.id}
+            client-secret: ${system.client.secret}
+            authorization-grant-type: client_credentials
+            scope: read,write
+          court-data-ingestion-api:
             provider: hmpps-auth
             client-id: ${system.client.id}
             client-secret: ${system.client.secret}
