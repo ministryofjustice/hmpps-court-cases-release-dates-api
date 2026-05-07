@@ -4,4 +4,5 @@ enum class ThingsToDoProviderName {
   ADJUSTMENTS,
   CRDS,
   IDENTIFY_REMAND,
+  DOCUMENTS,
 }

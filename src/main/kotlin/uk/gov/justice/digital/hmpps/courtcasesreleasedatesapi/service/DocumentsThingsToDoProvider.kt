@@ -27,5 +27,5 @@ class DocumentsThingsToDoProvider(
     }
   }
 
-  override fun thingsToDoProviderName(): ThingsToDoProviderName = ThingsToDoProviderName.CRDS
+  override fun thingsToDoProviderName(): ThingsToDoProviderName = ThingsToDoProviderName.DOCUMENTS
 }
