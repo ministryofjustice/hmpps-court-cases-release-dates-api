@@ -118,6 +118,9 @@ ccrd-service-configurations:
       url-mapping: '/prisoner/{prisonerId}/documents'
       requiredRoles:
         - 'CCRD_DOCUMENTS'
+  maintenanceAlert:
+    enabled: false
+    message: "placeholder"
 
 
 feature-toggles:
