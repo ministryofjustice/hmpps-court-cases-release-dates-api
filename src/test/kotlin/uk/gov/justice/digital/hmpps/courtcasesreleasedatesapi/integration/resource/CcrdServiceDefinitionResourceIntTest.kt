@@ -70,6 +70,10 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                   "count": 0
                 }
               }
+            },
+            "maintenanceAlert": {
+              "enabled": false,
+              "message": "placeholder"
             }
           }          
           """.trimIndent(),

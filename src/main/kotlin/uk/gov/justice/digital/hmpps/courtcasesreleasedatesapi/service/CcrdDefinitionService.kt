@@ -8,6 +8,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdService
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.FeatureToggles
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CcrdServiceDefinition
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.CcrdServiceDefinitions
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.MaintenanceAlert
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
 import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
 
@@ -34,6 +35,7 @@ class CcrdDefinitionService(
             thingsToDo = thingToDo,
           )
         },
+      MaintenanceAlert(ccrdServiceConfigs.maintenanceAlert.enabled, ccrdServiceConfigs.maintenanceAlert.message),
     )
   }
 
