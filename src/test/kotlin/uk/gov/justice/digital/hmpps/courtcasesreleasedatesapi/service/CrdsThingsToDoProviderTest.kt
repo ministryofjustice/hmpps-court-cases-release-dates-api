@@ -8,6 +8,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.CalculateReleaseDatesApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.MaintenanceAlertConfig
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.enums.CalculationToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
@@ -104,6 +105,7 @@ class CrdsThingsToDoProviderTest {
       urlMapping = "http://localhost/crds?prisonId={prisonerId}",
       requiredRoles = listOf("CALCULATE_RELEASE_DATES"),
       text = "CRDS",
+      maintenanceAlert = MaintenanceAlertConfig(enabled = false, message = "placeholder"),
     )
   }
 }
