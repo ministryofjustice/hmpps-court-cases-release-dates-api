@@ -33,7 +33,7 @@ class CcrdDefinitionService(
             href = getHref(serviceConfig, prisonerId),
             text = serviceConfig.text,
             thingsToDo = thingToDo,
-            maintenanceAlert = MaintenanceAlert(serviceConfig.maintenanceAlert.enabled, serviceConfig.maintenanceAlert.message)
+            maintenanceAlert = MaintenanceAlert(serviceConfig.maintenanceAlert.enabled, serviceConfig.maintenanceAlert.message),
           )
         },
       MaintenanceAlert(ccrdServiceConfigs.maintenanceAlert.enabled, ccrdServiceConfigs.maintenanceAlert.message),
