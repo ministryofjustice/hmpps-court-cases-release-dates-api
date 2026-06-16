@@ -6,6 +6,7 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.IdentifyRemandApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.MaintenanceAlertConfig
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.IdentifyRemandThingsToDo
@@ -85,6 +86,7 @@ class IdentifyRemandThingToDoProviderTest {
       urlMapping = "http://localhost/adjustments/{prisonerId}",
       requiredRoles = listOf("foo"),
       text = "adjustments",
+      maintenanceAlert = MaintenanceAlertConfig(enabled = false, message = "placeholder"),
     )
   }
 }

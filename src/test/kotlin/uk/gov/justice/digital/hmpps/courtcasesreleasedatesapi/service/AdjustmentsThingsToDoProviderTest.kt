@@ -8,6 +8,7 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.AdjustmentsApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.MaintenanceAlertConfig
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.enums.AdjustmentToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
@@ -157,6 +158,7 @@ class AdjustmentsThingsToDoProviderTest {
       urlMapping = "http://localhost/adjustments/{prisonerId}",
       requiredRoles = listOf("foo"),
       text = "adjustments",
+      maintenanceAlert = MaintenanceAlertConfig(enabled = false, message = "placeholder"),
     )
   }
 }
