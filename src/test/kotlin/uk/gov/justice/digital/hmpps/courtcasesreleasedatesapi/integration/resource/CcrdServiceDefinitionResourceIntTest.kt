@@ -33,6 +33,10 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                 "text": "Overview",
                 "thingsToDo": {
                   "count": 0
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
                 }
               },
               "courtCases": {
@@ -40,6 +44,10 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                 "text": "Court cases",
                 "thingsToDo": {
                   "count": 0
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
                 }
               },
               "adjustments": {
@@ -47,6 +55,10 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                 "text": "Adjustments",
                 "thingsToDo": {
                   "count": 0
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
                 }
               },
               "recalls": {
@@ -54,6 +66,10 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                 "text": "Recalls",
                 "thingsToDo": {
                   "count": 0
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
                 }
               },
               "releaseDates": {
@@ -61,6 +77,10 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                 "text": "Release dates and calculations",
                 "thingsToDo": {
                   "count": 0
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
                 }
               },
               "documents": {
@@ -68,6 +88,10 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                 "text": "Documents",
                 "thingsToDo": {
                   "count": 0
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
                 }
               }
             },

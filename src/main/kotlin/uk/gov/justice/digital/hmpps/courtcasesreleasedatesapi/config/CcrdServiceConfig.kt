@@ -5,6 +5,7 @@ data class CcrdServiceConfig(
   val urlMapping: String,
   val requiredRoles: List<String>,
   val text: String,
+  val maintenanceAlert: MaintenanceAlertConfig
 ) {
   init {
     if (!urlMapping.contains("{prisonerId}")) {
