@@ -89,8 +89,8 @@ ccrd-service-configurations:
       requiredRoles:
         - 'RELEASE_DATES_CALCULATOR'
       maintenanceAlert:
-        enabled: false
-        message: "placeholder"
+        enabled: ${maintenance-alert-overview-feature-toggle:false}
+        message: ${maintenance-alert-overview-message:placeholder}
     courtCases:
       text: 'Court cases'
       ui-url: ${hmpps-remand-and-sentencing-ui-url}
@@ -98,8 +98,8 @@ ccrd-service-configurations:
       requiredRoles:
         - 'REMAND_AND_SENTENCING'
       maintenanceAlert:
-        enabled: false
-        message: "placeholder"
+        enabled: ${maintenance-alert-court-cases-feature-toggle:false}
+        message: ${maintenance-alert-court-cases-message:placeholder}
     adjustments:
       text: 'Adjustments'
       ui-url: ${hmpps-adjustments-ui-url}
@@ -107,8 +107,8 @@ ccrd-service-configurations:
       requiredRoles:
         - 'RELEASE_DATES_CALCULATOR'
       maintenanceAlert:
-        enabled: false
-        message: "placeholder"
+        enabled: ${maintenance-alert-adjustments-feature-toggle:false}
+        message: ${maintenance-alert-adjustments-message:placeholder}
     recalls:
       text: 'Recalls'
       ui-url: ${hmpps-recalls-ui-url}
@@ -116,8 +116,8 @@ ccrd-service-configurations:
       requiredRoles:
         - 'RECALL_MAINTAINER'
       maintenanceAlert:
-        enabled: false
-        message: "placeholder"
+        enabled: ${maintenance-alert-recalls-feature-toggle:false}
+        message: ${maintenance-alert-recalls-message:placeholder}
     releaseDates:
       text: 'Release dates and calculations'
       ui-url: ${hmpps-calculate-release-dates-ui-url}
@@ -125,8 +125,8 @@ ccrd-service-configurations:
       requiredRoles:
         - 'RELEASE_DATES_CALCULATOR'
       maintenanceAlert:
-        enabled: false
-        message: "placeholder"
+        enabled: ${maintenance-alert-release-dates-feature-toggle:false}
+        message: ${maintenance-alert-release-dates-message:placeholder}
     documents:
       text: 'Documents'
       ui-url: ${hmpps-court-cases-and-release-dates-ui-url}
@@ -134,11 +134,11 @@ ccrd-service-configurations:
       requiredRoles:
         - 'CCRD_DOCUMENTS'
       maintenanceAlert:
-        enabled: false
-        message: "placeholder"
+        enabled: ${maintenance-alert-document-feature-toggle:false}
+        message: ${maintenance-alert-document-message:placeholder}
   maintenanceAlert:
-    enabled: false
-    message: "placeholder"
+    enabled: ${maintenance-alert-all-feature-toggle:false}
+    message: ${maintenance-alert-all-message:placeholder}
 
 
 feature-toggles:
