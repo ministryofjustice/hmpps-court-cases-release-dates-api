@@ -12,7 +12,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDoPr
 @Component
 class CrdsThingsToDoProvider(
   private val calculateReleaseDatesApiClient: CalculateReleaseDatesApiClient,
-) : ThingsToDoProvider {
+) : CacheableThingsToDoProvider {
   override val serviceName: String = "releaseDates"
 
   override fun getThingsToDo(

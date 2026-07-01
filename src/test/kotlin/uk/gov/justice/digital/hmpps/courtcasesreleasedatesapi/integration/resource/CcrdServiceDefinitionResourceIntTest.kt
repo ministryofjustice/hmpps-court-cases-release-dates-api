@@ -9,6 +9,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.CourtDataIngestionApiExtension.Companion.courtDataIngestionApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.HmppsAuthApiExtension.Companion.hmppsAuth
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.IdentifyRemandApiExtension.Companion.identifyRemandApiMockServer
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.RemandAndSentencingApiExtension.Companion.remandAndSentencingApiMockServer
 
 class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
 
@@ -22,6 +23,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       identifyRemandApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "CCRD_DOCUMENTS"))
         .expectBody()
         .json(
@@ -674,6 +676,71 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                   ],
                   "count": 5,
                   "severity": "NOTIFICATION"
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+    }
+  }
+
+  @Nested
+  @DisplayName("GET /service-definitions remand and sentencing things to do")
+  inner class RemandAndSentencingThingsToDo {
+    @Test
+    fun `Should call remand and sentencing things to do if user has role and return alert `() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubThingsToDoRemandWarrant(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING"))
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "adjustments": {
+                "href": "http://localhost:8002/AB1234AB",
+                "text": "Adjustments",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "courtCases": {
+                "href": "http://localhost:8001/person/AB1234AB",
+                "text": "Court cases",
+                "thingsToDo": {
+                  "things": [{
+                    "title":"Enter information from a new remand warrant",
+                    "message":"A new remand warrant for ABC123 has been added from Common Platform. Review and add information from the remand warrant.",
+                    "buttonText":"Review remand warrant",
+                    "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing",
+                    "type":"REMAND_WARRANT_NEW_COURT_CASE"
+                  }],
+                  "count":1,
+                  "severity":"REQUIRED_BEFORE_CALCULATION"
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
                 }
               }
             }

@@ -14,7 +14,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.Int
 @Component
 class AdjustmentsThingsToDoProvider(
   private val adjustmentsApiClient: AdjustmentsApiClient,
-) : ThingsToDoProvider {
+) : CacheableThingsToDoProvider {
   override val serviceName: String = "adjustments"
 
   override fun getThingsToDo(

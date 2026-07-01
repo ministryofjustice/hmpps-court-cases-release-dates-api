@@ -11,7 +11,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDoPr
 @Component
 class DocumentsThingsToDoProvider(
   private val courtDataIngestionApiClient: CourtDataIngestionApiClient,
-) : ThingsToDoProvider {
+) : CacheableThingsToDoProvider {
   override val serviceName: String = "documents"
 
   override fun getThingsToDo(
