@@ -15,7 +15,7 @@ class IdentifyRemandThingToDoProvider(
   private val identifyRemandApiClient: IdentifyRemandApiClient,
   @Value("\${hmpps-identify-remand-ui.url}") private val identifyRemandApiBaseUri: String,
 
-) : ThingsToDoProvider {
+) : CacheableThingsToDoProvider {
   override val serviceName: String = "adjustments"
 
   override fun getThingsToDo(

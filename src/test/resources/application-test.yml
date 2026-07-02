@@ -34,6 +34,8 @@ hmpps-identify-remand-ui:
   url:  "http://localhost:8005"
 hmpps-court-data-ingestion-api:
   url:  "http://localhost:8094"
+hmpps-remand-and-sentencing-api:
+  url:  "http://localhost:8095"
 things-to-do-feature-toggle: "true"
 
 
