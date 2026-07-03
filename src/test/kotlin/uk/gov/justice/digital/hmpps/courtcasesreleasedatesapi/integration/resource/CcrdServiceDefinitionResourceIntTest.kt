@@ -689,12 +689,13 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
   @DisplayName("GET /service-definitions remand and sentencing things to do")
   inner class RemandAndSentencingThingsToDo {
     @Test
-    fun `Should call remand and sentencing things to do if user has role and return alert `() {
+    fun `Should call remand and sentencing things to do if user has role Ras and documents role`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubThingsToDoRemandWarrant(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING"))
+      courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS"))
         .expectBody()
         .json(
           """
@@ -729,6 +730,71 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                   }],
                   "count":1,
                   "severity":"REQUIRED_BEFORE_CALCULATION"
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "documents": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/documents",
+                "text": "Documents",
+                "thingsToDo": {
+                  "count": 0
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun `Should call not remand and sentencing things to do if user doesnt have documents role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubThingsToDoRemandWarrant(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING"))
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "adjustments": {
+                "href": "http://localhost:8002/AB1234AB",
+                "text": "Adjustments",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "courtCases": {
+                "href": "http://localhost:8001/person/AB1234AB",
+                "text": "Court cases",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
                 },
                 "maintenanceAlert": {
                   "enabled": false,
