@@ -29,4 +29,6 @@ class RemandAndSentencingThingsToDoProvider(
       )
     }
   }
+
+  override fun additionalRoles(): List<String> = listOf("CCRD_DOCUMENTS")
 }
