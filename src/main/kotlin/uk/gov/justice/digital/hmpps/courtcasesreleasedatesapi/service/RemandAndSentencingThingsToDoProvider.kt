@@ -19,13 +19,15 @@ class RemandAndSentencingThingsToDoProvider(
     serviceConfig: CcrdServiceConfig,
   ): List<ThingToDo> {
     val thingsToDo = remandAndSentencingApiClient.thingsToDo(prisonerId)
+
     return thingsToDo.thingsToDo.map {
+      val warrantType = if (it == uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.ThingToDoType.NEW_SENTENCING_WARRANT) "sentencing" else "remand"
       ThingToDo(
-        title = "Enter information from a new remand warrant",
-        message = "A new remand warrant for ${thingsToDo.hearingThingsToDoData!!.courtCaseReference} has been added from Common Platform. Review and add information from the remand warrant.",
-        buttonText = "Review remand warrant",
+        title = "Enter information from a new $warrantType warrant",
+        message = "A new $warrantType warrant for ${thingsToDo.hearingThingsToDoData!!.courtCaseReference} has been added from Common Platform. Review and add information from the $warrantType warrant.",
+        buttonText = "Review $warrantType warrant",
         buttonHref = serviceConfig.uiUrl + "/person/$prisonerId/review-new-documents/${thingsToDo.hearingThingsToDoData.hearingId}/landing",
-        type = ThingToDoType.REMAND_WARRANT_NEW_COURT_CASE,
+        type = ThingToDoType.WARRANT_NEW_COURT_CASE,
       )
     }
   }
