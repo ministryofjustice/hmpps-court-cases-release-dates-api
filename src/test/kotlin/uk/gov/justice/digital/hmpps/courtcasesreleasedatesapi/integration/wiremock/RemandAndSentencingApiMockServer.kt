@@ -38,6 +38,27 @@ class RemandAndSentencingApiMockServer : WireMockServer(8095) {
     )
   }
 
+  fun stubThingsToDoSentencingWarrant(prisonerId: String) {
+    stubFor(
+      get("/things-to-do/prisoner/$prisonerId").willReturn(
+        aResponse()
+          .withHeader("Content-Type", "application/json")
+          .withBody(
+            """
+            {
+                "prisonerId": "$prisonerId",
+                "thingsToDo": ["NEW_SENTENCING_WARRANT"],
+                "hearingThingsToDoData": {
+                  "hearingId": "60466893-a289-4ba9-be8e-c9377731472c",
+                  "courtCaseReference": "ABC123"
+                }
+            }
+            """.trimIndent(),
+          ),
+      ),
+    )
+  }
+
   fun stubGetEmptyThingsTodo(prisonerId: String) {
     stubFor(
       get("/things-to-do/prisoner/$prisonerId").willReturn(

@@ -689,7 +689,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
   @DisplayName("GET /service-definitions remand and sentencing things to do")
   inner class RemandAndSentencingThingsToDo {
     @Test
-    fun `Should call remand and sentencing things to do if user has role Ras and documents role`() {
+    fun `Should get remand warrant things to do if user has role Ras and documents role`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
@@ -726,7 +726,80 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                     "message":"A new remand warrant for ABC123 has been added from Common Platform. Review and add information from the remand warrant.",
                     "buttonText":"Review remand warrant",
                     "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing",
-                    "type":"REMAND_WARRANT_NEW_COURT_CASE"
+                    "type":"WARRANT_NEW_COURT_CASE"
+                  }],
+                  "count":1,
+                  "severity":"REQUIRED_BEFORE_CALCULATION"
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "documents": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/documents",
+                "text": "Documents",
+                "thingsToDo": {
+                  "count": 0
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun `Should get sentencing warrant things to do if user has role Ras and documents role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubThingsToDoSentencingWarrant(PRISONER_ID)
+      courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS"))
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "adjustments": {
+                "href": "http://localhost:8002/AB1234AB",
+                "text": "Adjustments",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "courtCases": {
+                "href": "http://localhost:8001/person/AB1234AB",
+                "text": "Court cases",
+                "thingsToDo": {
+                  "things": [{
+                    "title":"Enter information from a new sentencing warrant",
+                    "message":"A new sentencing warrant for ABC123 has been added from Common Platform. Review and add information from the sentencing warrant.",
+                    "buttonText":"Review sentencing warrant",
+                    "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing",
+                    "type":"WARRANT_NEW_COURT_CASE"
                   }],
                   "count":1,
                   "severity":"REQUIRED_BEFORE_CALCULATION"

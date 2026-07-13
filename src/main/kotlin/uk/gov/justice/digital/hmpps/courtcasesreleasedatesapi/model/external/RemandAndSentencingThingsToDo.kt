@@ -10,6 +10,7 @@ data class RemandAndSentencingThingsToDo(
 
 enum class ThingToDoType {
   NEW_REMAND_WARRANT,
+  NEW_SENTENCING_WARRANT,
 }
 
 data class HearingThingsToDoData(
