@@ -1,8 +1,8 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.0-beta"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.1"
   id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
-  kotlin("plugin.spring") version "2.4.0"
-  id("org.openapi.generator") version "7.23.0"
+  kotlin("plugin.spring") version "2.4.10"
+  id("org.openapi.generator") version "7.24.0"
 }
 
 configurations {
@@ -15,7 +15,7 @@ configurations {
 }
 
 dependencies {
-  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.0-beta") {
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.0") {
     exclude(group = "com.fasterxml.jackson.core")
   }
   implementation("org.springframework.boot:spring-boot-starter-webflux")
