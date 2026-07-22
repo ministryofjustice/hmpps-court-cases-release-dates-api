@@ -689,13 +689,13 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
   @DisplayName("GET /service-definitions remand and sentencing things to do")
   inner class RemandAndSentencingThingsToDo {
     @Test
-    fun `Should get remand warrant things to do if user has role Ras and documents role`() {
+    fun `Should get remand warrant things to do if user has role Ras and documents and auto populate role`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubThingsToDoRemandWarrant(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS", "RAS_DOCUMENT_AUTO"))
         .expectBody()
         .json(
           """
@@ -762,13 +762,13 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     }
 
     @Test
-    fun `Should get sentencing warrant things to do if user has role Ras and documents role`() {
+    fun `Should get sentencing warrant things to do if user has role Ras and documents and auto populate role`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubThingsToDoSentencingWarrant(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS", "RAS_DOCUMENT_AUTO"))
         .expectBody()
         .json(
           """
@@ -835,7 +835,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     }
 
     @Test
-    fun `Should call not remand and sentencing things to do if user doesnt have documents role`() {
+    fun `Should call not remand and sentencing things to do if user does not have documents role`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)

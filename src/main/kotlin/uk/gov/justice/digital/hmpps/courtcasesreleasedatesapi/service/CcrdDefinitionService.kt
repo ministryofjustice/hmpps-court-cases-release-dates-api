@@ -61,7 +61,7 @@ class CcrdDefinitionService(
     return ThingsToDo(emptyList())
   }
 
-  private fun roleCheck(requiredRoles: List<String>): Boolean = HmppsAuthenticationHolder.hasRoles(*requiredRoles.toTypedArray())
+  private fun roleCheck(requiredRoles: List<String>): Boolean = requiredRoles.all { HmppsAuthenticationHolder.hasRoles(it) }
 
   companion object {
     private val log: Logger = LoggerFactory.getLogger(CcrdDefinitionService::class.java)
