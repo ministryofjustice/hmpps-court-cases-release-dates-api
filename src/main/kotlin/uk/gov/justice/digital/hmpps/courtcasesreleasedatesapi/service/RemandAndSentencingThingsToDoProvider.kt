@@ -24,7 +24,12 @@ class RemandAndSentencingThingsToDoProvider(
       val warrantType = if (it == uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.ThingToDoType.NEW_SENTENCING_WARRANT) "sentencing" else "remand"
       ThingToDo(
         title = "Enter information from a new $warrantType warrant",
-        message = "A new $warrantType warrant for ${thingsToDo.hearingThingsToDoData!!.courtCaseReference} has been added from Common Platform. Review and add information from the $warrantType warrant.",
+        message = """
+          <p>A new $warrantType warrant has been added from Common Platform.</p>
+          <p>This relates to <strong>${thingsToDo.hearingThingsToDoData!!.courtCaseReference} heard on ${thingsToDo.hearingThingsToDoData.hearingDate} (${thingsToDo.hearingThingsToDoData.hearingType})</strong>.</p>
+          <p>Review and add information from the warrant.</p>
+        """.trimIndent(),
+        messageIsHtml = true,
         buttonText = "Review $warrantType warrant",
         buttonHref = serviceConfig.uiUrl + "/person/$prisonerId/review-new-documents/${thingsToDo.hearingThingsToDoData.hearingId}/landing",
         type = ThingToDoType.WARRANT_NEW_COURT_CASE,

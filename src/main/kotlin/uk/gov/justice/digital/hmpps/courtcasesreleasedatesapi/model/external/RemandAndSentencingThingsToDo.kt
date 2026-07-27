@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external
 
+import java.time.LocalDate
 import java.util.UUID
 
 data class RemandAndSentencingThingsToDo(
@@ -16,4 +17,6 @@ enum class ThingToDoType {
 data class HearingThingsToDoData(
   val hearingId: UUID,
   val courtCaseReference: String,
+  val hearingDate: LocalDate,
+  val hearingType: String,
 )

@@ -138,7 +138,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                         "message": "Some information has changed. Check that all information is up to date then calculate release dates.",
                         "buttonText": "Calculate release dates",
                         "buttonHref": "http://localhost:8004/calculation/AB1234AB/reason",
-                        "type": "CALCULATION_REQUIRED"
+                        "type": "CALCULATION_REQUIRED",
+                        "messageIsHtml": false
                       }
                     ],
                     "count": 1,
@@ -186,7 +187,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "message": "message",
                       "buttonText": "Review ADA",
                       "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-and-approve",
-                      "type": "ADA_INTERCEPT"
+                      "type": "ADA_INTERCEPT",
+                      "messageIsHtml": false
                     }
                   ],
                   "count": 1,
@@ -236,7 +238,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "message": "message",
                       "buttonText": "Review ADA",
                       "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-and-approve",
-                      "type": "ADA_INTERCEPT"
+                      "type": "ADA_INTERCEPT",
+                      "messageIsHtml": false
                     }
                   ],
                   "count": 1,
@@ -286,7 +289,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "message": "message",
                       "buttonText": "Review PADA",
                       "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-prospective",
-                      "type": "ADA_INTERCEPT"
+                      "type": "ADA_INTERCEPT",
+                      "messageIsHtml": false
                     }
                   ],
                   "count": 1,
@@ -336,7 +340,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "message": "There are some previous periods of UAL that may be relevant to the release dates calculation. Check whether this UAL needs to saved before calculating release dates.",
                       "buttonText": "Review UAL",
                       "buttonHref": "http://localhost:8002/AB1234AB/review-previous-unlawfully-at-large-periods",
-                      "type": "PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW"
+                      "type": "PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW",
+                      "messageIsHtml": false
                     }
                   ],
                   "count": 1,
@@ -386,14 +391,16 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "message": "message",
                       "buttonText": "Review ADA",
                       "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-and-approve",
-                      "type": "ADA_INTERCEPT"
+                      "type": "ADA_INTERCEPT",
+                      "messageIsHtml": false
                     },
                     {
                       "title": "Review UAL",
                       "message": "There are some previous periods of UAL that may be relevant to the release dates calculation. Check whether this UAL needs to saved before calculating release dates.",
                       "buttonText": "Review UAL",
                       "buttonHref": "http://localhost:8002/AB1234AB/review-previous-unlawfully-at-large-periods",
-                      "type": "PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW"
+                      "type": "PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW",
+                      "messageIsHtml": false
                     }
                   ],
                   "count": 2,
@@ -449,14 +456,16 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "message": "message",
                       "buttonText": "Review PADA",
                       "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-prospective",
-                      "type": "ADA_INTERCEPT"
+                      "type": "ADA_INTERCEPT",
+                      "messageIsHtml": false
                     },
                     {
                       "title": "The remand tool has calculated that there is relevant remand to be applied.",
                       "message": "Review the remand tool before calculating a release date.",
                       "buttonText": "Review remand",
                       "buttonHref": "http://localhost:8005/prisoner/AB1234AB",
-                      "type": "REVIEW_IDENTIFIED_REMAND"
+                      "type": "REVIEW_IDENTIFIED_REMAND",
+                      "messageIsHtml": false
                     }
                   ],
                   "count": 2,
@@ -507,14 +516,16 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "message": "message",
                       "buttonText": "Review PADA",
                       "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-prospective",
-                      "type": "ADA_INTERCEPT"
+                      "type": "ADA_INTERCEPT",
+                      "messageIsHtml": false
                     },
                     {
                       "title": "The remand tool has calculated that there is no remand to be applied.",
                       "message": "Review the remand tool before calculating a release date.",
                       "buttonText": "Review remand",
                       "buttonHref": "http://localhost:8005/prisoner/AB1234AB",
-                      "type": "REVIEW_IDENTIFIED_REMAND"
+                      "type": "REVIEW_IDENTIFIED_REMAND",
+                      "messageIsHtml": false
                     }
                   ],
                   "count": 2,
@@ -565,14 +576,16 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                       "message": "message",
                       "buttonText": "Review PADA",
                       "buttonHref": "http://localhost:8002/AB1234AB/additional-days/review-prospective",
-                      "type": "ADA_INTERCEPT"
+                      "type": "ADA_INTERCEPT",
+                      "messageIsHtml": false
                     },
                     {
                       "title": "The remand tool has calculated that there is no remand to be applied.",
                       "message": "Review the remand tool before calculating a release date.",
                       "buttonText": "Review remand",
                       "buttonHref": "http://localhost:8005/prisoner/AB1234AB",
-                      "type": "REVIEW_IDENTIFIED_REMAND"
+                      "type": "REVIEW_IDENTIFIED_REMAND",
+                      "messageIsHtml": false
                     }
                   ],
                   "count": 2,
@@ -723,10 +736,11 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                 "thingsToDo": {
                   "things": [{
                     "title":"Enter information from a new remand warrant",
-                    "message":"A new remand warrant for ABC123 has been added from Common Platform. Review and add information from the remand warrant.",
+                    "message":"<p>A new remand warrant has been added from Common Platform.</p>\n<p>This relates to <strong>ABC123 heard on 2026-01-01 (Bail hearing)</strong>.</p>\n<p>Review and add information from the warrant.</p>",
                     "buttonText":"Review remand warrant",
                     "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing",
-                    "type":"WARRANT_NEW_COURT_CASE"
+                    "type":"WARRANT_NEW_COURT_CASE",
+                    "messageIsHtml": true
                   }],
                   "count":1,
                   "severity":"REQUIRED_BEFORE_CALCULATION"
@@ -796,10 +810,11 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                 "thingsToDo": {
                   "things": [{
                     "title":"Enter information from a new sentencing warrant",
-                    "message":"A new sentencing warrant for ABC123 has been added from Common Platform. Review and add information from the sentencing warrant.",
+                    "message":"<p>A new sentencing warrant has been added from Common Platform.</p>\n<p>This relates to <strong>ABC123 heard on 2026-01-01 (Sentencing hearing)</strong>.</p>\n<p>Review and add information from the warrant.</p>",
                     "buttonText":"Review sentencing warrant",
                     "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing",
-                    "type":"WARRANT_NEW_COURT_CASE"
+                    "type":"WARRANT_NEW_COURT_CASE",
+                    "messageIsHtml": true
                   }],
                   "count":1,
                   "severity":"REQUIRED_BEFORE_CALCULATION"
