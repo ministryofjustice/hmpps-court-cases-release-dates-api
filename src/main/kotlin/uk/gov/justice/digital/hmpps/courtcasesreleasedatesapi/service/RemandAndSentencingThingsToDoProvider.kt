@@ -21,17 +21,17 @@ class RemandAndSentencingThingsToDoProvider(
     val thingsToDo = remandAndSentencingApiClient.thingsToDo(prisonerId)
 
     return thingsToDo.thingsToDo.map {
-      val warrantType = if (it == uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.ThingToDoType.NEW_SENTENCING_WARRANT) "sentencing" else "remand"
+      val warrantType = if (it.type == uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.ThingToDoType.NEW_SENTENCING_WARRANT) "sentencing" else "remand"
       ThingToDo(
         title = "Enter information from a new $warrantType warrant",
         message = """
           <p>A new $warrantType warrant has been added from Common Platform.</p>
-          <p>This relates to <strong>${thingsToDo.hearingThingsToDoData!!.courtCaseReference} heard on ${thingsToDo.hearingThingsToDoData.hearingDate} (${thingsToDo.hearingThingsToDoData.hearingType})</strong>.</p>
+          <p>This relates to <strong>${it.hearingThingsToDoData!!.courtCaseReference} heard on ${it.hearingThingsToDoData.hearingDate} (${it.hearingThingsToDoData.hearingType})</strong>.</p>
           <p>Review and add information from the warrant.</p>
         """.trimIndent(),
         messageIsHtml = true,
         buttonText = "Review $warrantType warrant",
-        buttonHref = serviceConfig.uiUrl + "/person/$prisonerId/review-new-documents/${thingsToDo.hearingThingsToDoData.hearingId}/landing",
+        buttonHref = serviceConfig.uiUrl + "/person/$prisonerId/review-new-documents/${it.hearingThingsToDoData.hearingId}/landing",
         type = ThingToDoType.WARRANT_NEW_COURT_CASE,
       )
     }

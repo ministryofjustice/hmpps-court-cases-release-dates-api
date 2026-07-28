@@ -5,8 +5,12 @@ import java.util.UUID
 
 data class RemandAndSentencingThingsToDo(
   val prisonerId: String,
-  val thingsToDo: List<ThingToDoType> = emptyList(),
-  val hearingThingsToDoData: HearingThingsToDoData?,
+  val thingsToDo: List<RemandAndSentencingThingToDo>,
+)
+
+data class RemandAndSentencingThingToDo(
+  val type: ThingToDoType,
+  val hearingThingsToDoData: HearingThingsToDoData,
 )
 
 enum class ThingToDoType {

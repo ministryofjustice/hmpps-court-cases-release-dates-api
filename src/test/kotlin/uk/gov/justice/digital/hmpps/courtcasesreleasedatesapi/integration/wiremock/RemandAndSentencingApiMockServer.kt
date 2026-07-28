@@ -26,13 +26,15 @@ class RemandAndSentencingApiMockServer : WireMockServer(8095) {
             """
             {
                 "prisonerId": "$prisonerId",
-                "thingsToDo": ["NEW_REMAND_WARRANT"],
-                "hearingThingsToDoData": {
-                  "hearingId": "60466893-a289-4ba9-be8e-c9377731472c",
-                  "courtCaseReference": "ABC123",
-                  "hearingDate": "2026-01-01",
-                  "hearingType": "Bail hearing"
-                }
+                "thingsToDo": [{
+                  "type": "NEW_REMAND_WARRANT",
+                  "hearingThingsToDoData": {
+                    "hearingId": "60466893-a289-4ba9-be8e-c9377731472c",
+                    "courtCaseReference": "ABC123",
+                    "hearingDate": "2026-01-01",
+                    "hearingType": "Bail hearing"
+                  }
+                }]
             }
             """.trimIndent(),
           ),
@@ -49,13 +51,15 @@ class RemandAndSentencingApiMockServer : WireMockServer(8095) {
             """
             {
                 "prisonerId": "$prisonerId",
-                "thingsToDo": ["NEW_SENTENCING_WARRANT"],
-                "hearingThingsToDoData": {
+                "thingsToDo": [{
+                  "type": "NEW_SENTENCING_WARRANT",
+                  "hearingThingsToDoData": {
                   "hearingId": "60466893-a289-4ba9-be8e-c9377731472c",
                   "courtCaseReference": "ABC123",
                   "hearingDate": "2026-01-01",
                   "hearingType": "Sentencing hearing"
                 }
+                }]
             }
             """.trimIndent(),
           ),
