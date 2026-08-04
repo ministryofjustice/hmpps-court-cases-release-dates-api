@@ -85,6 +85,17 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                   "message": "placeholder"
                 }
               },
+              "immigration": {
+                "href": "http://localhost:8006?prisonId=AB1234AB/immigration-detention/overview",
+                "text": "Immigration",
+                "thingsToDo": {
+                  "count": 0
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
+                }
+              },
               "documents": {
                 "href": "http://localhost:8000/prisoner/AB1234AB/documents",
                 "text": "Documents",

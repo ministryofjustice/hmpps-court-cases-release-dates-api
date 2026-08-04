@@ -133,6 +133,15 @@ ccrd-service-configurations:
       maintenanceAlert:
         enabled: ${maintenance-alert-release-dates-feature-toggle:false}
         message: ${maintenance-alert-release-dates-message:placeholder}
+    immigration:
+      text: 'Immigration'
+      ui-url: ${hmpps-immigration-ui-url}
+      url-mapping: '/{prisonerId}/immigration-detention/overview'
+      requiredRoles:
+        - 'IMMIGRATION_DETENTION_MAINTAINER'
+      maintenanceAlert:
+        enabled: ${maintenance-alert-recalls-feature-toggle:false}
+        message: ${maintenance-alert-recalls-message:placeholder}
     documents:
       text: 'Documents'
       ui-url: ${hmpps-court-cases-and-release-dates-ui-url}

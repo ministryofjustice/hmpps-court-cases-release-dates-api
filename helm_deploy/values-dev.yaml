@@ -16,6 +16,7 @@ generic-service:
     HMPPS_REMAND_AND_SENTENCING_UI_URL: "https://remand-and-sentencing-dev.hmpps.service.justice.gov.uk"
     HMPPS_ADJUSTMENTS_UI_URL: "https://adjustments-dev.hmpps.service.justice.gov.uk"
     HMPPS_RECALLS_UI_URL: "https://record-a-recall-dev.hmpps.service.justice.gov.uk"
+    HMPPS_IMMIGRATION_UI_URL: "https://immigration-detention-dev.hmpps.service.justice.gov.uk"
     HMPPS_CALCULATE_RELEASE_DATES_UI_URL: "https://calculate-release-dates-dev.hmpps.service.justice.gov.uk"
     THINGS_TO_DO_FEATURE_TOGGLE: "true"
     HMPPS_IDENTIFY_REMAND_UI_URL: "https://identify-remand-periods-dev.hmpps.service.justice.gov.uk"
