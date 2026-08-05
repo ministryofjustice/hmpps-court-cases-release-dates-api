@@ -24,7 +24,7 @@ class CcrdDefinitionService(
     return CcrdServiceDefinitions(
       ccrdServiceConfigs.services
         .filter { (_, serviceConfig) ->
-          roleCheck(serviceConfig.requiredRoles)
+          roleCheck(serviceConfig.requiredRoles, serviceConfig.requireAllRoles)
         }
         .mapValues { (serviceName, serviceConfig) ->
           val thingToDo = getThingsToDo(prisonerId, serviceName, thingsToDo)
@@ -61,7 +61,11 @@ class CcrdDefinitionService(
     return ThingsToDo(emptyList())
   }
 
-  private fun roleCheck(requiredRoles: List<String>): Boolean = requiredRoles.all { HmppsAuthenticationHolder.hasRoles(it) }
+  private fun roleCheck(requiredRoles: List<String>, requireAllRoles: Boolean = true): Boolean = if (requireAllRoles) {
+    requiredRoles.all(HmppsAuthenticationHolder::hasRoles)
+  } else {
+    HmppsAuthenticationHolder.hasRoles(*requiredRoles.toTypedArray())
+  }
 
   companion object {
     private val log: Logger = LoggerFactory.getLogger(CcrdDefinitionService::class.java)
