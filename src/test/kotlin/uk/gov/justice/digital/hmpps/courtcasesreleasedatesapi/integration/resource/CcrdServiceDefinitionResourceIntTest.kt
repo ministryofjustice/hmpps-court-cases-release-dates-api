@@ -164,6 +164,42 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       adjustmentsApiMockServer.verifyNumberOfThingsToDoCalls(PRISONER_ID, 1)
       identifyRemandApiMockServer.verifyNoThingsToDoCalls(PRISONER_ID)
     }
+
+    @Test
+    fun `Should return immigration service for immigration detention user role`() {
+      hmppsAuth.stubGrantToken()
+
+      getServiceDefinitions(
+        listOf(
+          "IMMIGRATION_DETENTION_USER",
+        ),
+      )
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "immigration": {
+                "href": "http://localhost:8006/AB1234AB/immigration-detention/overview",
+                "text": "Immigration",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+    }
   }
 
   @Nested
