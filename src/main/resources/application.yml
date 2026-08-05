@@ -138,10 +138,11 @@ ccrd-service-configurations:
       ui-url: ${hmpps-immigration-ui-url}
       url-mapping: '/{prisonerId}/immigration-detention/overview'
       requiredRoles:
-        - 'IMMIGRATION_DETENTION_MAINTAINER'
+        - 'IMMIGRATION_DETENTION_ADMIN'
+        - 'IMMIGRATION_DETENTION_USER'
       maintenanceAlert:
-        enabled: ${maintenance-alert-recalls-feature-toggle:false}
-        message: ${maintenance-alert-recalls-message:placeholder}
+        enabled: ${maintenance-alert-immigration-feature-toggle:false}
+        message: ${maintenance-alert-immigration-message:placeholder}
     documents:
       text: 'Documents'
       ui-url: ${hmpps-court-cases-and-release-dates-ui-url}
