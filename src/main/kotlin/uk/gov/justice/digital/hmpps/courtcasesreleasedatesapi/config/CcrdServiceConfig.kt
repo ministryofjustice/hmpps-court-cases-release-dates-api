@@ -4,6 +4,7 @@ data class CcrdServiceConfig(
   val uiUrl: String,
   val urlMapping: String,
   val requiredRoles: List<String>,
+  val requireAllRoles: Boolean = true,
   val text: String,
   val maintenanceAlert: MaintenanceAlertConfig,
 ) {

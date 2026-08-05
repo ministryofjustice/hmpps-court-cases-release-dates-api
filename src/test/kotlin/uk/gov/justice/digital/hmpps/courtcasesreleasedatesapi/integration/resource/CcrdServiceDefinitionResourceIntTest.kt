@@ -904,6 +904,93 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     }
   }
 
+  @Nested
+  @DisplayName("GET /service-definitions requireAllRoles behaviour for courtCases and recalls")
+  inner class RequireAnyRoleCcrdServiceFiltering {
+
+    @Test
+    fun `Should include courtCases when user has both REMAND_AND_SENTENCING and COURT_CASES roles`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
+      getServiceDefinitions(listOf("REMAND_AND_SENTENCING", "COURT_CASES", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.courtCases").exists()
+    }
+
+    @Test
+    fun `Should include courtCases when user has only REMAND_AND_SENTENCING role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("REMAND_AND_SENTENCING", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.courtCases").exists()
+    }
+
+    @Test
+    fun `Should exclude courtCases when user has INVALID_ROLE role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("INVALID_ROLE", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.courtCases").doesNotExist()
+    }
+
+    @Test
+    fun `Should include courtCases when user has only COURT_CASES role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("COURT_CASES", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.courtCases").exists()
+    }
+
+    @Test
+    fun `Should include recalls when user has both RECALL_MAINTAINER and COURT_CASES roles`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("RECALL_MAINTAINER", "COURT_CASES", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.recalls").exists()
+    }
+
+    @Test
+    fun `Should include recalls when user has only RECALL_MAINTAINER role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("RECALL_MAINTAINER", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.recalls").exists()
+    }
+
+    @Test
+    fun `Should include recalls when user has only COURT_CASES role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("COURT_CASES", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.recalls").exists()
+    }
+
+    @Test
+    fun `Should exclude recalls when user has only INVALID_ROLE role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("INVALID_ROLE", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.recalls").doesNotExist()
+    }
+  }
+
   private fun getServiceDefinitions(roles: List<String>) = webTestClient.get()
     .uri("/service-definitions/prisoner/$PRISONER_ID")
     .headers(setAuthorisation(roles = roles))
