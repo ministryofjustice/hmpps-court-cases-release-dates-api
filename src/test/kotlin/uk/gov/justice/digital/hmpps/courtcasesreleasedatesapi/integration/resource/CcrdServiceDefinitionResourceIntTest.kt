@@ -24,7 +24,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       identifyRemandApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "CCRD_DOCUMENTS"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "IMMIGRATION_DETENTION_ADMIN", "IMMIGRATION_DETENTION_USER", "CCRD_DOCUMENTS"))
         .expectBody()
         .json(
           """
