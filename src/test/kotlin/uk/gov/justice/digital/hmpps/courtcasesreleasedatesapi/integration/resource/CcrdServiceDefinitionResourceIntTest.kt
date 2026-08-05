@@ -171,6 +171,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
 
       getServiceDefinitions(
         listOf(
+          "RELEASE_DATES_CALCULATOR",
           "IMMIGRATION_DETENTION_USER",
         ),
       )
