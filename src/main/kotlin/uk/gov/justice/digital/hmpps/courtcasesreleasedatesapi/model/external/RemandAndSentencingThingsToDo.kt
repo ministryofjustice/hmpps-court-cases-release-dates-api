@@ -14,8 +14,7 @@ data class RemandAndSentencingThingToDo(
 )
 
 enum class ThingToDoType {
-  NEW_REMAND_WARRANT,
-  NEW_SENTENCING_WARRANT,
+  NEW_WARRANT,
 }
 
 data class HearingThingsToDoData(
@@ -23,4 +22,11 @@ data class HearingThingsToDoData(
   val courtCaseReference: String,
   val hearingDate: LocalDate,
   val hearingType: String,
+  val warrantType: HearingThingsToDoWarrantType,
+  val courtCaseUuid: String?,
 )
+
+enum class HearingThingsToDoWarrantType {
+  REMAND,
+  SENTENCING,
+}

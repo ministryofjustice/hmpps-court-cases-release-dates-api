@@ -6,6 +6,7 @@ import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdService
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDo
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingToDoType
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.ThingsToDo
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.HearingThingsToDoWarrantType
 
 @Component
 class RemandAndSentencingThingsToDoProvider(
@@ -21,7 +22,7 @@ class RemandAndSentencingThingsToDoProvider(
     val thingsToDo = remandAndSentencingApiClient.thingsToDo(prisonerId)
 
     return thingsToDo.thingsToDo.map {
-      val warrantType = if (it.type == uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.ThingToDoType.NEW_SENTENCING_WARRANT) "sentencing" else "remand"
+      val warrantType = if (it.hearingThingsToDoData.warrantType == HearingThingsToDoWarrantType.SENTENCING) "sentencing" else "remand"
       ThingToDo(
         title = "Enter information from a new $warrantType warrant",
         message = """
@@ -31,8 +32,8 @@ class RemandAndSentencingThingsToDoProvider(
         """.trimIndent(),
         messageIsHtml = true,
         buttonText = "Review $warrantType warrant",
-        buttonHref = serviceConfig.uiUrl + "/person/$prisonerId/review-new-documents/${it.hearingThingsToDoData.hearingId}/landing",
-        type = ThingToDoType.WARRANT_NEW_COURT_CASE,
+        buttonHref = serviceConfig.uiUrl + "/person/$prisonerId/review-new-documents/${it.hearingThingsToDoData.hearingId}/landing" + if (it.hearingThingsToDoData.courtCaseUuid != null) "/existing-case" else "",
+        type = ThingToDoType.NEW_HMCTS_WARRANT,
       )
     }
   }
