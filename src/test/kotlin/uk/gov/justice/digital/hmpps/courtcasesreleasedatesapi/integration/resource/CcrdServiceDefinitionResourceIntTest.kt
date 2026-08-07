@@ -706,7 +706,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      remandAndSentencingApiMockServer.stubThingsToDoRemandWarrant(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubThingsToDoRemandWarrantOnNewCase(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS", "RAS_DOCUMENT_AUTO"))
         .expectBody()
@@ -739,7 +739,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                     "message":"<p>A new remand warrant has been added from Common Platform.</p>\n<p>This relates to <strong>ABC123 heard on 2026-01-01 (Bail hearing)</strong>.</p>\n<p>Review and add information from the warrant.</p>",
                     "buttonText":"Review remand warrant",
                     "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing",
-                    "type":"WARRANT_NEW_COURT_CASE",
+                    "type":"NEW_HMCTS_WARRANT",
                     "messageIsHtml": true
                   }],
                   "count":1,
@@ -780,7 +780,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      remandAndSentencingApiMockServer.stubThingsToDoSentencingWarrant(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubThingsToDoSentencingWarrantOnExistingCase(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS", "RAS_DOCUMENT_AUTO"))
         .expectBody()
@@ -812,8 +812,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                     "title":"Enter information from a new sentencing warrant",
                     "message":"<p>A new sentencing warrant has been added from Common Platform.</p>\n<p>This relates to <strong>ABC123 heard on 2026-01-01 (Sentencing hearing)</strong>.</p>\n<p>Review and add information from the warrant.</p>",
                     "buttonText":"Review sentencing warrant",
-                    "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing",
-                    "type":"WARRANT_NEW_COURT_CASE",
+                    "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing/existing-case",
+                    "type":"NEW_HMCTS_WARRANT",
                     "messageIsHtml": true
                   }],
                   "count":1,
@@ -854,7 +854,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      remandAndSentencingApiMockServer.stubThingsToDoRemandWarrant(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubThingsToDoRemandWarrantOnNewCase(PRISONER_ID)
       getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING"))
         .expectBody()
         .json(
