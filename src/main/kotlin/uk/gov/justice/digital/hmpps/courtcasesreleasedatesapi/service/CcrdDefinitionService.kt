@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.service
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.client.RemandAndSentencingApiClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfig
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.CcrdServiceConfigs
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.config.FeatureToggles
@@ -17,6 +18,7 @@ class CcrdDefinitionService(
   private val featureToggles: FeatureToggles,
   private val ccrdServiceConfigs: CcrdServiceConfigs,
   private val thingsToDoProviders: List<ThingsToDoProvider>,
+  private val remandAndSentencingApiClient: RemandAndSentencingApiClient,
 ) {
 
   fun getCcrdConfiguration(prisonerId: String): CcrdServiceDefinitions {
@@ -30,7 +32,7 @@ class CcrdDefinitionService(
           val thingToDo = getThingsToDo(prisonerId, serviceName, thingsToDo)
           thingsToDo.add(thingToDo)
           CcrdServiceDefinition(
-            href = getHref(serviceConfig, prisonerId),
+            href = getHref(serviceName, serviceConfig, prisonerId),
             text = serviceConfig.text,
             thingsToDo = thingToDo,
             maintenanceAlert = MaintenanceAlert(serviceConfig.maintenanceAlert.enabled, serviceConfig.maintenanceAlert.message),
@@ -40,7 +42,25 @@ class CcrdDefinitionService(
     )
   }
 
-  private fun getHref(serviceConfig: CcrdServiceConfig, prisonerId: String): String = serviceConfig.uiUrl + serviceConfig.urlMapping.replace("{prisonerId}", prisonerId)
+  private fun getHref(
+    serviceName: String,
+    serviceConfig: CcrdServiceConfig,
+    prisonerId: String,
+  ): String {
+    if (serviceName != "immigration") {
+      return serviceConfig.uiUrl + serviceConfig.urlMapping.replace("{prisonerId}", prisonerId)
+    }
+
+    val immigrationRecord = remandAndSentencingApiClient.findLatestImmigrationDetentionRecordByPerson(prisonerId)
+
+    val urlMapping = if (immigrationRecord != null) {
+      "/{prisonerId}/immigration-detention/overview"
+    } else {
+      "/{prisonerId}/immigration-detention/add"
+    }
+
+    return serviceConfig.uiUrl + urlMapping.replace("{prisonerId}", prisonerId)
+  }
 
   private fun getThingsToDo(prisonerId: String, serviceName: String, thingsToDo: MutableList<ThingsToDo>): ThingsToDo {
     if (featureToggles.thingsToDo) {
