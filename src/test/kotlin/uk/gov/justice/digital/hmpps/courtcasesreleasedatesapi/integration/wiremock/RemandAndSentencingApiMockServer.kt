@@ -17,7 +17,7 @@ class RemandAndSentencingApiMockServer : WireMockServer(8095) {
     verify(exactly(number), getRequestedFor(urlEqualTo("/things-to-do/prisoner/$prisonerId")))
   }
 
-  fun stubThingsToDoRemandWarrant(prisonerId: String) {
+  fun stubThingsToDoRemandWarrantOnNewCase(prisonerId: String) {
     stubFor(
       get("/things-to-do/prisoner/$prisonerId").willReturn(
         aResponse()
@@ -27,12 +27,14 @@ class RemandAndSentencingApiMockServer : WireMockServer(8095) {
             {
                 "prisonerId": "$prisonerId",
                 "thingsToDo": [{
-                  "type": "NEW_REMAND_WARRANT",
+                  "type": "NEW_WARRANT",
                   "hearingThingsToDoData": {
                     "hearingId": "60466893-a289-4ba9-be8e-c9377731472c",
                     "courtCaseReference": "ABC123",
                     "hearingDate": "2026-01-01",
-                    "hearingType": "Bail hearing"
+                    "hearingType": "Bail hearing",
+                    "warrantType": "REMAND",
+                    "courtCaseUuid": null
                   }
                 }]
             }
@@ -42,7 +44,7 @@ class RemandAndSentencingApiMockServer : WireMockServer(8095) {
     )
   }
 
-  fun stubThingsToDoSentencingWarrant(prisonerId: String) {
+  fun stubThingsToDoSentencingWarrantOnExistingCase(prisonerId: String) {
     stubFor(
       get("/things-to-do/prisoner/$prisonerId").willReturn(
         aResponse()
@@ -52,12 +54,14 @@ class RemandAndSentencingApiMockServer : WireMockServer(8095) {
             {
                 "prisonerId": "$prisonerId",
                 "thingsToDo": [{
-                  "type": "NEW_SENTENCING_WARRANT",
+                  "type": "NEW_WARRANT",
                   "hearingThingsToDoData": {
                   "hearingId": "60466893-a289-4ba9-be8e-c9377731472c",
                   "courtCaseReference": "ABC123",
                   "hearingDate": "2026-01-01",
-                  "hearingType": "Sentencing hearing"
+                  "hearingType": "Sentencing hearing",
+                  "warrantType": "SENTENCING",
+                  "courtCaseUuid": "25463091-9799-4a9b-8652-6b4da4ba0ada"
                 }
                 }]
             }

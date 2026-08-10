@@ -103,6 +103,8 @@ ccrd-service-configurations:
       url-mapping: '/person/{prisonerId}'
       requiredRoles:
         - 'REMAND_AND_SENTENCING'
+        - 'COURT_CASES'
+      requireAllRoles: false
       maintenanceAlert:
         enabled: ${maintenance-alert-court-cases-feature-toggle:false}
         message: ${maintenance-alert-court-cases-message:placeholder}
@@ -121,6 +123,8 @@ ccrd-service-configurations:
       url-mapping: '/person/{prisonerId}'
       requiredRoles:
         - 'RECALL_MAINTAINER'
+        - 'COURT_CASES'
+      requireAllRoles: false
       maintenanceAlert:
         enabled: ${maintenance-alert-recalls-feature-toggle:false}
         message: ${maintenance-alert-recalls-message:placeholder}

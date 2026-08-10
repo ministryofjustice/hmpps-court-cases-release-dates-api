@@ -754,7 +754,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      remandAndSentencingApiMockServer.stubThingsToDoRemandWarrant(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubThingsToDoRemandWarrantOnNewCase(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS", "RAS_DOCUMENT_AUTO"))
         .expectBody()
@@ -787,7 +787,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                     "message":"<p>A new remand warrant has been added from Common Platform.</p>\n<p>This relates to <strong>ABC123 heard on 2026-01-01 (Bail hearing)</strong>.</p>\n<p>Review and add information from the warrant.</p>",
                     "buttonText":"Review remand warrant",
                     "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing",
-                    "type":"WARRANT_NEW_COURT_CASE",
+                    "type":"NEW_HMCTS_WARRANT",
                     "messageIsHtml": true
                   }],
                   "count":1,
@@ -828,7 +828,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      remandAndSentencingApiMockServer.stubThingsToDoSentencingWarrant(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubThingsToDoSentencingWarrantOnExistingCase(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS", "RAS_DOCUMENT_AUTO"))
         .expectBody()
@@ -860,8 +860,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                     "title":"Enter information from a new sentencing warrant",
                     "message":"<p>A new sentencing warrant has been added from Common Platform.</p>\n<p>This relates to <strong>ABC123 heard on 2026-01-01 (Sentencing hearing)</strong>.</p>\n<p>Review and add information from the warrant.</p>",
                     "buttonText":"Review sentencing warrant",
-                    "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing",
-                    "type":"WARRANT_NEW_COURT_CASE",
+                    "buttonHref":"http://localhost:8001/person/AB1234AB/review-new-documents/60466893-a289-4ba9-be8e-c9377731472c/landing/existing-case",
+                    "type":"NEW_HMCTS_WARRANT",
                     "messageIsHtml": true
                   }],
                   "count":1,
@@ -902,7 +902,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      remandAndSentencingApiMockServer.stubThingsToDoRemandWarrant(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubThingsToDoRemandWarrantOnNewCase(PRISONER_ID)
       getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING"))
         .expectBody()
         .json(
@@ -949,6 +949,93 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
           }
           """.trimIndent(),
         )
+    }
+  }
+
+  @Nested
+  @DisplayName("GET /service-definitions requireAllRoles behaviour for courtCases and recalls")
+  inner class RequireAnyRoleCcrdServiceFiltering {
+
+    @Test
+    fun `Should include courtCases when user has both REMAND_AND_SENTENCING and COURT_CASES roles`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
+      getServiceDefinitions(listOf("REMAND_AND_SENTENCING", "COURT_CASES", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.courtCases").exists()
+    }
+
+    @Test
+    fun `Should include courtCases when user has only REMAND_AND_SENTENCING role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("REMAND_AND_SENTENCING", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.courtCases").exists()
+    }
+
+    @Test
+    fun `Should exclude courtCases when user has INVALID_ROLE role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("INVALID_ROLE", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.courtCases").doesNotExist()
+    }
+
+    @Test
+    fun `Should include courtCases when user has only COURT_CASES role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("COURT_CASES", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.courtCases").exists()
+    }
+
+    @Test
+    fun `Should include recalls when user has both RECALL_MAINTAINER and COURT_CASES roles`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("RECALL_MAINTAINER", "COURT_CASES", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.recalls").exists()
+    }
+
+    @Test
+    fun `Should include recalls when user has only RECALL_MAINTAINER role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("RECALL_MAINTAINER", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.recalls").exists()
+    }
+
+    @Test
+    fun `Should include recalls when user has only COURT_CASES role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("COURT_CASES", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.recalls").exists()
+    }
+
+    @Test
+    fun `Should exclude recalls when user has only INVALID_ROLE role`() {
+      hmppsAuth.stubGrantToken()
+      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
+      getServiceDefinitions(listOf("INVALID_ROLE", "RELEASE_DATES_CALCULATOR"))
+        .expectBody()
+        .jsonPath("$.services.recalls").doesNotExist()
     }
   }
 
