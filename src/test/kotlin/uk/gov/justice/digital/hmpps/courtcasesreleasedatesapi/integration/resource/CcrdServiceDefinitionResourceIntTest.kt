@@ -245,6 +245,97 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
           """.trimIndent(),
         )
     }
+
+    @Test
+    fun `Should return immigration service for immigration detention admin role`() {
+      hmppsAuth.stubGrantToken()
+
+      getServiceDefinitions(
+        listOf(
+          "RELEASE_DATES_CALCULATOR",
+          "IMMIGRATION_DETENTION_ADMIN",
+        ),
+      )
+        .expectBody()
+        .json(
+          """
+      {
+        "services": {
+          "overview": {
+            "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+            "text": "Overview",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          },
+          "immigration": {
+            "href": "http://localhost:8006/AB1234AB/immigration-detention/overview",
+            "text": "Immigration",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          },
+          "releaseDates": {
+            "href": "http://localhost:8004?prisonId=AB1234AB",
+            "text": "Release dates and calculations",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          }
+        }
+      }
+          """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun `Should return immigration service when user has both immigration detention roles`() {
+      hmppsAuth.stubGrantToken()
+
+      getServiceDefinitions(
+        listOf(
+          "RELEASE_DATES_CALCULATOR",
+          "IMMIGRATION_DETENTION_ADMIN",
+          "IMMIGRATION_DETENTION_USER",
+        ),
+      )
+        .expectBody()
+        .json(
+          """
+      {
+        "services": {
+          "overview": {
+            "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+            "text": "Overview",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          },
+          "immigration": {
+            "href": "http://localhost:8006/AB1234AB/immigration-detention/overview",
+            "text": "Immigration",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          },
+          "releaseDates": {
+            "href": "http://localhost:8004?prisonId=AB1234AB",
+            "text": "Release dates and calculations",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          }
+        }
+      }
+          """.trimIndent(),
+        )
+    }
   }
 
   @Nested
