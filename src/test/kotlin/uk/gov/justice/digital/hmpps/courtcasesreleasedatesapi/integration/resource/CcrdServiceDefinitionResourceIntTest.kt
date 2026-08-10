@@ -24,7 +24,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       identifyRemandApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "CCRD_DOCUMENTS"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "IMMIGRATION_DETENTION_ADMIN", "IMMIGRATION_DETENTION_USER", "CCRD_DOCUMENTS"))
         .expectBody()
         .json(
           """
@@ -77,6 +77,17 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
               "releaseDates": {
                 "href": "http://localhost:8004?prisonId=AB1234AB",
                 "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "count": 0
+                },
+                "maintenanceAlert": {
+                  "enabled": false,
+                  "message": "placeholder"
+                }
+              },
+              "immigration": {
+                "href": "http://localhost:8006/AB1234AB/immigration-detention/overview",
+                "text": "Immigration",
                 "thingsToDo": {
                   "count": 0
                 },
@@ -152,6 +163,178 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
         )
       adjustmentsApiMockServer.verifyNumberOfThingsToDoCalls(PRISONER_ID, 1)
       identifyRemandApiMockServer.verifyNoThingsToDoCalls(PRISONER_ID)
+    }
+
+    @Test
+    fun `Should return immigration service for immigration detention user role`() {
+      hmppsAuth.stubGrantToken()
+
+      getServiceDefinitions(
+        listOf(
+          "RELEASE_DATES_CALCULATOR",
+          "IMMIGRATION_DETENTION_USER",
+        ),
+      )
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "immigration": {
+                "href": "http://localhost:8006/AB1234AB/immigration-detention/overview",
+                "text": "Immigration",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun `Should not return immigration service when user has no immigration detention role`() {
+      hmppsAuth.stubGrantToken()
+
+      getServiceDefinitions(
+        listOf(
+          "RELEASE_DATES_CALCULATOR",
+        ),
+      )
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun `Should return immigration service for immigration detention admin role`() {
+      hmppsAuth.stubGrantToken()
+
+      getServiceDefinitions(
+        listOf(
+          "RELEASE_DATES_CALCULATOR",
+          "IMMIGRATION_DETENTION_ADMIN",
+        ),
+      )
+        .expectBody()
+        .json(
+          """
+      {
+        "services": {
+          "overview": {
+            "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+            "text": "Overview",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          },
+          "immigration": {
+            "href": "http://localhost:8006/AB1234AB/immigration-detention/overview",
+            "text": "Immigration",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          },
+          "releaseDates": {
+            "href": "http://localhost:8004?prisonId=AB1234AB",
+            "text": "Release dates and calculations",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          }
+        }
+      }
+          """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun `Should return immigration service when user has both immigration detention roles`() {
+      hmppsAuth.stubGrantToken()
+
+      getServiceDefinitions(
+        listOf(
+          "RELEASE_DATES_CALCULATOR",
+          "IMMIGRATION_DETENTION_ADMIN",
+          "IMMIGRATION_DETENTION_USER",
+        ),
+      )
+        .expectBody()
+        .json(
+          """
+      {
+        "services": {
+          "overview": {
+            "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+            "text": "Overview",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          },
+          "immigration": {
+            "href": "http://localhost:8006/AB1234AB/immigration-detention/overview",
+            "text": "Immigration",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          },
+          "releaseDates": {
+            "href": "http://localhost:8004?prisonId=AB1234AB",
+            "text": "Release dates and calculations",
+            "thingsToDo": {
+              "things": [],
+              "count": 0
+            }
+          }
+        }
+      }
+          """.trimIndent(),
+        )
     }
   }
 
