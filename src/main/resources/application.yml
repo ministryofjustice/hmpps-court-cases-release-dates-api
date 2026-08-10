@@ -144,6 +144,7 @@ ccrd-service-configurations:
       requiredRoles:
         - 'IMMIGRATION_DETENTION_ADMIN'
         - 'IMMIGRATION_DETENTION_USER'
+        - 'COURT_CASES'
       requireAllRoles: false
       maintenanceAlert:
         enabled: ${maintenance-alert-immigration-feature-toggle:false}
