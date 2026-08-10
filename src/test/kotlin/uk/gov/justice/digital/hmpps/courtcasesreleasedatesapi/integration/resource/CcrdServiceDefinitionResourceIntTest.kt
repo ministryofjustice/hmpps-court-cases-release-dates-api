@@ -195,6 +195,50 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
                   "things": [],
                   "count": 0
                 }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              }
+            }
+          }
+          """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun `Should not return immigration service when user has no immigration detention role`() {
+      hmppsAuth.stubGrantToken()
+
+      getServiceDefinitions(
+        listOf(
+          "RELEASE_DATES_CALCULATOR",
+        ),
+      )
+        .expectBody()
+        .json(
+          """
+          {
+            "services": {
+              "overview": {
+                "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+                "text": "Overview",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
+              },
+              "releaseDates": {
+                "href": "http://localhost:8004?prisonId=AB1234AB",
+                "text": "Release dates and calculations",
+                "thingsToDo": {
+                  "things": [],
+                  "count": 0
+                }
               }
             }
           }
