@@ -26,6 +26,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       identifyRemandApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
+      remandAndSentencingApiMockServer.stubLatestImmigrationDetentionRecord(PRISONER_ID)
       getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "IMMIGRATION_DETENTION_ADMIN", "IMMIGRATION_DETENTION_USER", "CCRD_DOCUMENTS"))
         .expectBody()
         .json(
@@ -217,6 +218,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     )
     fun `Should return immigration service for valid user role`(rolesCsv: String) {
       hmppsAuth.stubGrantToken()
+      remandAndSentencingApiMockServer.stubLatestImmigrationDetentionRecord(PRISONER_ID)
 
       getServiceDefinitions(
         rolesCsv.split(",").plus("RELEASE_DATES_CALCULATOR"),
@@ -252,6 +254,52 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
               }
             }
           }
+          """.trimIndent(),
+        )
+    }
+
+    @Test
+    fun `Should return immigration add URL when no immigration detention record exists`() {
+      hmppsAuth.stubGrantToken()
+      remandAndSentencingApiMockServer.stubNoLatestImmigrationDetentionRecord(PRISONER_ID)
+
+      getServiceDefinitions(
+        listOf(
+          "RELEASE_DATES_CALCULATOR",
+          "IMMIGRATION_DETENTION_USER",
+        ),
+      )
+        .expectBody()
+        .json(
+          """
+        {
+          "services": {
+            "overview": {
+              "href": "http://localhost:8000/prisoner/AB1234AB/overview",
+              "text": "Overview",
+              "thingsToDo": {
+                "things": [],
+                "count": 0
+              }
+            },
+            "immigration": {
+              "href": "http://localhost:8006/AB1234AB/immigration-detention/add",
+              "text": "Immigration",
+              "thingsToDo": {
+                "things": [],
+                "count": 0
+              }
+            },
+            "releaseDates": {
+              "href": "http://localhost:8004?prisonId=AB1234AB",
+              "text": "Release dates and calculations",
+              "thingsToDo": {
+                "things": [],
+                "count": 0
+              }
+            }
+          }
+        }
           """.trimIndent(),
         )
     }
