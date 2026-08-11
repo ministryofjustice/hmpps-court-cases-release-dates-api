@@ -47,7 +47,7 @@ class CcrdDefinitionService(
     serviceConfig: CcrdServiceConfig,
     prisonerId: String,
   ): String {
-    if (serviceName != "immigration") {
+    if (serviceName.lowercase() != "immigration") {
       return serviceConfig.uiUrl + serviceConfig.urlMapping.replace("{prisonerId}", prisonerId)
     }
 

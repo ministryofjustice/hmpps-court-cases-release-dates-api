@@ -27,7 +27,7 @@ class RemandAndSentencingApiClient(
   }
 
   fun findLatestImmigrationDetentionRecordByPerson(prisonerId: String): ImmigrationDetention? {
-    log.info("Get latest immigration detention record from Remand and Sentencing API for $prisonerId")
+    log.debug("Get latest immigration detention record from Remand and Sentencing API for {}", prisonerId)
 
     return try {
       webClient.get()
@@ -36,7 +36,7 @@ class RemandAndSentencingApiClient(
         .bodyToMono(typeReference<ImmigrationDetention>())
         .block()
     } catch (e: WebClientResponseException.NotFound) {
-      log.info("No immigration detention record found for prisoner $prisonerId")
+      log.warn("No immigration detention record found for prisoner {}", prisonerId)
       null
     }
   }
