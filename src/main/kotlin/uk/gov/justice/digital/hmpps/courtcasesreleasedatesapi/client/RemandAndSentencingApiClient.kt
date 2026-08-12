@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.WebClientResponseException
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.RemandAndSentencingThingsToDo
 
 @Service
@@ -28,15 +27,10 @@ class RemandAndSentencingApiClient(
   fun isImmigrationDetentionPrisoner(prisonerId: String): Boolean {
     log.debug("Check if prisoner {} is an immigration detention prisoner", prisonerId)
 
-    return try {
-      webClient.get()
-        .uri("/immigration-detention/person/$prisonerId/exists")
-        .retrieve()
-        .bodyToMono(Boolean::class.java)
-        .block()!!
-    } catch (e: WebClientResponseException.Forbidden) {
-      log.warn("Received 403 checking immigration detention status for prisoner {}, defaulting to false", prisonerId)
-      false
-    }
+    return webClient.get()
+      .uri("/immigration-detention/person/$prisonerId/exists")
+      .retrieve()
+      .bodyToMono(Boolean::class.java)
+      .block()!!
   }
 }
