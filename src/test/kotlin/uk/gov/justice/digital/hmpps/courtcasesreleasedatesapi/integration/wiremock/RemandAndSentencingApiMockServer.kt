@@ -86,6 +86,28 @@ class RemandAndSentencingApiMockServer : WireMockServer(8095) {
       ),
     )
   }
+
+  fun stubImmigrationDetentionExists(prisonerId: String) {
+    stubFor(
+      get("/immigration-detention/person/$prisonerId/exists").willReturn(
+        aResponse()
+          .withStatus(200)
+          .withHeader("Content-Type", "application/json")
+          .withBody("true"),
+      ),
+    )
+  }
+
+  fun stubNoImmigrationDetentionExists(prisonerId: String) {
+    stubFor(
+      get("/immigration-detention/person/$prisonerId/exists").willReturn(
+        aResponse()
+          .withStatus(200)
+          .withHeader("Content-Type", "application/json")
+          .withBody("false"),
+      ),
+    )
+  }
 }
 
 class RemandAndSentencingApiExtension :

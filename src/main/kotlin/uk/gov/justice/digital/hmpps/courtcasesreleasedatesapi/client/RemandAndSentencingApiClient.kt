@@ -8,8 +8,11 @@ import org.springframework.web.reactive.function.client.WebClient
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.RemandAndSentencingThingsToDo
 
 @Service
-class RemandAndSentencingApiClient(@param:Qualifier("remandAndSentencingApiWebClient") private val webClient: WebClient) {
+class RemandAndSentencingApiClient(
+  @param:Qualifier("remandAndSentencingApiWebClient") private val webClient: WebClient,
+) {
   private val log = LoggerFactory.getLogger(this::class.java)
+
   private inline fun <reified T : Any> typeReference() = object : ParameterizedTypeReference<T>() {}
 
   fun thingsToDo(prisonerId: String): RemandAndSentencingThingsToDo {
@@ -18,6 +21,16 @@ class RemandAndSentencingApiClient(@param:Qualifier("remandAndSentencingApiWebCl
       .uri("/things-to-do/prisoner/$prisonerId")
       .retrieve()
       .bodyToMono(typeReference<RemandAndSentencingThingsToDo>())
+      .block()!!
+  }
+
+  fun isImmigrationDetentionPrisoner(prisonerId: String): Boolean {
+    log.debug("Check if prisoner {} is an immigration detention prisoner", prisonerId)
+
+    return webClient.get()
+      .uri("/immigration-detention/person/$prisonerId/exists")
+      .retrieve()
+      .bodyToMono(Boolean::class.java)
       .block()!!
   }
 }
