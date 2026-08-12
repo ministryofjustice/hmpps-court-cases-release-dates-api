@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.WebClientResponseException
-import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.ImmigrationDetention
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.model.external.RemandAndSentencingThingsToDo
 
 @Service
@@ -26,18 +24,13 @@ class RemandAndSentencingApiClient(
       .block()!!
   }
 
-  fun findLatestImmigrationDetentionRecordByPerson(prisonerId: String): ImmigrationDetention? {
-    log.debug("Get latest immigration detention record from Remand and Sentencing API for {}", prisonerId)
+  fun isImmigrationDetentionPrisoner(prisonerId: String): Boolean {
+    log.debug("Check if prisoner {} is an immigration detention prisoner", prisonerId)
 
-    return try {
-      webClient.get()
-        .uri("/immigration-detention/person/$prisonerId/latest")
-        .retrieve()
-        .bodyToMono(typeReference<ImmigrationDetention>())
-        .block()
-    } catch (e: WebClientResponseException.NotFound) {
-      log.warn("No immigration detention record found for prisoner {}", prisonerId)
-      null
-    }
+    return webClient.get()
+      .uri("/immigration-detention/person/$prisonerId/exists")
+      .retrieve()
+      .bodyToMono(Boolean::class.java)
+      .block()!!
   }
 }

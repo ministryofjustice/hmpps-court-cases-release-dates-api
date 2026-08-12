@@ -51,9 +51,9 @@ class CcrdDefinitionService(
       return serviceConfig.uiUrl + serviceConfig.urlMapping.replace("{prisonerId}", prisonerId)
     }
 
-    val immigrationRecord = remandAndSentencingApiClient.findLatestImmigrationDetentionRecordByPerson(prisonerId)
+    val isImmigrationDetentionPrisoner = remandAndSentencingApiClient.isImmigrationDetentionPrisoner(prisonerId)
 
-    val urlMapping = if (immigrationRecord != null) {
+    val urlMapping = if (isImmigrationDetentionPrisoner) {
       "/{prisonerId}/immigration-detention/overview"
     } else {
       "/{prisonerId}/immigration-detention/add"
