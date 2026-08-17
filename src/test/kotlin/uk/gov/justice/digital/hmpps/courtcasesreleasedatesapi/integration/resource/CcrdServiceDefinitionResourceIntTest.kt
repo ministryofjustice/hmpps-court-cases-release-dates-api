@@ -259,7 +259,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     }
 
     @Test
-    fun `Should return immigration add URL when no immigration detention record exists`() {
+    fun `Should return immigration start URL when no immigration detention record exists`() {
       hmppsAuth.stubGrantToken()
       remandAndSentencingApiMockServer.stubNoImmigrationDetentionExists(PRISONER_ID)
 
@@ -283,7 +283,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
               }
             },
             "immigration": {
-              "href": "http://localhost:8006/AB1234AB/immigration-detention/add",
+              "href": "http://localhost:8006/AB1234AB/immigration-detention/start",
               "text": "Immigration",
               "thingsToDo": {
                 "things": [],

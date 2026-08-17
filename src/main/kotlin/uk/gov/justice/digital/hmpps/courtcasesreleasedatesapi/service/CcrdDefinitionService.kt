@@ -56,7 +56,7 @@ class CcrdDefinitionService(
     val urlMapping = if (isImmigrationDetentionPrisoner) {
       "/{prisonerId}/immigration-detention/overview"
     } else {
-      "/{prisonerId}/immigration-detention/add"
+      "/{prisonerId}/immigration-detention/start"
     }
 
     return serviceConfig.uiUrl + urlMapping.replace("{prisonerId}", prisonerId)
