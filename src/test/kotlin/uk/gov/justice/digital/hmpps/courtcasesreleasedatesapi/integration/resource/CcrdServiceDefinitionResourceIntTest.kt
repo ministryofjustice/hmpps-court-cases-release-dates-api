@@ -259,7 +259,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     }
 
     @Test
-    fun `Should return immigration add URL when no immigration detention record exists`() {
+    fun `Should return immigration start URL when no immigration detention record exists`() {
       hmppsAuth.stubGrantToken()
       remandAndSentencingApiMockServer.stubNoImmigrationDetentionExists(PRISONER_ID)
 
