@@ -283,7 +283,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
               }
             },
             "immigration": {
-              "href": "http://localhost:8006/AB1234AB/immigration-detention/add",
+              "href": "http://localhost:8006/AB1234AB/immigration-detention/start",
               "text": "Immigration",
               "thingsToDo": {
                 "things": [],
