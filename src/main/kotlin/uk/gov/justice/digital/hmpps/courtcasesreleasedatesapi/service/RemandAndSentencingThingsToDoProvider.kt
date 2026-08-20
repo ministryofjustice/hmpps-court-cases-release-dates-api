@@ -27,7 +27,7 @@ class RemandAndSentencingThingsToDoProvider(
         title = "Enter information from a new $warrantType warrant",
         message = """
           <p>A new $warrantType warrant has been added from Common Platform.</p>
-          <p>This relates to <strong>${it.hearingThingsToDoData!!.courtCaseReference} heard on ${it.hearingThingsToDoData.hearingDate} (${it.hearingThingsToDoData.hearingType})</strong>.</p>
+          <p>This relates to <strong>${it.hearingThingsToDoData.courtCaseReference} heard on ${it.hearingThingsToDoData.hearingDate} (${it.hearingThingsToDoData.hearingType})</strong>.</p>
           <p>Review and add information from the warrant.</p>
         """.trimIndent(),
         messageIsHtml = true,
