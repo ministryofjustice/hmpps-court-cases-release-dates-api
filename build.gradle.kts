@@ -1,7 +1,7 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.7"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.10"
   id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
-  kotlin("plugin.spring") version "2.4.10"
+  kotlin("plugin.spring") version "2.4.20"
   id("org.openapi.generator") version "7.25.0"
 }
 
@@ -15,7 +15,7 @@ configurations {
 }
 
 dependencies {
-  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.1") {
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.3") {
     exclude(group = "com.fasterxml.jackson.core")
   }
   implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -30,7 +30,7 @@ dependencies {
   testImplementation("io.swagger.parser.v3:swagger-parser-v2-converter:2.1.48")
   testImplementation("org.testcontainers:testcontainers:2.0.5")
   testImplementation("org.testcontainers:localstack:1.21.4")
-  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:3.0.1")
+  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:3.0.3")
   testImplementation("com.github.codemonstur:embedded-redis:1.4.4")
   testImplementation("org.awaitility:awaitility-kotlin")
 }
