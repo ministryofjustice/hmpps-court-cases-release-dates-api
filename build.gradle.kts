@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.12"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.14"
   id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
   kotlin("plugin.spring") version "2.4.21"
   id("org.openapi.generator") version "7.26.0"
@@ -22,7 +22,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-cache")
   implementation("org.springframework.boot:spring-boot-starter-data-redis")
   implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.4.1")
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
   implementation("org.springframework.boot:spring-boot-starter-webclient")
   testImplementation("org.springframework.boot:spring-boot-webtestclient")
