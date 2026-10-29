@@ -154,7 +154,7 @@ ccrd-service-configurations:
       ui-url: ${hmpps-court-cases-and-release-dates-ui-url}
       url-mapping: '/prisoner/{prisonerId}/documents'
       requiredRoles:
-        - 'CCRD_DOCUMENTS'
+        - 'COURT_CASES'
       maintenanceAlert:
         enabled: ${maintenance-alert-document-feature-toggle:false}
         message: ${maintenance-alert-document-message:placeholder}

@@ -27,7 +27,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "IMMIGRATION_DETENTION_ADMIN", "IMMIGRATION_DETENTION_USER", "CCRD_DOCUMENTS"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "IMMIGRATION_DETENTION_ADMIN", "IMMIGRATION_DETENTION_USER", "COURT_CASES"))
         .expectBody()
         .json(
           """
@@ -766,7 +766,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       courtDataIngestionApiMockServer.stubFiveNewDocuments(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "CCRD_DOCUMENTS"))
+      remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "COURT_CASES"))
         .expectBody()
         .json(
           """
@@ -858,7 +859,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubThingsToDoRemandWarrantOnNewCase(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS", "RAS_DOCUMENT_AUTO"))
+      remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS", "COURT_CASES",  "RAS_DOCUMENT_AUTO"))
         .expectBody()
         .json(
           """
@@ -932,7 +934,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubThingsToDoSentencingWarrantOnExistingCase(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS", "RAS_DOCUMENT_AUTO"))
+      remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "CCRD_DOCUMENTS", "COURT_CASES", "RAS_DOCUMENT_AUTO"))
         .expectBody()
         .json(
           """
