@@ -38,5 +38,5 @@ class RemandAndSentencingThingsToDoProvider(
     }
   }
 
-  override fun additionalRoles(): List<String> = listOf("COURT_CASES", "RAS_DOCUMENT_AUTO")
+  override fun additionalRoles(): List<String> = listOf("RAS_DOCUMENT_AUTO")
 }
