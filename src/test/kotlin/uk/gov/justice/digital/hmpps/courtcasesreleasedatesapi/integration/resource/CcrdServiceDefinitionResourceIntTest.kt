@@ -27,7 +27,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "IMMIGRATION_DETENTION_ADMIN", "IMMIGRATION_DETENTION_USER", "COURT_CASES"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER", "IMMIGRATION_DETENTION_ADMIN", "IMMIGRATION_DETENTION_USER", "COURT_CASES"))
         .expectBody()
         .json(
           """
@@ -1081,27 +1081,6 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       getServiceDefinitions(listOf("COURT_CASES", "RELEASE_DATES_CALCULATOR"))
         .expectBody()
         .jsonPath("$.services.courtCases").exists()
-    }
-
-    @Test
-    fun `Should include recalls when user has both RECALL_MAINTAINER and COURT_CASES roles`() {
-      hmppsAuth.stubGrantToken()
-      remandAndSentencingApiMockServer.stubNoImmigrationDetentionExists(PRISONER_ID)
-      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
-      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      getServiceDefinitions(listOf("RECALL_MAINTAINER", "COURT_CASES", "RELEASE_DATES_CALCULATOR"))
-        .expectBody()
-        .jsonPath("$.services.recalls").exists()
-    }
-
-    @Test
-    fun `Should include recalls when user has only RECALL_MAINTAINER role`() {
-      hmppsAuth.stubGrantToken()
-      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
-      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      getServiceDefinitions(listOf("RECALL_MAINTAINER", "RELEASE_DATES_CALCULATOR"))
-        .expectBody()
-        .jsonPath("$.services.recalls").exists()
     }
 
     @Test
