@@ -3,8 +3,6 @@ package uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.resou
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.integration.SqsIntegrationTestBase
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.AdjustmentsApiExtension.Companion.adjustmentsApiMockServer
 import uk.gov.justice.digital.hmpps.courtcasesreleasedatesapi.integration.wiremock.CalculateReleaseDatesApiExtension.Companion.calculateReleaseDatesApiMockServer
@@ -27,7 +25,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER", "IMMIGRATION_DETENTION_USER", "COURT_CASES"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER", "COURT_CASES"))
         .expectBody()
         .json(
           """
@@ -204,20 +202,13 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
         )
     }
 
-    @ParameterizedTest
-    @ValueSource(
-      strings = [
-        "IMMIGRATION_DETENTION_USER",
-        "COURT_CASES",
-        "COURT_CASES,IMMIGRATION_DETENTION_USER",
-      ],
-    )
-    fun `Should return immigration service for valid user role`(rolesCsv: String) {
+    @Test
+    fun `Should return immigration service for COURT_CASES user role`() {
       hmppsAuth.stubGrantToken()
       remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
 
       getServiceDefinitions(
-        rolesCsv.split(",").plus("RELEASE_DATES_CALCULATOR"),
+        listOf("RELEASE_DATES_CALCULATOR", "COURT_CASES"),
       )
         .expectBody()
         .json(
@@ -262,7 +253,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       getServiceDefinitions(
         listOf(
           "RELEASE_DATES_CALCULATOR",
-          "IMMIGRATION_DETENTION_USER",
+          "COURT_CASES"
         ),
       )
         .expectBody()
