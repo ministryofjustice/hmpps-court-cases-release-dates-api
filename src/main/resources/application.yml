@@ -102,7 +102,6 @@ ccrd-service-configurations:
       ui-url: ${hmpps-remand-and-sentencing-ui-url}
       url-mapping: '/person/{prisonerId}'
       requiredRoles:
-        - 'REMAND_AND_SENTENCING'
         - 'COURT_CASES'
       requireAllRoles: false
       maintenanceAlert:
@@ -122,7 +121,6 @@ ccrd-service-configurations:
       ui-url: ${hmpps-recalls-ui-url}
       url-mapping: '/person/{prisonerId}'
       requiredRoles:
-        - 'RECALL_MAINTAINER'
         - 'COURT_CASES'
       requireAllRoles: false
       maintenanceAlert:
@@ -142,8 +140,6 @@ ccrd-service-configurations:
       ui-url: ${hmpps-immigration-ui-url}
       url-mapping: '/{prisonerId}/immigration-detention/overview'
       requiredRoles:
-        - 'IMMIGRATION_DETENTION_ADMIN'
-        - 'IMMIGRATION_DETENTION_USER'
         - 'COURT_CASES'
       requireAllRoles: false
       maintenanceAlert:
