@@ -27,7 +27,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER", "IMMIGRATION_DETENTION_ADMIN", "IMMIGRATION_DETENTION_USER", "COURT_CASES"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER", "IMMIGRATION_DETENTION_USER", "COURT_CASES"))
         .expectBody()
         .json(
           """
@@ -208,12 +208,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     @ValueSource(
       strings = [
         "IMMIGRATION_DETENTION_USER",
-        "IMMIGRATION_DETENTION_ADMIN",
-        "IMMIGRATION_DETENTION_ADMIN,IMMIGRATION_DETENTION_USER",
         "COURT_CASES",
-        "COURT_CASES,IMMIGRATION_DETENTION_ADMIN",
         "COURT_CASES,IMMIGRATION_DETENTION_USER",
-        "COURT_CASES,IMMIGRATION_DETENTION_ADMIN,IMMIGRATION_DETENTION_USER",
       ],
     )
     fun `Should return immigration service for valid user role`(rolesCsv: String) {

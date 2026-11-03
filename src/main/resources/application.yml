@@ -140,7 +140,6 @@ ccrd-service-configurations:
       ui-url: ${hmpps-immigration-ui-url}
       url-mapping: '/{prisonerId}/immigration-detention/overview'
       requiredRoles:
-        - 'IMMIGRATION_DETENTION_ADMIN'
         - 'IMMIGRATION_DETENTION_USER'
         - 'COURT_CASES'
       requireAllRoles: false
