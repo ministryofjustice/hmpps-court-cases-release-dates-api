@@ -253,7 +253,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       getServiceDefinitions(
         listOf(
           "RELEASE_DATES_CALCULATOR",
-          "COURT_CASES"
+          "COURT_CASES",
         ),
       )
         .expectBody()
