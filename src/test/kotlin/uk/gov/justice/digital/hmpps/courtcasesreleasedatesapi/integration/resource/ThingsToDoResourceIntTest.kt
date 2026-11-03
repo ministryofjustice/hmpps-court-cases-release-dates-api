@@ -31,7 +31,6 @@ class ThingsToDoResourceIntTest : SqsIntegrationTestBase() {
       identifyRemandApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       val allRoles = listOf(
         "RELEASE_DATES_CALCULATOR",
-        "REMAND_AND_SENTENCING",
         "REMAND_IDENTIFIER",
       )
 

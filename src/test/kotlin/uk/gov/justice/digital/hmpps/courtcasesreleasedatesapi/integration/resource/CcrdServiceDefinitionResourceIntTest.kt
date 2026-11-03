@@ -27,7 +27,7 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "IMMIGRATION_DETENTION_ADMIN", "IMMIGRATION_DETENTION_USER", "COURT_CASES"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_IDENTIFIER", "RECALL_MAINTAINER", "IMMIGRATION_DETENTION_ADMIN", "IMMIGRATION_DETENTION_USER", "COURT_CASES"))
         .expectBody()
         .json(
           """
@@ -853,14 +853,14 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
   @DisplayName("GET /service-definitions remand and sentencing things to do")
   inner class RemandAndSentencingThingsToDo {
     @Test
-    fun `Should get remand warrant things to do if user has role Ras and documents and auto populate role`() {
+    fun `Should get remand warrant things to do if user has role Court cases and documents and auto populate role`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubThingsToDoRemandWarrantOnNewCase(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "COURT_CASES", "RAS_DOCUMENT_AUTO"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "COURT_CASES", "RAS_DOCUMENT_AUTO"))
         .expectBody()
         .json(
           """
@@ -928,14 +928,14 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
     }
 
     @Test
-    fun `Should get sentencing warrant things to do if user has role Ras and documents and auto populate role`() {
+    fun `Should get sentencing warrant things to do if user has role Court cases and documents and auto populate role`() {
       hmppsAuth.stubGrantToken()
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubThingsToDoSentencingWarrantOnExistingCase(PRISONER_ID)
       courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING", "COURT_CASES", "RAS_DOCUMENT_AUTO"))
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "COURT_CASES", "RAS_DOCUMENT_AUTO"))
         .expectBody()
         .json(
           """
@@ -1008,7 +1008,8 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
       adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
       calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
       remandAndSentencingApiMockServer.stubThingsToDoRemandWarrantOnNewCase(PRISONER_ID)
-      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "REMAND_AND_SENTENCING"))
+      remandAndSentencingApiMockServer.stubImmigrationDetentionExists(PRISONER_ID)
+      getServiceDefinitions(listOf("RELEASE_DATES_CALCULATOR", "COURT_CASES"))
         .expectBody()
         .json(
           """
@@ -1060,29 +1061,6 @@ class CcrdServiceDefinitionResourceIntTest : SqsIntegrationTestBase() {
   @Nested
   @DisplayName("GET /service-definitions requireAllRoles behaviour for courtCases and recalls")
   inner class RequireAnyRoleCcrdServiceFiltering {
-
-    @Test
-    fun `Should include courtCases when user has both REMAND_AND_SENTENCING and COURT_CASES roles`() {
-      hmppsAuth.stubGrantToken()
-      remandAndSentencingApiMockServer.stubNoImmigrationDetentionExists(PRISONER_ID)
-      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
-      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      remandAndSentencingApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
-      courtDataIngestionApiMockServer.stubNoThingsToDo(PRISONER_ID)
-      getServiceDefinitions(listOf("REMAND_AND_SENTENCING", "COURT_CASES", "RELEASE_DATES_CALCULATOR"))
-        .expectBody()
-        .jsonPath("$.services.courtCases").exists()
-    }
-
-    @Test
-    fun `Should include courtCases when user has only REMAND_AND_SENTENCING role`() {
-      hmppsAuth.stubGrantToken()
-      adjustmentsApiMockServer.stubGetEmptyThingsTodo(PRISONER_ID)
-      calculateReleaseDatesApiMockServer.stubGetNoThingsTodo(PRISONER_ID)
-      getServiceDefinitions(listOf("REMAND_AND_SENTENCING", "RELEASE_DATES_CALCULATOR"))
-        .expectBody()
-        .jsonPath("$.services.courtCases").exists()
-    }
 
     @Test
     fun `Should exclude courtCases when user has INVALID_ROLE role`() {
