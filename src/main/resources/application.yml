@@ -154,6 +154,15 @@ ccrd-service-configurations:
       maintenanceAlert:
         enabled: ${maintenance-alert-document-feature-toggle:false}
         message: ${maintenance-alert-document-message:placeholder}
+    adjudications:
+      text: 'Adjudications'
+      ui-url: ${hmpps-adjudications-ui-url}
+      url-mapping: '/adjudication-history/{prisonerId}'
+      requiredRoles:
+        - 'RELEASE_DATES_CALCULATOR'
+      maintenanceAlert:
+        enabled: ${maintenance-alert-adjustments-feature-toggle:false}
+        message: ${maintenance-alert-adjustments-message:placeholder}
   maintenanceAlert:
     enabled: ${maintenance-alert-all-feature-toggle:false}
     message: ${maintenance-alert-all-message:placeholder}
