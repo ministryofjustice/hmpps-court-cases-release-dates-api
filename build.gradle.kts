@@ -2,7 +2,7 @@ plugins {
   id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.1.2"
   id("org.springdoc.openapi-gradle-plugin") version "2.1.0"
   kotlin("plugin.spring") version "2.4.21"
-  id("org.openapi.generator") version "7.27.0"
+  id("org.openapi.generator") version "7.28.0"
 }
 
 configurations {
